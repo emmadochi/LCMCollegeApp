@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Profile - Atelier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary": "#ffffff",
+              "outline": "#767683",
+              "on-surface-variant": "#454652",
+              "on-secondary-fixed-variant": "#005145",
+              "on-background": "#191c1e",
+              "on-tertiary-container": "#6294ff",
+              "surface-variant": "#e0e3e6",
+              "tertiary-fixed": "#d9e2ff",
+              "on-primary-fixed": "#000767",
+              "surface-container-highest": "#e0e3e6",
+              "secondary": "#006b5c",
+              "primary-container": "#1a237e",
+              "on-secondary-fixed": "#00201a",
+              "outline-variant": "#c6c5d4",
+              "secondary-fixed-dim": "#44ddc1",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#bdc2ff",
+              "on-tertiary-fixed-variant": "#00429b",
+              "primary-fixed-dim": "#bdc2ff",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed-dim": "#b0c6ff",
+              "primary": "#000666",
+              "on-primary-fixed-variant": "#343d96",
+              "tertiary-container": "#002c6d",
+              "on-tertiary-fixed": "#001945",
+              "on-primary-container": "#8690ee",
+              "inverse-surface": "#2d3133",
+              "surface-tint": "#4c56af",
+              "secondary-fixed": "#68fadd",
+              "surface-container-lowest": "#ffffff",
+              "tertiary": "#001943",
+              "error": "#ba1a1a",
+              "on-error": "#ffffff",
+              "error-container": "#ffdad6",
+              "inverse-on-surface": "#eff1f4",
+              "surface-container-high": "#e6e8eb",
+              "surface": "#f7f9fc",
+              "surface-bright": "#f7f9fc",
+              "background": "#f7f9fc",
+              "secondary-container": "#68fadd",
+              "surface-container-low": "#f2f4f7",
+              "primary-fixed": "#e0e0ff",
+              "surface-dim": "#d8dadd",
+              "surface-container": "#eceef1",
+              "on-surface": "#191c1e",
+              "on-tertiary": "#ffffff",
+              "on-secondary-container": "#007261"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/60 dark:bg-slate-950/60 backdrop-blur-xl">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-3 transition-all duration-300 ease-in-out active:scale-95">
+<img alt="Student Profile Photo" class="w-10 h-10 rounded-full object-cover border-2 border-primary-container/10" data-alt="Modern close up portrait of Alex Johnson" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0Y9-K7EORVfldjJnALfouqMZFGoX91hzUtO4BbZEtbdoe6O_TRdnMcJ0mnEX5FCOlg1ymdeCqN4iqwOdvzC4vVpAljgWXowgkbnQ9qPkoMibPpz82SWdzz2JySDggimsHPj-uu8zmyUL550YTN1XNT9qlomwVamMO4mAvbwPEcApK83RaEeyQrGckdxZSstZam949AN9amKlHB1gR-gnGY7ZbBaJ40ypK2CHOl2biQ9NqvIFhce9uv_PPK0qWPzMC0Y6IooJ5RT8"/>
+</div>
+<h1 class="text-xl font-extrabold text-indigo-900 dark:text-indigo-200 font-headline tracking-tight">Atelier</h1>
+<button class="transition-all duration-300 ease-in-out active:scale-95 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+<div class="bg-slate-200/20 dark:bg-slate-800/20 h-[1px]"></div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-2xl mx-auto space-y-10">
+<!-- Profile Header Section -->
+<section class="flex flex-col items-center text-center space-y-4">
+<div class="relative">
+<div class="w-32 h-32 rounded-3xl overflow-hidden shadow-2xl rotate-3 transform hover:rotate-0 transition-transform duration-500">
+<img alt="Alex Johnson" class="w-full h-full object-cover scale-110" data-alt="Professional headshot of a young male student" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnZPmqKupjqD3jXU4TpBFzfeT2E8mavK6k3Q0XCX12pgXF94gJZEfGIsaxLyWYp3E1EPjsVq3vn6dFJx1AvsVs_owWfyLlX_QGRbSoCKMELm2tdLGvBwKAh-ayVU0HwHi5JO7or0-AtgYv-q8Vo_WPgSs0Rp9LqzBvyrR2NwJzF2t8qTuk2kha_jPz1gJle2-BXTQFAQI_0IDDUaWsigjiUVn468dRTaEvtV8aZUhU6Xs9n9Leb2EIuX6OFfC35Us7dLD9Ub4zrD0"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-secondary text-white p-2 rounded-xl shadow-lg">
+<span class="material-symbols-outlined text-sm" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="space-y-1">
+<h2 class="text-3xl font-extrabold font-headline tracking-tight text-primary">Alex Johnson</h2>
+<p class="text-on-surface-variant font-medium">Senior Computer Science Student</p>
+</div>
+</section>
+<!-- Stats Grid (Bento Style) -->
+<section class="grid grid-cols-2 md:grid-cols-3 gap-4">
+<div class="col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(25,28,30,0.04)] flex flex-col justify-between h-32">
+<span class="material-symbols-outlined text-secondary" data-icon="task_alt">task_alt</span>
+<div>
+<p class="text-2xl font-extrabold font-headline text-on-surface">4</p>
+<p class="text-xs font-semibold uppercase tracking-widest text-outline">Courses Completed</p>
+</div>
+</div>
+<div class="col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(25,28,30,0.04)] flex flex-col justify-between h-32">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="pending">pending</span>
+<div>
+<p class="text-2xl font-extrabold font-headline text-on-surface">2</p>
+<p class="text-xs font-semibold uppercase tracking-widest text-outline">In Progress</p>
+</div>
+</div>
+<div class="col-span-2 md:col-span-1 bg-primary text-on-primary p-6 rounded-xl shadow-[0_8px_24px_rgba(0,6,102,0.1)] flex flex-col justify-between h-32">
+<span class="material-symbols-outlined" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<div>
+<p class="text-2xl font-extrabold font-headline">12</p>
+<p class="text-xs font-semibold uppercase tracking-widest opacity-80">Certificates</p>
+</div>
+</div>
+</section>
+<!-- Achievements Section -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-bold font-headline text-primary">My Achievements</h3>
+<button class="text-sm font-semibold text-secondary hover:underline transition-all">View All</button>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar pb-4 -mx-6 px-6">
+<!-- Certificate Card 1 -->
+<div class="flex-shrink-0 w-48 bg-surface-container-lowest p-3 rounded-xl shadow-[0_8px_24px_rgba(25,28,30,0.02)] group active:scale-95 transition-transform">
+<div class="aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 mb-3 relative">
+<img alt="Python Certificate" class="w-full h-full object-cover" data-alt="Abstract geometric design in blue and white representing a digital certificate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3rooafwiQCGCtdQGkqJpEEh9PwQ3UwcF4aqe3QhiuyN2504i4lYBguyufr0DYgcs__0ygtZxhKWDkTyeAmSkn66JvVHtUkmrfDuL50SDpBjW_O-mIGnCwf0EG_KengIulhsRdBpqs7KuS17pUNsCpng-8TOtcXPPgTLl8dy1xkBP0tP2Hg83_lAieINsloTH1WmMgYYhm3-BxP68VZCTwLrIA6pv8UD6DXOObtyI8uc7S8TWrfPDy0XXsAtbYrjuuTXSw9V8dTII"/>
+<div class="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors"></div>
+</div>
+<p class="font-bold text-sm text-on-surface leading-tight">Python for Data Science</p>
+<p class="text-[10px] font-medium text-outline-variant mt-1 uppercase tracking-tighter">Verified 2023</p>
+</div>
+<!-- Certificate Card 2 -->
+<div class="flex-shrink-0 w-48 bg-surface-container-lowest p-3 rounded-xl shadow-[0_8px_24px_rgba(25,28,30,0.02)] group active:scale-95 transition-transform">
+<div class="aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 mb-3 relative">
+<img alt="Cloud Computing Certificate" class="w-full h-full object-cover" data-alt="Digital networking nodes and server patterns in teal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbJtGx1y8FqSAqWRXm6JGxwa71tWYuXYcTW3YMhKwkbAoqBFdOJnm2qUBy6ckZdvRkbDZ_N36OMwkAaujV-QV4SgTFBzpehRw1yOjely8Y-5mO0SKF_n5seD5Ka2-qFDL5mbi_LLGkbI6gzVpE-DhAHbBtaHf_f1UQHzWJiualcGd_iSqLWxN6F273EJXwpdeQHQ14LzMzPJVXpxpijW6EvceRtNPcZAKMDCPRxPA6poyoEYrZl4zepVXfftPv_xZfEuDlsceh3yw"/>
+<div class="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors"></div>
+</div>
+<p class="font-bold text-sm text-on-surface leading-tight">Advanced Cloud Systems</p>
+<p class="text-[10px] font-medium text-outline-variant mt-1 uppercase tracking-tighter">Verified 2023</p>
+</div>
+<!-- Certificate Card 3 -->
+<div class="flex-shrink-0 w-48 bg-surface-container-lowest p-3 rounded-xl shadow-[0_8px_24px_rgba(25,28,30,0.02)] group active:scale-95 transition-transform">
+<div class="aspect-[4/3] rounded-lg overflow-hidden bg-slate-100 mb-3 relative">
+<img alt="UI Design Certificate" class="w-full h-full object-cover" data-alt="Modern UI layout mockups with vibrant purple accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXI_LLn6hd5VRP2JrRuRdO7Ap_gFStyLTyRbOiYT1HDNZlSoxSPI6xdF13naI6VwNYZyJF4-fAPs8RgCmA40ggd6opCT31aFu-VhUAZ1qfL2Jp6IsTrpL8ODuKQPQq_fG5CbRnNLjNii4NWNA3jtJpDId2NJmGgTlTtrnv9xSli_MgBTo_XWwHy0u7OoTdRLcwTGK7GoR7psye59F3omBwho428wmCx04LNpTRdmoxhFPNK6juvCAew4Tqsx15Y21SdDDXc-98dyc"/>
+<div class="absolute inset-0 bg-primary/10 group-hover:bg-transparent transition-colors"></div>
+</div>
+<p class="font-bold text-sm text-on-surface leading-tight">UI/UX Fundamentals</p>
+<p class="text-[10px] font-medium text-outline-variant mt-1 uppercase tracking-tighter">Verified 2024</p>
+</div>
+</div>
+</section>
+<!-- Settings List -->
+<section class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0_8px_24px_rgba(25,28,30,0.04)]">
+<div class="p-6 pb-2">
+<h3 class="text-xs font-bold uppercase tracking-widest text-outline">Preferences</h3>
+</div>
+<div class="divide-y divide-surface-container">
+<!-- Account Settings -->
+<button class="w-full flex items-center justify-between p-6 hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="manage_accounts">manage_accounts</span>
+</div>
+<span class="font-semibold text-on-surface">Account Settings</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Notifications -->
+<button class="w-full flex items-center justify-between p-6 hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="notifications_active">notifications_active</span>
+</div>
+<span class="font-semibold text-on-surface">Notifications</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Help Center -->
+<button class="w-full flex items-center justify-between p-6 hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="help_center">help_center</span>
+</div>
+<span class="font-semibold text-on-surface">Help Center</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Logout -->
+<button class="w-full flex items-center justify-between p-6 hover:bg-error-container/10 transition-colors active:scale-[0.98]">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-error-container/20 flex items-center justify-center text-error">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+</div>
+<span class="font-semibold text-error">Logout</span>
+</div>
+</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl z-50 rounded-t-3xl shadow-[0_-8px_24px_rgba(25,28,30,0.04)]">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 transition-transform duration-200 active:scale-90 hover:text-indigo-600 dark:hover:text-indigo-300" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider mt-1">Home</span>
+</a>
+<!-- My Courses -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 transition-transform duration-200 active:scale-90 hover:text-indigo-600 dark:hover:text-indigo-300" href="#">
+<span class="material-symbols-outlined" data-icon="import_contacts">import_contacts</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider mt-1">My Courses</span>
+</a>
+<!-- Search -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 transition-transform duration-200 active:scale-90 hover:text-indigo-600 dark:hover:text-indigo-300" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider mt-1">Search</span>
+</a>
+<!-- Profile (Active) -->
+<a class="flex flex-col items-center justify-center bg-teal-600 dark:bg-teal-500 text-white rounded-2xl px-4 py-2 shadow-[0_4px_12px_rgba(0,107,92,0.3)] transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

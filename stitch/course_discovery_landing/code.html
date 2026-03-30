@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Atelier - Academic Learning Platform</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary": "#ffffff",
+              "outline": "#767683",
+              "on-surface-variant": "#454652",
+              "on-secondary-fixed-variant": "#005145",
+              "on-background": "#191c1e",
+              "on-tertiary-container": "#6294ff",
+              "surface-variant": "#e0e3e6",
+              "tertiary-fixed": "#d9e2ff",
+              "on-primary-fixed": "#000767",
+              "surface-container-highest": "#e0e3e6",
+              "secondary": "#006b5c",
+              "primary-container": "#1a237e",
+              "on-secondary-fixed": "#00201a",
+              "outline-variant": "#c6c5d4",
+              "secondary-fixed-dim": "#44ddc1",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#bdc2ff",
+              "on-tertiary-fixed-variant": "#00429b",
+              "primary-fixed-dim": "#bdc2ff",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed-dim": "#b0c6ff",
+              "primary": "#000666",
+              "on-primary-fixed-variant": "#343d96",
+              "tertiary-container": "#002c6d",
+              "on-tertiary-fixed": "#001945",
+              "on-primary-container": "#8690ee",
+              "inverse-surface": "#2d3133",
+              "surface-tint": "#4c56af",
+              "secondary-fixed": "#68fadd",
+              "surface-container-lowest": "#ffffff",
+              "tertiary": "#001943",
+              "error": "#ba1a1a",
+              "on-error": "#ffffff",
+              "error-container": "#ffdad6",
+              "inverse-on-surface": "#eff1f4",
+              "surface-container-high": "#e6e8eb",
+              "surface": "#f7f9fc",
+              "surface-bright": "#f7f9fc",
+              "background": "#f7f9fc",
+              "secondary-container": "#68fadd",
+              "surface-container-low": "#f2f4f7",
+              "primary-fixed": "#e0e0ff",
+              "surface-dim": "#d8dadd",
+              "surface-container": "#eceef1",
+              "on-surface": "#191c1e",
+              "on-tertiary": "#ffffff",
+              "on-secondary-container": "#007261"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface mb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/60 dark:bg-slate-950/60 backdrop-blur-xl">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container overflow-hidden">
+<img alt="Student Profile Photo" class="w-full h-full object-cover" data-alt="Portrait of a female university student" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlwkMRnjD9bw3v49VJUYP6Iog-LVAsOY3GDAWoBQdPaoh3nMVg1-7sTkjVahqHzxFx_B2ble4tF1_czni9S5ZUNLeNeflsD-vNQHx5X2RpjNCAAd93JymApHFkk2gLBsSrIs2TYDf6zCQQE30PcnYsy0KCWpnmO0a1TY39g-cMb052jhSqBXrwakzPdlH91Z8uYNdIOIxB7Bn9BZZ62o_3vRJeiiTmlEAFpYulLeBdXL7WUZSvt09-RSW92sG8uBKwf93UnhWaqrI"/>
+</div>
+</div>
+<h1 class="text-xl font-extrabold text-indigo-900 dark:text-indigo-200 font-headline tracking-tight">Atelier</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition-all active:scale-95">
+<span class="material-symbols-outlined text-indigo-900" data-icon="notifications">notifications</span>
+</button>
+</div>
+<div class="bg-slate-200/20 dark:bg-slate-800/20 h-[1px]"></div>
+</header>
+<main class="pt-20 px-6">
+<!-- Hero Section -->
+<section class="mt-8 mb-12">
+<h2 class="text-4xl font-headline font-extrabold text-primary leading-tight tracking-tight mb-6">
+                Explore your next<br/>academic frontier
+            </h2>
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+</div>
+<input class="w-full pl-12 pr-4 py-4 bg-surface-container-low rounded-xl border-none focus:ring-2 focus:ring-primary/20 transition-all font-body text-on-surface placeholder-on-surface-variant/60" placeholder="Search courses, mentors, subjects..." type="text"/>
+</div>
+</section>
+<!-- Categories -->
+<section class="mb-12 overflow-hidden">
+<div class="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-highest flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-all shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="payments">payments</span>
+</div>
+<span class="text-[11px] font-bold font-headline uppercase tracking-widest text-on-surface-variant">Business</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-highest flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-all shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="terminal">terminal</span>
+</div>
+<span class="text-[11px] font-bold font-headline uppercase tracking-widest text-on-surface-variant">Tech</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-highest flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-all shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="architecture">architecture</span>
+</div>
+<span class="text-[11px] font-bold font-headline uppercase tracking-widest text-on-surface-variant">Design</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-highest flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-all shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="campaign">campaign</span>
+</div>
+<span class="text-[11px] font-bold font-headline uppercase tracking-widest text-on-surface-variant">Marketing</span>
+</div>
+<div class="flex flex-col items-center gap-2 group">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-highest flex items-center justify-center group-hover:bg-primary group-hover:text-on-primary transition-all shadow-sm">
+<span class="material-symbols-outlined text-2xl" data-icon="science">science</span>
+</div>
+<span class="text-[11px] font-bold font-headline uppercase tracking-widest text-on-surface-variant">Science</span>
+</div>
+</div>
+</section>
+<!-- Featured Courses (Horizontal Scroll) -->
+<section class="mb-14">
+<div class="flex justify-between items-end mb-6">
+<div>
+<span class="text-secondary font-bold text-xs uppercase tracking-widest mb-1 block">Editor's Choice</span>
+<h3 class="text-2xl font-headline font-bold text-on-surface">Featured Curriculum</h3>
+</div>
+<button class="text-primary font-bold text-sm">View all</button>
+</div>
+<div class="flex gap-6 overflow-x-auto no-scrollbar -mx-6 px-6">
+<!-- Featured Card 1 -->
+<div class="min-w-[85vw] md:min-w-[400px] bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(25,28,30,0.04)] group">
+<div class="relative h-52">
+<img alt="Data Science Course" class="w-full h-full object-cover" data-alt="Sophisticated data visualization on a screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQRHNrPsAEoOujpNjv7N-KqXKy6hWVAdWGyaqCrs01qYwcRgThat7_FSpjfkC8aHdCklBksDo3Kfp2LBjtKi1GR_YVcRTamRkPjNWHVwUueltYROPeplk5or9uAeRwW8yGolT5wguvoFJ1ZmHiYqcb9ZUeA6B9kzdIU8nLP9Wg8-JtABgdchRkeNAdmcBOsyTyuKcVFRQwBQkDexAkRFYowqyCyv6HpXf0S1mK_R14WHCr_lno_DacMq_r3yl8oeKv5wwW3gL0TKI"/>
+<div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-amber-500 text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold text-on-surface">4.9</span>
+</div>
+</div>
+<div class="p-6">
+<h4 class="text-xl font-headline font-bold text-primary mb-2 line-clamp-1">Advanced Neural Networks</h4>
+<div class="flex items-center gap-3">
+<img alt="Instructor" class="w-8 h-8 rounded-full border-2 border-surface" data-alt="Portrait of a professor in spectacles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDw6FM4Dqj6-_9zYGnh9eZ9b4Z9CZJ_Fm8ODzQHXlAKHf3YOZQpfdxAx9XYwYQBVTObilHVGAENEklrRGEYOcWri8uyl65wgH5rYPb7Yad7YCMcn6VgRRUOTOrwJvb4E5e81IZyd3BLYKhH_irr7RkwV1700EpLGWcy4DpnZPV_AIAA_Oto7yy_53k3-a_a1DJJ3WF3uC38U8Uy0mLrf4cSJNuEFFgw1hjIFD-rx9d3vNrTPuuiZsN5KHPdD21qEpURq3yLeJGq9Jg"/>
+<p class="text-sm text-on-surface-variant font-medium">Dr. Julian Vance</p>
+</div>
+</div>
+</div>
+<!-- Featured Card 2 -->
+<div class="min-w-[85vw] md:min-w-[400px] bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_8px_24px_rgba(25,28,30,0.04)] group">
+<div class="relative h-52">
+<img alt="Design Systems Course" class="w-full h-full object-cover" data-alt="Clean minimalist digital design interface layout" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrNcdkYgUvSKV6muzE7HrEGjl1oQ2SksFq5zxF1JuHjOcjikQuCrrOU2EXwHu0qM1-qsFvnbQdB9mqlzDg_Jt-l7ykPmJjo-rHEXsMg-ULQSY5iEXPew5IVrzC8C_km7hJL5DnO4H9m4cir-XGusb_4YpnCW_3DCJzy4oWoBa-nCC03YQJnmrEImT9bEK_9kfTATHHxZ19JmI8W_pZTWxMcWlGwgYFgD1fk5xMPpGEO4y71amoIRDVEzf9mIOHQOW_YewCP584sCo"/>
+<div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-amber-500 text-sm" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-xs font-bold text-on-surface">4.8</span>
+</div>
+</div>
+<div class="p-6">
+<h4 class="text-xl font-headline font-bold text-primary mb-2 line-clamp-1">Global Market Strategy</h4>
+<div class="flex items-center gap-3">
+<img alt="Instructor" class="w-8 h-8 rounded-full border-2 border-surface" data-alt="Professional woman in business attire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9fjdOcMkcnr1qpbleL1mkjCRO8ZQuwmxROrwRHehMTyxRz99mBZmX3UwyQ0zqu_pYjnAs945_TsB2X3gXpjC7x-Eh6qnxIWjiU8ifel6H34MKh7ZWh5_1-6CDYY49IXKgQr0yxCxkitcC7dYFlqcBW7gEO52mHrIZqrGsS8a66aUiLGFN-9iaL5HFUIq8F0Bh2xVMhhVSjO9WdiIR1w79sH395x5gNAqmyrxzdCL3JHCTJYFgaJJFk62B41BEZyLThcNV5Csuto4"/>
+<p class="text-sm text-on-surface-variant font-medium">Elena Rodriguez, MBA</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Popular Courses (Bento/Vertical List) -->
+<section class="mb-12">
+<h3 class="text-2xl font-headline font-bold text-on-surface mb-6">Popular Academy Tracks</h3>
+<div class="flex flex-col gap-6">
+<!-- Course Item 1 -->
+<div class="flex gap-4 p-4 bg-surface-container-low rounded-2xl items-center transition-all hover:bg-surface-container-high group">
+<div class="w-24 h-24 rounded-xl overflow-hidden shrink-0">
+<img alt="Code" class="w-full h-full object-cover" data-alt="A screen displaying clean source code" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDLBqwZDivowBNDJmAH_Ken_QuJ-reKqn1E5wP3ooP7ERb8RX_UTIxD2Ur_Lod2MIRrmymp5wp_V91deTtScOHO9HXM8tJNkrPLUof4qidLQO005JAUCWtbVAX8tgkaSn1O8_psTrqF1jfD0-zWPC58vKMN7xf11eqbLSW9fW2GUZUmfoTjnUNEscLL5gKjjJgdPd1a92L619f5K8Ii1rhqQa9eCg94iX_aNuRrXghtx9ncHuDgzEkdeCFuBJPv8-HT5vLvowAY2U"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h5 class="font-headline font-bold text-on-surface leading-tight">Mastering Python for Financial Analytics</h5>
+<span class="text-xs font-bold text-secondary">4.8</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1 line-clamp-2 leading-relaxed">Leverage the power of Python to build predictive financial models and automate trading workflows.</p>
+<div class="flex gap-2 mt-2">
+<span class="px-2 py-0.5 bg-surface-container-highest text-[10px] font-bold rounded uppercase tracking-tighter text-outline">Tech</span>
+<span class="px-2 py-0.5 bg-surface-container-highest text-[10px] font-bold rounded uppercase tracking-tighter text-outline">Finance</span>
+</div>
+</div>
+</div>
+<!-- Course Item 2 -->
+<div class="flex gap-4 p-4 bg-surface-container-low rounded-2xl items-center transition-all hover:bg-surface-container-high group">
+<div class="w-24 h-24 rounded-xl overflow-hidden shrink-0">
+<img alt="Lab" class="w-full h-full object-cover" data-alt="Microscope in a brightly lit lab" src="https://lh3.googleusercontent.com/aida-public/AB6AXuApG-Gm2Wzs4DyYv2OyCHYP7ysUGngcltRqN0zzG6Z94t5ZhugfdrBULeP4S8Tl23obn0zkH-Pl2fQEz3_dhxiibBocVktUCSRKDSErZNuBPabLSnKycLkhj3Dl5SyGlBP2U0g01tw1V8ycoDY6KoTSdj76bi22ydVHWkoK7VpmXA9ceMuDNPABcMR1YWJmgfCKO99QtpkZeHlQVHpyMKrEVUGwXzGWC5HniXCc0PyYKGkv8UR2D71hbbBpliyVqyMsWT22X1TxU9w"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h5 class="font-headline font-bold text-on-surface leading-tight">Introduction to Quantum Bio-Chemistry</h5>
+<span class="text-xs font-bold text-secondary">4.7</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1 line-clamp-2 leading-relaxed">Exploring the intersection of subatomic particles and biological systems in modern medicine.</p>
+<div class="flex gap-2 mt-2">
+<span class="px-2 py-0.5 bg-surface-container-highest text-[10px] font-bold rounded uppercase tracking-tighter text-outline">Science</span>
+<span class="px-2 py-0.5 bg-surface-container-highest text-[10px] font-bold rounded uppercase tracking-tighter text-outline">Advanced</span>
+</div>
+</div>
+</div>
+<!-- Course Item 3 -->
+<div class="flex gap-4 p-4 bg-surface-container-low rounded-2xl items-center transition-all hover:bg-surface-container-high group">
+<div class="w-24 h-24 rounded-xl overflow-hidden shrink-0">
+<img alt="Brand Design" class="w-full h-full object-cover" data-alt="Logo design sketch on high-quality paper" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4LY7MOj-4Pkaq0FB5SV6LDvE5N4vsAKlLg-600TGkfyAve71k-d1K7kk50UNaVcZjdzawtmkmkP6dnEyyREDQvPb5i-J1jkM03DP9ES1-nlvYJ0GYhfhoh8PdiotO5Hpx97WmA2b-nCMvUBxPkOux3ZUGUhleJunXSSqkld7FR96MrQxNCZo0Ldrs-ycelZv9Ryvto7aCquol9fzRKpVt0RbsscJj1R9HTi0baCgqvAfx71HL30T_wEIvAZ5PGNsevK-Wcm1NIHc"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h5 class="font-headline font-bold text-on-surface leading-tight">Brand Identity: From Concept to Icon</h5>
+<span class="text-xs font-bold text-secondary">4.9</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1 line-clamp-2 leading-relaxed">A comprehensive guide to visual storytelling and high-impact corporate identity design.</p>
+<div class="flex gap-2 mt-2">
+<span class="px-2 py-0.5 bg-surface-container-highest text-[10px] font-bold rounded uppercase tracking-tighter text-outline">Design</span>
+<span class="px-2 py-0.5 bg-surface-container-highest text-[10px] font-bold rounded uppercase tracking-tighter text-outline">Creative</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl z-50 rounded-t-3xl shadow-[0_-8px_24px_rgba(25,28,30,0.04)]">
+<!-- Home (Inactive) -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="home">home</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider">Home</span>
+</a>
+<!-- My Courses (Inactive) -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="import_contacts">import_contacts</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider">My Courses</span>
+</a>
+<!-- Search (Active) -->
+<a class="flex flex-col items-center justify-center bg-teal-600 dark:bg-teal-500 text-white rounded-2xl px-4 py-2 shadow-[0_4px_12px_rgba(0,107,92,0.3)] transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="search" style="font-variation-settings: 'FILL' 1;">search</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider">Search</span>
+</a>
+<!-- Profile (Inactive) -->
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined text-2xl mb-1" data-icon="person">person</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider">Profile</span>
+</a>
+</nav>
+</body></html>

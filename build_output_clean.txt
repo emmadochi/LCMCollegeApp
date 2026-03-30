@@ -1,0 +1,42 @@
+Support for Android x86 targets will be removed in the next stable release after 3.27. See https://github.com/flutter/flutter/issues/157543 for details.
+Running Gradle task 'assembleDebug'...                          
+Your project is configured with Android NDK 26.3.11579264, but the following plugin(s) depend on a different Android NDK version:
+- cloud_firestore requires Android NDK 27.0.12077973
+- firebase_auth requires Android NDK 27.0.12077973
+- firebase_core requires Android NDK 27.0.12077973
+- path_provider_android requires Android NDK 27.0.12077973
+- printing requires Android NDK 27.0.12077973
+- share_plus requires Android NDK 27.0.12077973
+- sqflite_android requires Android NDK 27.0.12077973
+- video_player_android requires Android NDK 27.0.12077973
+Fix this issue by using the highest Android NDK version (they are backward compatible).
+Add the following to C:\xampp\htdocs\CollegeApp\android\app\build.gradle.kts:
+
+    android {
+        ndkVersion = "27.0.12077973"
+        ...
+    }
+C:\xampp\htdocs\CollegeApp\android\app\src\debug\AndroidManifest.xml Error:
+	uses-sdk:minSdkVersion 21 cannot be smaller than version 23 declared in library [com.google.firebase:firebase-auth:23.2.1] C:\Users\DELL\.gradle\caches\8.12\transforms\0f3f82d80d77fece28fd45a2f26f93c2\transformed\jetified-firebase-auth-23.2.1\AndroidManifest.xml as the library might be using APIs not available in 21
+	Suggestion: use a compatible library with a minSdk of at most 21,
+		or increase this project's minSdk version to at least 23,
+		or use tools:overrideLibrary="com.google.firebase.auth" to force usage (may lead to runtime failures)
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:processDebugMainManifest'.
+> Manifest merger failed : uses-sdk:minSdkVersion 21 cannot be smaller than version 23 declared in library [com.google.firebase:firebase-auth:23.2.1] C:\Users\DELL\.gradle\caches\8.12\transforms\0f3f82d80d77fece28fd45a2f26f93c2\transformed\jetified-firebase-auth-23.2.1\AndroidManifest.xml as the library might be using APIs not available in 21
+  	Suggestion: use a compatible library with a minSdk of at most 21,
+  		or increase this project's minSdk version to at least 23,
+  		or use tools:overrideLibrary="com.google.firebase.auth" to force usage (may lead to runtime failures)
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 13s
+Running Gradle task 'assembleDebug'...                             13.8s
+Gradle task assembleDebug failed with exit code 1

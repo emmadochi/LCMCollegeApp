@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary": "#ffffff",
+              "outline": "#767683",
+              "on-surface-variant": "#454652",
+              "on-secondary-fixed-variant": "#005145",
+              "on-background": "#191c1e",
+              "on-tertiary-container": "#6294ff",
+              "surface-variant": "#e0e3e6",
+              "tertiary-fixed": "#d9e2ff",
+              "on-primary-fixed": "#000767",
+              "surface-container-highest": "#e0e3e6",
+              "secondary": "#006b5c",
+              "primary-container": "#1a237e",
+              "on-secondary-fixed": "#00201a",
+              "outline-variant": "#c6c5d4",
+              "secondary-fixed-dim": "#44ddc1",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#bdc2ff",
+              "on-tertiary-fixed-variant": "#00429b",
+              "primary-fixed-dim": "#bdc2ff",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed-dim": "#b0c6ff",
+              "primary": "#000666",
+              "on-primary-fixed-variant": "#343d96",
+              "tertiary-container": "#002c6d",
+              "on-tertiary-fixed": "#001945",
+              "on-primary-container": "#8690ee",
+              "inverse-surface": "#2d3133",
+              "surface-tint": "#4c56af",
+              "secondary-fixed": "#68fadd",
+              "surface-container-lowest": "#ffffff",
+              "tertiary": "#001943",
+              "error": "#ba1a1a",
+              "on-error": "#ffffff",
+              "error-container": "#ffdad6",
+              "inverse-on-surface": "#eff1f4",
+              "surface-container-high": "#e6e8eb",
+              "surface": "#f7f9fc",
+              "surface-bright": "#f7f9fc",
+              "background": "#f7f9fc",
+              "secondary-container": "#68fadd",
+              "surface-container-low": "#f2f4f7",
+              "primary-fixed": "#e0e0ff",
+              "surface-dim": "#d8dadd",
+              "surface-container": "#eceef1",
+              "on-surface": "#191c1e",
+              "on-tertiary": "#ffffff",
+              "on-secondary-container": "#007261"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .no-border { border: none !important; }
+      .tonal-shift { background-image: linear-gradient(to top, rgba(247, 249, 252, 0.8), rgba(247, 249, 252, 0)); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container/30">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/60 backdrop-blur-xl">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high ring-2 ring-primary-fixed">
+<img alt="Student Profile Photo" class="w-full h-full object-cover" data-alt="Portrait of a male student smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZFjnn73PRr_YN1YVBUQ15RPP3bc8kOzND-i37C-XX4sA3adcfdz8jYnXBRNgeVoSOREeaTVBrjbaG51KccbsFNHA4TbwGVVvk-NONQUDf-gOwcuI_hh7aNWRXD7iQAkhNDd4f6Kuy7K4AwIQj8HrLQmpB5tNY12W80-TCX2Z9KpMkavzrjTmaqoE-ePcdxRoUpoMnysPtH5S0aUic74IHan82ptwuUuXviW-rnd1j_si817RtRNttmi7PlFo0fzXDWG5LUiJONTc"/>
+</div>
+<span class="text-xl font-extrabold text-indigo-900 font-headline tracking-tight">Atelier</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl transition-all duration-300 ease-in-out active:scale-95 hover:bg-slate-100 text-slate-500">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+<div class="bg-slate-200/20 h-[1px]"></div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-2xl mx-auto space-y-10">
+<!-- Welcome Section -->
+<section class="space-y-1">
+<p class="text-secondary font-semibold font-label uppercase tracking-widest text-[11px]">Personal Dashboard</p>
+<h1 class="text-3xl font-extrabold font-headline tracking-tight text-on-surface">Welcome back, Alex!</h1>
+<p class="text-on-surface-variant text-sm">You have 3 active assignments due this week.</p>
+</section>
+<!-- Continue Learning (Hero Card) -->
+<section>
+<div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-primary to-primary-container text-on-primary p-8 shadow-2xl shadow-primary/20 group">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-teal-500/10 rounded-full blur-3xl"></div>
+<div class="absolute right-0 bottom-0 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]" data-icon="code">code</span>
+</div>
+<div class="relative z-10 space-y-6">
+<div class="space-y-1">
+<span class="inline-block px-3 py-1 rounded-lg bg-white/10 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest mb-2">Featured Module</span>
+<h2 class="text-2xl font-bold font-headline leading-tight">Advanced Web Dev</h2>
+<p class="text-primary-fixed/80 text-sm font-medium">Lesson 14: Modern State Management</p>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="text-xs font-medium text-primary-fixed/60">Current Progress</span>
+<span class="text-lg font-bold font-headline">65%</span>
+</div>
+<div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-secondary-fixed rounded-full shadow-[0_0_12px_rgba(104,250,221,0.4)] transition-all duration-1000" style="width: 65%"></div>
+</div>
+</div>
+<button class="w-full sm:w-auto px-8 py-4 bg-secondary text-white rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:bg-on-secondary-container transition-transform active:scale-95 shadow-lg shadow-black/10">
+<span class="material-symbols-outlined" data-icon="play_circle" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+                        Resume Lesson
+                    </button>
+</div>
+</div>
+</section>
+<!-- Enrolled Courses (Bento-style Grid) -->
+<section class="space-y-6">
+<div class="flex justify-between items-center">
+<h3 class="text-xl font-bold font-headline tracking-tight">Enrolled Courses</h3>
+<button class="text-primary font-bold text-xs hover:underline">View All</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Course 1 -->
+<div class="bg-surface-container-lowest p-5 rounded-[1.5rem] flex flex-col justify-between h-48 hover:shadow-xl transition-shadow duration-300 group">
+<div>
+<div class="w-10 h-10 rounded-xl bg-teal-50 text-secondary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+</div>
+<h4 class="font-bold text-lg leading-snug">Data Science</h4>
+<p class="text-on-surface-variant text-xs mt-1">Foundations &amp; Analysis</p>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-bold uppercase tracking-wider text-outline">
+<span>Progress</span>
+<span>30%</span>
+</div>
+<div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 30%"></div>
+</div>
+</div>
+</div>
+<!-- Course 2 -->
+<div class="bg-surface-container-lowest p-5 rounded-[1.5rem] flex flex-col justify-between h-48 hover:shadow-xl transition-shadow duration-300 group">
+<div>
+<div class="w-10 h-10 rounded-xl bg-indigo-50 text-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+</div>
+<h4 class="font-bold text-lg leading-snug">Financial Modeling</h4>
+<p class="text-on-surface-variant text-xs mt-1">Advanced Valuation</p>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-bold uppercase tracking-wider text-outline">
+<span>Progress</span>
+<span>10%</span>
+</div>
+<div class="h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 10%"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Completed Courses -->
+<section class="space-y-4">
+<h3 class="text-sm font-bold uppercase tracking-widest text-outline">Completed</h3>
+<div class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+<!-- Thumb 1 -->
+<div class="flex-shrink-0 relative group">
+<div class="w-20 h-20 rounded-2xl overflow-hidden ring-2 ring-transparent group-hover:ring-secondary-fixed transition-all">
+<img alt="Finished Course 1" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="Abstract digital grid representing technology course" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-HAyhNCM69O66KvW6unY-YakROE4kOSQChqip-Ne76Bb_yf2g9NeE6fEqG_GTAoak_-tUyHFWk9gnonwT5CA5qo8bxUpdcC-ilCw9tJaBa-Gq75Yykh2Wsy3x-haarXYP4N4ET7ZPQRDz1Fviy8P8g3jUE_B0kD0tfO-BAN7E5OOxsrcfvHprFvlwBPDYEuS4kgsPCA9yDEACsjjaY3gvcXLtBAeHN7yfbqv7KDX3o-VxHJZfIO0QX4EJdXIuS-FKOxVBhwM49sA"/>
+<div class="absolute inset-0 bg-secondary/40 flex items-center justify-center opacity-100">
+<span class="material-symbols-outlined text-white" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<p class="text-[10px] mt-2 font-bold text-center text-on-surface-variant truncate w-20">Cybersecurity</p>
+</div>
+<!-- Thumb 2 -->
+<div class="flex-shrink-0 relative group">
+<div class="w-20 h-20 rounded-2xl overflow-hidden ring-2 ring-transparent group-hover:ring-secondary-fixed transition-all">
+<img alt="Finished Course 2" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="Digital networking lines representing social science" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6n00ZEKbt2GJw_mwsSxfDS-3CykOuGTVUVpCFIO2CaGZvdmi08j4yhhk4-1gCCBYMauKNXraSxuFTwdkd2I5XraMu5_lHNgnbRGv6223oUC_IDH3MrpCtMGhIcB-UaEW3Pt8Id3znxQbxDtlNWTHB-LUuqahV2duXhwWJPnQL4yx0e_dqx83aIgTLTV8sN-vf7u-1TPYVEWB7SQ6QkCHiGRR0bJ2MoAS0ezUPy6t4uKI-zfUF2nkZCNL8SFby5h_93jVpBZDUI8U"/>
+<div class="absolute inset-0 bg-secondary/40 flex items-center justify-center opacity-100">
+<span class="material-symbols-outlined text-white" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<p class="text-[10px] mt-2 font-bold text-center text-on-surface-variant truncate w-20">Ethics in AI</p>
+</div>
+<!-- Thumb 3 -->
+<div class="flex-shrink-0 relative group">
+<div class="w-20 h-20 rounded-2xl overflow-hidden ring-2 ring-transparent group-hover:ring-secondary-fixed transition-all">
+<img alt="Finished Course 3" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="Desk with notebooks representing business foundations" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_7zoQF0LrSK2CMRGTvNScz1EprmaD4Scv-0CKh2PjjVyPaDBbNErLmHa6Dhi0wnW4H5AbrOMroZrlM_dkqXFejpKruNpzGyLHxUdI5bCM-b1mA0ZkQI0chmR_M4pABSBEEA_dRJqj1pXW_LmHp9Bayk5z8-4OudINaEJ8dViV-4trjlLhRS64G18_Yg3CIoOFlvqfH1VOPNCDBL5yYZbyosw7YvxbjbHBGes7c0cCD_qhusJYQEmYFa-g5lCEoD8N_XIeBPdksdE"/>
+<div class="absolute inset-0 bg-secondary/40 flex items-center justify-center opacity-100">
+<span class="material-symbols-outlined text-white" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<p class="text-[10px] mt-2 font-bold text-center text-on-surface-variant truncate w-20">Business Law</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-8 pt-4 bg-white/80 backdrop-blur-2xl z-50 rounded-t-[2.5rem] shadow-[0_-8px_24px_rgba(25,28,30,0.04)] no-border">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center bg-teal-600 text-white rounded-2xl px-5 py-2.5 shadow-[0_4px_12px_rgba(0,107,92,0.3)] transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-manrope text-[10px] font-bold uppercase tracking-wider mt-1">Home</span>
+</a>
+<!-- My Courses -->
+<a class="flex flex-col items-center justify-center text-slate-400 px-4 py-2 transition-transform duration-200 active:scale-90 hover:text-indigo-600" href="#">
+<span class="material-symbols-outlined" data-icon="import_contacts">import_contacts</span>
+<span class="font-manrope text-[10px] font-semibold uppercase tracking-wider mt-1">My Courses</span>
+</a>
+<!-- Search -->
+<a class="flex flex-col items-center justify-center text-slate-400 px-4 py-2 transition-transform duration-200 active:scale-90 hover:text-indigo-600" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-manrope text-[10px] font-semibold uppercase tracking-wider mt-1">Search</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-slate-400 px-4 py-2 transition-transform duration-200 active:scale-90 hover:text-indigo-600" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-manrope text-[10px] font-semibold uppercase tracking-wider mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

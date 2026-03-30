@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Courses - LCM College Admin</title>
+    <script>
+        if (window.location.pathname.endsWith('/@admin')) {
+            window.location.replace(window.location.pathname + '/');
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body style="background:var(--body-bg);display:flex;height:100vh;overflow:hidden;">
+
+    <!-- Sidebar -->
+    <aside class="adm-sidebar">
+        <div class="adm-sidebar-logo">
+            <img src="images/logo.png" alt="Logo">
+            <span>LCM Admin</span>
+        </div>
+        <nav class="adm-sidebar-nav">
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Overview</span>
+                <a href="index.html" class="adm-nav-item">
+                    <span class="material-icons">dashboard</span> Dashboard
+                </a>
+            </div>
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Academics</span>
+                <a href="courses.html" class="adm-nav-item active">
+                    <span class="material-icons">menu_book</span> Courses
+                </a>
+                <a href="categories.html" class="adm-nav-item">
+                    <span class="material-icons">category</span> Categories
+                </a>
+                <a href="lessons.html" class="adm-nav-item">
+                    <span class="material-icons">play_lesson</span> Lessons
+                </a>
+                <a href="quizzes.html" class="adm-nav-item">
+                    <span class="material-icons">quiz</span> Quizzes &amp; Tests
+                </a>
+                <a href="assignments.html" class="adm-nav-item">
+                    <span class="material-icons">assignment</span> Assignments
+                </a>
+            </div>
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Users</span>
+                <a href="students.html" class="adm-nav-item">
+                    <span class="material-icons">people</span> Students
+                </a>
+                <a href="reviews.html" class="adm-nav-item">
+                    <span class="material-icons">rate_review</span> Reviews
+                </a>
+            </div>
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Settings</span>
+                <a href="settings.html" class="adm-nav-item">
+                    <span class="material-icons">settings</span> Settings
+                </a>
+            </div>
+        </nav>
+        <div class="adm-sidebar-footer">
+            <button id="logoutBtn" class="adm-logout-btn">
+                <span class="material-icons">logout</span> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+        <header class="adm-header">
+            <div>
+                <h1 class="adm-header-title">Course Management</h1>
+            </div>
+            <div class="adm-header-right">
+                <div class="adm-avatar">A</div>
+            </div>
+        </header>
+
+        <div style="flex:1;overflow-y:auto;padding:28px 32px;">
+            <!-- Toolbar -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;">
+                <div>
+                    <h1 class="page-heading">Courses</h1>
+                    <p class="page-sub">Create and manage your course catalogue</p>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                    <div class="adm-search">
+                        <span class="material-icons">search</span>
+                        <input type="text" placeholder="Search courses…">
+                    </div>
+                    <button class="btn-secondary" onclick="syncCourseSchema()">
+                        <span class="material-icons">sync</span> Sync Schema
+                    </button>
+                    <a href="add_course.html" class="btn-primary">
+                        <span class="material-icons">add</span> Create Course
+                    </a>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="adm-table-wrap">
+                <table class="adm-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40px;">
+                                <input type="checkbox" style="accent-color:var(--brand);">
+                            </th>
+                            <th>Course Details</th>
+                            <th>Modules</th>
+                            <th>Status</th>
+                            <th style="text-align:right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coursesList">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+                <!-- Pagination strip -->
+                <div style="background:var(--card-bg);padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+                    <p style="font-size:13px;color:var(--text-muted);">Showing all results</p>
+                    <div style="display:flex;gap:6px;">
+                        <button class="btn-icon"><span class="material-icons">chevron_left</span></button>
+                        <button class="btn-icon" style="background:#ede9fe;border-color:#c7d2fe;color:var(--brand);font-weight:700;font-size:13px;">1</button>
+                        <button class="btn-icon"><span class="material-icons">chevron_right</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/courses.js"></script>
+</body>
+</html>

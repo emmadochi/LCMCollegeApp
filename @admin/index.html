@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LCM College</title>
+    <script>
+        if (window.location.pathname.endsWith('/@admin')) {
+            window.location.replace(window.location.pathname + '/');
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body style="background:var(--body-bg);display:flex;height:100vh;overflow:hidden;">
+
+    <!-- Sidebar -->
+    <aside class="adm-sidebar">
+        <div class="adm-sidebar-logo">
+            <img src="images/logo.png" alt="Logo">
+            <span>LCM Admin</span>
+        </div>
+        <nav class="adm-sidebar-nav">
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Overview</span>
+                <a href="index.html" class="adm-nav-item active">
+                    <span class="material-icons">dashboard</span> Dashboard
+                </a>
+            </div>
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Academics</span>
+                <a href="courses.html" class="adm-nav-item">
+                    <span class="material-icons">menu_book</span> Courses
+                </a>
+                <a href="categories.html" class="adm-nav-item">
+                    <span class="material-icons">category</span> Categories
+                </a>
+                <a href="lessons.html" class="adm-nav-item">
+                    <span class="material-icons">play_lesson</span> Lessons
+                </a>
+                <a href="quizzes.html" class="adm-nav-item">
+                    <span class="material-icons">quiz</span> Quizzes &amp; Tests
+                </a>
+                <a href="assignments.html" class="adm-nav-item">
+                    <span class="material-icons">assignment</span> Assignments
+                </a>
+            </div>
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Users</span>
+                <a href="students.html" class="adm-nav-item">
+                    <span class="material-icons">people</span> Students
+                </a>
+                <a href="reviews.html" class="adm-nav-item">
+                    <span class="material-icons">rate_review</span> Reviews
+                </a>
+            </div>
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Settings</span>
+                <a href="settings.html" class="adm-nav-item">
+                    <span class="material-icons">settings</span> Settings
+                </a>
+            </div>
+        </nav>
+        <div class="adm-sidebar-footer">
+            <button id="logoutBtn" class="adm-logout-btn">
+                <span class="material-icons">logout</span> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+        <!-- Header -->
+        <header class="adm-header">
+            <div style="display:flex;align-items:center;gap:16px;">
+                <div class="adm-search">
+                    <span class="material-icons">search</span>
+                    <input type="text" placeholder="Search courses, students…">
+                </div>
+            </div>
+            <div class="adm-header-right">
+                <button class="adm-notif-btn">
+                    <span class="material-icons" style="font-size:18px;">notifications</span>
+                    <span class="adm-notif-dot"></span>
+                </button>
+                <div class="adm-avatar" title="Administrator">A</div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div style="flex:1;overflow-y:auto;padding:28px 32px;">
+
+            <!-- Page Heading -->
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;">
+                <div>
+                    <h1 class="page-heading">Dashboard</h1>
+                    <p class="page-sub">Welcome back. Here's what's happening at LCM College today.</p>
+                </div>
+                <a href="add_course.html" class="btn-primary" style="margin-top:4px;">
+                    <span class="material-icons">add</span> New Course
+                </a>
+            </div>
+
+            <!-- Stats Grid -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:28px;">
+                <div class="stat-card">
+                    <div>
+                        <p class="stat-label">Total Students</p>
+                        <p class="stat-value" id="statStudents"><span class="stat-loader"></span></p>
+                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loading…</p>
+                    </div>
+                    <div class="stat-card-icon indigo">
+                        <span class="material-icons">group</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div>
+                        <p class="stat-label">Active Courses</p>
+                        <p class="stat-value" id="statCourses"><span class="stat-loader"></span></p>
+                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loading…</p>
+                    </div>
+                    <div class="stat-card-icon blue">
+                        <span class="material-icons">menu_book</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div>
+                        <p class="stat-label">Certificates Issued</p>
+                        <p class="stat-value" id="statCerts"><span class="stat-loader"></span></p>
+                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loading…</p>
+                    </div>
+                    <div class="stat-card-icon amber">
+                        <span class="material-icons">workspace_premium</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div>
+                        <p class="stat-label">Avg Completion</p>
+                        <p class="stat-value" id="statCompletion"><span class="stat-loader"></span></p>
+                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loading…</p>
+                    </div>
+                    <div class="stat-card-icon emerald">
+                        <span class="material-icons">donut_large</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Grid -->
+            <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;">
+
+                <!-- Recent Courses Table -->
+                <div class="adm-card">
+                    <div class="adm-card-header">
+                        <span class="adm-card-title">
+                            <span class="material-icons" style="font-size:17px;color:var(--brand);">menu_book</span>
+                            Recently Added Courses
+                        </span>
+                        <a href="courses.html" style="font-size:13px;font-weight:600;color:var(--brand);text-decoration:none;">View all →</a>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="adm-table" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Modules</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashRecentCourses">
+                                <tr>
+                                    <td colspan="3" style="text-align:center;padding:32px;color:var(--text-muted);">
+                                        <span class="loader" style="margin:0 auto 8px;"></span>
+                                        <p style="font-size:12px;margin-top:8px;">Fetching latest data…</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="adm-card">
+                    <div class="adm-card-header">
+                        <span class="adm-card-title">
+                            <span class="material-icons" style="font-size:17px;color:var(--brand);">bolt</span>
+                            Quick Actions
+                        </span>
+                    </div>
+                    <div style="padding:16px;display:flex;flex-direction:column;gap:10px;">
+                        <a href="add_course.html" class="quick-action-item qa-indigo">
+                            <div class="qa-icon">
+                                <span class="material-icons">add_circle</span>
+                            </div>
+                            <div>
+                                <p class="qa-label">Create New Course</p>
+                                <p class="qa-sub">Set up a new learning track</p>
+                            </div>
+                        </a>
+                        <a href="add_lesson.html" class="quick-action-item qa-teal">
+                            <div class="qa-icon">
+                                <span class="material-icons">video_file</span>
+                            </div>
+                            <div>
+                                <p class="qa-label">Upload Lesson Content</p>
+                                <p class="qa-sub">Add videos and notes</p>
+                            </div>
+                        </a>
+                        <a href="add_quiz.html" class="quick-action-item qa-amber">
+                            <div class="qa-icon">
+                                <span class="material-icons">fact_check</span>
+                            </div>
+                            <div>
+                                <p class="qa-label">Create Quiz Assessment</p>
+                                <p class="qa-sub">Build tests with passing threshold</p>
+                            </div>
+                        </a>
+                        <a href="assignments.html" class="quick-action-item qa-emerald" style="border-color:rgba(16, 185, 129, 0.2);background:rgba(16, 185, 129, 0.03);">
+                            <div class="qa-icon" style="background:#ecfdf5;color:#10b981;">
+                                <span class="material-icons">assignment</span>
+                            </div>
+                            <div>
+                                <p class="qa-label">Manage Assignments</p>
+                                <p class="qa-sub">View and grade submissions</p>
+                            </div>
+                        </a>
+                        <a href="students.html" class="quick-action-item" style="border-color:var(--border);">
+                            <div class="qa-icon" style="background:#f0fdf4;color:#16a34a;">
+                                <span class="material-icons">manage_accounts</span>
+                            </div>
+                            <div>
+                                <p class="qa-label" style="color:var(--text-main);">Manage Students</p>
+                                <p class="qa-sub">View and manage enrolment</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

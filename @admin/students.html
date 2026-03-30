@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students - LCM College Admin</title>
+    <script>
+        if (window.location.pathname.endsWith('/@admin')) {
+            window.location.replace(window.location.pathname + '/');
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body style="background:var(--body-bg);display:flex;height:100vh;overflow:hidden;">
+
+    <!-- Sidebar -->
+    <aside class="adm-sidebar">
+        <div class="adm-sidebar-logo">
+            <img src="images/logo.png" alt="Logo">
+            <span>LCM Admin</span>
+        </div>
+        <nav class="adm-sidebar-nav">
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Overview</span>
+                <a href="index.html" class="adm-nav-item">
+                    <span class="material-icons">dashboard</span> Dashboard
+                </a>
+            </div>
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Academics</span>
+                <a href="courses.html" class="adm-nav-item">
+                    <span class="material-icons">menu_book</span> Courses
+                </a>
+                <a href="categories.html" class="adm-nav-item">
+                    <span class="material-icons">category</span> Categories
+                </a>
+                <a href="lessons.html" class="adm-nav-item">
+                    <span class="material-icons">play_lesson</span> Lessons
+                </a>
+                <a href="quizzes.html" class="adm-nav-item">
+                    <span class="material-icons">quiz</span> Quizzes &amp; Tests
+                </a>
+                <a href="assignments.html" class="adm-nav-item">
+                    <span class="material-icons">assignment</span> Assignments
+                </a>
+            </div>
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Users</span>
+                <a href="students.html" class="adm-nav-item active">
+                    <span class="material-icons">people</span> Students
+                </a>
+                <a href="reviews.html" class="adm-nav-item">
+                    <span class="material-icons">rate_review</span> Reviews
+                </a>
+            </div>
+            <div class="adm-nav-section">
+                <span class="adm-nav-label">Settings</span>
+                <a href="settings.html" class="adm-nav-item">
+                    <span class="material-icons">settings</span> Settings
+                </a>
+            </div>
+        </nav>
+        <div class="adm-sidebar-footer">
+            <button id="logoutBtn" class="adm-logout-btn">
+                <span class="material-icons">logout</span> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+        <header class="adm-header">
+            <h1 class="adm-header-title">Student Directory</h1>
+            <div class="adm-header-right">
+                <span id="studentCount" style="font-size:13px;color:var(--text-muted);"></span>
+                <div class="adm-search">
+                    <span class="material-icons">search</span>
+                    <input id="studentSearch" type="text" placeholder="Search by name or email…">
+                </div>
+                <div class="adm-avatar">A</div>
+            </div>
+        </header>
+
+        <div style="flex:1;overflow-y:auto;padding:28px 32px;">
+            <div style="margin-bottom:24px;">
+                <h1 class="page-heading">Students</h1>
+                <p class="page-sub">Browse and manage all registered learners</p>
+            </div>
+
+            <div class="adm-table-wrap">
+                <table class="adm-table">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Email</th>
+                            <th>Registered</th>
+                            <th>Status</th>
+                            <th style="text-align:right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsList">
+                        <!-- Dynamic content via students.js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="js/students.js"></script>
+</body>
+</html>

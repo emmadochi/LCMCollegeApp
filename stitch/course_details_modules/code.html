@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary": "#ffffff",
+              "outline": "#767683",
+              "on-surface-variant": "#454652",
+              "on-secondary-fixed-variant": "#005145",
+              "on-background": "#191c1e",
+              "on-tertiary-container": "#6294ff",
+              "surface-variant": "#e0e3e6",
+              "tertiary-fixed": "#d9e2ff",
+              "on-primary-fixed": "#000767",
+              "surface-container-highest": "#e0e3e6",
+              "secondary": "#006b5c",
+              "primary-container": "#1a237e",
+              "on-secondary-fixed": "#00201a",
+              "outline-variant": "#c6c5d4",
+              "secondary-fixed-dim": "#44ddc1",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#bdc2ff",
+              "on-tertiary-fixed-variant": "#00429b",
+              "primary-fixed-dim": "#bdc2ff",
+              "on-secondary": "#ffffff",
+              "tertiary-fixed-dim": "#b0c6ff",
+              "primary": "#000666",
+              "on-primary-fixed-variant": "#343d96",
+              "tertiary-container": "#002c6d",
+              "on-tertiary-fixed": "#001945",
+              "on-primary-container": "#8690ee",
+              "inverse-surface": "#2d3133",
+              "surface-tint": "#4c56af",
+              "secondary-fixed": "#68fadd",
+              "surface-container-lowest": "#ffffff",
+              "tertiary": "#001943",
+              "error": "#ba1a1a",
+              "on-error": "#ffffff",
+              "error-container": "#ffdad6",
+              "inverse-on-surface": "#eff1f4",
+              "surface-container-high": "#e6e8eb",
+              "surface": "#f7f9fc",
+              "surface-bright": "#f7f9fc",
+              "background": "#f7f9fc",
+              "secondary-container": "#68fadd",
+              "surface-container-low": "#f2f4f7",
+              "primary-fixed": "#e0e0ff",
+              "surface-dim": "#d8dadd",
+              "surface-container": "#eceef1",
+              "on-surface": "#191c1e",
+              "on-tertiary": "#ffffff",
+              "on-secondary-container": "#007261"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-shift {
+            background: linear-gradient(to top, rgba(247, 249, 252, 1), rgba(247, 249, 252, 0));
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/60 backdrop-blur-xl">
+<div class="flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high">
+<img alt="Student Profile Photo" data-alt="Close up professional headshot of a student" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzdyThEkO0uNmPbBuJcSXRhmdiCk2K5JBhOYzAVoLamMpSZwlI261SLXAjuDNTsf4CsL8X6T6RC9rFjRlAoRNRInD64WrYZqfLcG-qmQgOBC4GHG9aWM7KYbnzaJez3ViyEtBvZ12SExPhGUWDnnZ0AneXsBY1FGelvn_jB0iUvPwC6pzf0RSjeXfmsMnOSdt--Yytfv4II5Icxise74nBTbVCwUSrw7Y6fsyt77VspMPdA5nhxv9fqa4c-531EQU8CTdlXr12Rjk"/>
+</div>
+<span class="text-xl font-extrabold text-indigo-900 font-headline tracking-tight">Atelier</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-slate-100 transition-all active:scale-95">
+<span class="material-symbols-outlined text-indigo-900" data-icon="notifications">notifications</span>
+</button>
+</div>
+<div class="bg-slate-200/20 h-[1px]"></div>
+</header>
+<main class="pt-20 pb-32">
+<!-- Progress Bar (Top) -->
+<div class="px-6 mb-8 mt-4">
+<div class="flex justify-between items-end mb-2">
+<span class="font-headline font-bold text-primary tracking-tight">Overall Progress</span>
+<span class="font-headline font-extrabold text-secondary">25%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-1/4 shadow-[0_0_12px_rgba(0,107,92,0.3)]"></div>
+</div>
+</div>
+<!-- Hero Section -->
+<section class="px-6 mb-10">
+<div class="relative w-full aspect-[16/10] rounded-xl overflow-hidden shadow-2xl group">
+<img alt="Advanced Web Development" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Modern laptop with clean code editor showing web development components" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBF1mmL_toMvX0Jq6eyZCqgOUX6BUVNyoNZc0JZABqNG7kNvALFAqg2poyYg0Q0e49R02VEgfEx7ozzUns5nQd3yvB3X_gExeyZw9ZmQ-ZSJJd8BM-uuukT_eCdxgWagiplc-WJDEeNqGNfkzCQpjThpfWq_p_NP0Fucvje-Nrv0GunUwgi8GEP5MGd7XF1z8j3sTP1YE1g4b350yhnjEbePgc6SboKtQOHpfElZT-u690Oe1yNSs1eZfSHrmjxafmS7iYSkzywPzs"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6">
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-secondary text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-widest uppercase">Enrolled</span>
+</div>
+<h1 class="text-white font-headline font-extrabold text-3xl leading-tight tracking-tight">Advanced Web Development</h1>
+</div>
+</div>
+</section>
+<!-- Course Stats Bento Grid -->
+<section class="px-6 grid grid-cols-2 gap-4 mb-12">
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0_8px_24px_rgba(25,28,30,0.04)] flex flex-col gap-1">
+<span class="material-symbols-outlined text-secondary text-xl mb-1" data-icon="menu_book">menu_book</span>
+<span class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider">Lessons</span>
+<span class="font-headline font-bold text-on-surface text-lg">12 Lessons</span>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0_8px_24px_rgba(25,28,30,0.04)] flex flex-col gap-1">
+<span class="material-symbols-outlined text-secondary text-xl mb-1" data-icon="schedule">schedule</span>
+<span class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider">Duration</span>
+<span class="font-headline font-bold text-on-surface text-lg">8 Hours</span>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0_8px_24px_rgba(25,28,30,0.04)] flex flex-col gap-1">
+<span class="material-symbols-outlined text-secondary text-xl mb-1" data-icon="quiz">quiz</span>
+<span class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider">Assessments</span>
+<span class="font-headline font-bold text-on-surface text-lg">3 Tests</span>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0_8px_24px_rgba(25,28,30,0.04)] flex flex-col gap-1">
+<span class="material-symbols-outlined text-secondary text-xl mb-1" data-icon="trending_up">trending_up</span>
+<span class="text-on-surface-variant text-xs font-semibold uppercase tracking-wider">Skill Level</span>
+<span class="font-headline font-bold text-on-surface text-lg">Intermediate</span>
+</div>
+</section>
+<!-- Curriculum List -->
+<section class="px-6 mb-20">
+<h2 class="font-headline font-extrabold text-2xl mb-8 text-primary flex items-center gap-3">
+                Curriculum
+                <span class="h-1 w-12 bg-secondary/20 rounded-full"></span>
+</h2>
+<div class="space-y-8">
+<!-- Module 1 -->
+<div class="relative pl-12">
+<div class="absolute left-4 top-0 bottom-0 w-[2px] bg-secondary-fixed/30"></div>
+<div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-secondary flex items-center justify-center z-10 shadow-[0_4px_12px_rgba(0,107,92,0.3)]">
+<span class="material-symbols-outlined text-white text-lg" data-icon="check">check</span>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_8px_24px_rgba(25,28,30,0.04)] border-l-4 border-secondary">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Module 1</span>
+<span class="text-xs font-medium text-secondary">Completed</span>
+</div>
+<h3 class="font-headline font-bold text-lg text-on-surface mb-2">Introduction</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed mb-4">Foundation of modern architecture and development workflows.</p>
+<button class="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest hover:translate-x-1 transition-transform">
+                            Review Module
+                            <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Module 2 -->
+<div class="relative pl-12">
+<div class="absolute left-4 top-0 bottom-0 w-[2px] bg-secondary-fixed/30"></div>
+<div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-primary-container flex items-center justify-center z-10 shadow-[0_4px_12px_rgba(26,35,126,0.3)]">
+<span class="material-symbols-outlined text-white text-lg" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-[0_20px_40px_rgba(0,6,102,0.08)] border-l-4 border-primary">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-primary-container uppercase tracking-[0.2em]">Module 2</span>
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary-fixed/50 text-[10px] font-extrabold text-primary">IN PROGRESS</span>
+</div>
+<h3 class="font-headline font-bold text-lg text-on-surface mb-2">React Fundamentals</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed mb-6">Component lifecycles, hooks, and performance optimization techniques.</p>
+<button class="w-full bg-secondary text-white font-headline font-bold py-3 px-6 rounded-full flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_8px_20px_rgba(0,107,92,0.3)]">
+                            Resume Learning
+                            <span class="material-symbols-outlined" data-icon="play_circle">play_circle</span>
+</button>
+</div>
+</div>
+<!-- Module 3 -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-surface-dim flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-on-surface-variant text-lg" data-icon="lock">lock</span>
+</div>
+<div class="bg-surface-container/40 p-6 rounded-xl backdrop-blur-sm grayscale-[0.5]">
+<div class="flex justify-between items-start mb-2">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.2em]">Module 3</span>
+</div>
+<h3 class="font-headline font-bold text-lg text-on-surface/50 mb-2">State Management</h3>
+<div class="flex items-center gap-2 bg-white/50 w-fit px-3 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="info">info</span>
+<p class="text-[11px] font-medium text-on-surface-variant">Locked - Finish prev module</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 backdrop-blur-2xl z-50 rounded-t-3xl shadow-[0_-8px_24px_rgba(25,28,30,0.04)]">
+<a class="flex flex-col items-center justify-center text-slate-400 px-4 py-2 transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-teal-600 text-white rounded-2xl px-4 py-2 shadow-[0_4px_12px_rgba(0,107,92,0.3)] transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="import_contacts" style="font-variation-settings: 'FILL' 1;">import_contacts</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider mt-1">My Courses</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 px-4 py-2 transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider mt-1">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 px-4 py-2 transition-transform duration-200 active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-manrope text-[11px] font-semibold uppercase tracking-wider mt-1">Profile</span>
+</a>
+</nav>
+</body></html>
