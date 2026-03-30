@@ -42,54 +42,21 @@ class LessonPlayerScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Video Player Area
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      boxShadow: AppTheme.softShadow,
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: Container(
+                color: Colors.black,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.network('https://lh3.googleusercontent.com/aida-public/AB6AXuD2Pjy9tB0CZQc4haxUX1wBViVl1nvH5hNGCpUlPVpgyzUGCs7wJaP63oOCBvUCxdG2kBU_j5fdhha5ayVKv5gvvLMtZFazUImk7Ou-Z51djo2JaoEk68OFvMYCX8IKsvvHTRFw-E0tyO_C7BLmi_rbLdd_giIKX89aZWkYiqAitnJY5KxTDJJdZ6s6EKY3NoCyypSzLkN--2jnpS0KAnn4a4OmAK5V_HSmAUsm_QgOXICBJ0iLmgHbHu3tC5XrXfbWW48mMNrWsOA', fit: BoxFit.cover, opacity: const AlwaysStoppedAnimation(0.6)),
+                    Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), shape: BoxShape.circle, border: Border.all(color: Colors.white, width: 2)),
+                      child: const Icon(Symbols.play_arrow, color: Colors.white, size: 32, fill: 1),
                     ),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.network(
-                          'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070', 
-                          fit: BoxFit.cover, 
-                          opacity: const AlwaysStoppedAnimation(0.4),
-                        ),
-                        Container(
-                          width: 72,
-                          height: 72,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2), 
-                            shape: BoxShape.circle, 
-                            border: Border.all(color: Colors.white.withOpacity(0.5), width: 1.5),
-                          ),
-                          child: const Icon(Symbols.play_arrow, color: Colors.white, size: 40, fill: 1),
-                        ),
-                        // Glassy Duration Tag
-                        Positioned(
-                          bottom: 16,
-                          right: 16,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.6),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: const Text(
-                              '12:45',
-                              style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -198,16 +165,16 @@ class LessonPlayerScreen extends ConsumerWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Theme.of(context).colorScheme.primary, 
-              Theme.of(context).colorScheme.primary.withOpacity(0.8),
+              Theme.of(context).colorScheme.secondary, 
+              Theme.of(context).colorScheme.secondaryContainer,
             ],
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.3), 
-              blurRadius: 15, 
-              offset: const Offset(0, 8),
+              color: Theme.of(context).colorScheme.secondary.withOpacity(0.3), 
+              blurRadius: 12, 
+              offset: const Offset(0, 6),
             ),
           ],
         ),
@@ -471,9 +438,9 @@ class _SubmissionStatusView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color, 
+        color: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.white : Theme.of(context).colorScheme.surfaceContainerHigh, 
         borderRadius: BorderRadius.circular(20), 
-        boxShadow: AppTheme.softShadow,
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

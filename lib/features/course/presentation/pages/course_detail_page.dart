@@ -12,8 +12,6 @@ import '../../data/repositories/course_repository.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
-import '../../../../core/widgets/app_cards.dart';
-import '../../../../core/widgets/app_loading.dart';
 import '../../data/models/review_model.dart';
 import '../providers/review_providers.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -41,10 +39,7 @@ class CourseDetailPage extends ConsumerWidget {
         stream: FirebaseFirestore.instance.collection('courses').doc(courseId).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Padding(
-              padding: EdgeInsets.all(24),
-              child: CourseCardSkeleton(isVertical: true),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || !snapshot.data!.exists) {
             return const Center(child: Text("Course not found"));
@@ -57,10 +52,7 @@ class CourseDetailPage extends ConsumerWidget {
             stream: LearningRepository().getLessons(courseId),
             builder: (context, lessonSnapshot) {
               if (lessonSnapshot.connectionState == ConnectionState.waiting) {
-                return const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: CourseCardSkeleton(),
-                );
+                return const Center(child: CircularProgressIndicator());
               }
               final lessons = lessonSnapshot.data ?? [];
 
@@ -119,40 +111,19 @@ class CourseDetailPage extends ConsumerWidget {
                           ],
                           const SizedBox(height: 32),
                           // Hero
-                          Hero(
-                            tag: 'course-thumb-${course.title}',
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(24),
-                              child: Stack(
-                                children: [
-                                  Image.network(
-                                    course.thumbnailUrl.isNotEmpty ? course.thumbnailUrl : 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070',
-                                    height: 240,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Positioned.fill(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: [Colors.black.withOpacity(0.8), Colors.transparent],
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 24,
-                                    left: 24,
-                                    right: 24,
-                                    child: Text(
-                                      course.title,
-                                      style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(24),
+                            child: Stack(
+                              children: [
+                                Image.network(
+                                  course.thumbnailUrl.isNotEmpty ? course.thumbnailUrl : 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070',
+                                  height: 200,
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                                Positioned.fill(child: Container(decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.black.withOpacity(0.8), Colors.transparent], begin: Alignment.bottomCenter, end: Alignment.topCenter)))),
+                                Positioned(bottom: 24, left: 24, child: Text(course.title, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold))),
+                              ],
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -511,49 +482,20 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).cardTheme.color,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.white : Theme.of(context).colorScheme.surfaceContainerHigh, 
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 20),
-          ),
+          Icon(icon, color: Theme.of(context).colorScheme.secondary, size: 24),
           const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 9,
-                    fontWeight: FontWeight.w900,
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
-                    letterSpacing: 0.5,
-                  ),
-                ),
-                Text(
-                  value,
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4))),
+              Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+            ],
           ),
         ],
       ),

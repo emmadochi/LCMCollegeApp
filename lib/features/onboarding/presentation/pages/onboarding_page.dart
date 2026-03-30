@@ -6,12 +6,12 @@ import '../providers/onboarding_provider.dart';
 class OnboardingContent {
   final String title;
   final String description;
-  final String image;
+  final IconData icon;
 
   OnboardingContent({
     required this.title,
     required this.description,
-    required this.image,
+    required this.icon,
   });
 }
 
@@ -28,19 +28,19 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
 
   final List<OnboardingContent> _contents = [
     OnboardingContent(
-      title: 'Elevate Your\nAcademic Journey',
-      description: 'The most comprehensive platform for modern college students to excel in their studies.',
-      image: 'assets/images/onboarding_welcome.png',
+      title: 'Welcome to College App',
+      description: 'Your one-stop destination for all learning and college activities.',
+      icon: Symbols.school,
     ),
     OnboardingContent(
-      title: 'Master New\nSkills Anywhere',
-      description: 'Access high-quality courses, interactive tutorials, and quizzes on the go, anytime.',
-      image: 'assets/images/onboarding_learn.png',
+      title: 'Learn Anywhere',
+      description: 'Access courses, tutorials, and quizzes on the go.',
+      icon: Symbols.menu_book,
     ),
     OnboardingContent(
-      title: 'Track Your\nPath to Success',
-      description: 'Monitor your achievements and milestones with our advanced progress tracking system.',
-      image: 'assets/images/onboarding_track.png',
+      title: 'Track Your Progress',
+      description: 'Stay updated with your achievements and milestones.',
+      icon: Symbols.analytics,
     ),
   ];
 
@@ -64,132 +64,95 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).colorScheme.surface,
-              Theme.of(context).colorScheme.primary.withOpacity(0.05),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextButton(
-                    onPressed: () {
-                      ref.read(hasSeenOnboardingProvider.notifier).completeOnboarding();
-                    },
-                    child: Text(
-                      'Skip',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: TextButton(
+                onPressed: () {
+                  ref.read(hasSeenOnboardingProvider.notifier).completeOnboarding();
+                },
+                child: const Text('Skip'),
+              ),
+            ),
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: _contents.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final content = _contents[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(40.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/logo.png',
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.contain,
+                        ),
+                        const SizedBox(height: 40),
+                        Text(
+                          content.title,
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          content.description,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
+                  );
+                },
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                _contents.length,
+                (index) => Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  width: _currentIndex == index ? 12 : 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: _currentIndex == index
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(4),
                   ),
                 ),
               ),
-              Expanded(
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: _contents.length,
-                  onPageChanged: (index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                  itemBuilder: (context, index) {
-                    final content = _contents[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 300,
-                            padding: const EdgeInsets.all(20),
-                            child: Image.asset(
-                              content.image,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          const SizedBox(height: 48),
-                          Text(
-                            content.title,
-                            style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  height: 1.1,
-                                ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 20),
-                          Text(
-                            content.description,
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-                                  height: 1.5,
-                                ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  _contents.length,
-                  (index) => AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: _currentIndex == index ? 24 : 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: _currentIndex == index
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+            ),
+            const SizedBox(height: 40),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _onNextPressed,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: Text(
+                    _currentIndex == _contents.length - 1 ? 'Get Started' : 'Next',
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ),
               ),
-              const SizedBox(height: 48),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 32.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _onNextPressed,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      elevation: 4,
-                      shadowColor: Theme.of(context).colorScheme.primary.withOpacity(0.4),
-                    ),
-                    child: Text(
-                      _currentIndex == _contents.length - 1 ? 'Get Started' : 'Continue',
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

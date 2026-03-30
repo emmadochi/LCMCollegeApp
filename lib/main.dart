@@ -28,13 +28,13 @@ void main() async {
       overrides: [
         sharedPrefsProvider.overrideWithValue(sharedPrefs),
       ],
-      child: const CollegeApp(),
+      child: const LCMCollege(),
     ),
   );
 }
 
-class CollegeApp extends ConsumerWidget {
-  const CollegeApp({super.key});
+class LCMCollege extends ConsumerWidget {
+  const LCMCollege({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,7 +42,7 @@ class CollegeApp extends ConsumerWidget {
     final authState = ref.watch(authStateProvider);
 
     return MaterialApp(
-      title: 'College App',
+      title: 'LCM College',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,

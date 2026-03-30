@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/models/quiz_model.dart';
-import '../../data/repositories/quiz_repository.dart';
+import '../data/models/quiz_model.dart';
+import '../data/repositories/quiz_repository.dart';
 
 final quizRepositoryProvider = Provider<QuizRepository>((ref) => QuizRepository());
 

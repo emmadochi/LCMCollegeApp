@@ -4,7 +4,6 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../course/presentation/pages/course_discovery_page.dart';
 import '../../../profile/presentation/pages/profile_page.dart';
 import '../../../learning/presentation/pages/my_courses_page.dart';
-import '../../../../core/widgets/app_cards.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -26,46 +25,44 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
       body: _pages[_selectedIndex],
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-          child: AppGlassContainer(
-            blur: 20,
-            opacity: Theme.of(context).brightness == Brightness.light ? 0.8 : 0.4,
-            borderRadius: BorderRadius.circular(24),
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _NavItem(
-                  icon: Symbols.home,
-                  label: 'Home',
-                  isActive: _selectedIndex == 0,
-                  onTap: () => setState(() => _selectedIndex = 0),
-                ),
-                _NavItem(
-                  icon: Symbols.import_contacts,
-                  label: 'My Courses',
-                  isActive: _selectedIndex == 1,
-                  onTap: () => setState(() => _selectedIndex = 1),
-                ),
-                _NavItem(
-                  icon: Symbols.search,
-                  label: 'Search',
-                  isActive: _selectedIndex == 2,
-                  onTap: () => setState(() => _selectedIndex = 2),
-                ),
-                _NavItem(
-                  icon: Symbols.person,
-                  label: 'Profile',
-                  isActive: _selectedIndex == 3,
-                  onTap: () => setState(() => _selectedIndex = 3),
-                ),
-              ],
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.only(bottom: 24, top: 12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+          borderRadius: const BorderRadius.only(topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 20, offset: const Offset(0, -8)),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _NavItem(
+              icon: Symbols.home,
+              label: 'Home',
+              isActive: _selectedIndex == 0,
+              onTap: () => setState(() => _selectedIndex = 0),
             ),
-          ),
+            _NavItem(
+              icon: Symbols.import_contacts,
+              label: 'My Courses',
+              isActive: _selectedIndex == 1,
+              onTap: () => setState(() => _selectedIndex = 1),
+            ),
+            _NavItem(
+              icon: Symbols.search,
+              label: 'Search',
+              isActive: _selectedIndex == 2,
+              onTap: () => setState(() => _selectedIndex = 2),
+            ),
+            _NavItem(
+              icon: Symbols.person,
+              label: 'Profile',
+              isActive: _selectedIndex == 3,
+              onTap: () => setState(() => _selectedIndex = 3),
+            ),
+          ],
         ),
       ),
     );
