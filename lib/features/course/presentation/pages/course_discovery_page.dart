@@ -9,6 +9,12 @@ import '../../data/models/category_model.dart';
 import 'course_detail_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../../core/widgets/app_cards.dart';
+import '../../../../core/widgets/app_loading.dart';
+import '../../../../core/widgets/app_cards.dart';
+import '../../../../core/widgets/app_loading.dart';
+import '../../../../core/widgets/app_cards.dart';
+import '../../../../core/widgets/app_loading.dart';
 
 class CourseDiscoveryPage extends ConsumerWidget {
   const CourseDiscoveryPage({super.key});
@@ -127,15 +133,13 @@ class CourseDiscoveryPage extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 filteredCoursesAsync.when(
-                  data: (courses) {
-                    if (courses.isEmpty) {
-                      return const Center(child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 48),
-                        child: Text("No courses match your criteria."),
-                      ));
-                    }
-                    return Column(
-                      children: courses.map((course) => _CourseListItem(
+                  data: (courses) => ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: courses.length,
+                    itemBuilder: (context, index) {
+                      final course = courses[index];
+                      return AppCourseCard(
                         title: course.title,
                         rating: course.rating,
                         category: course.category,
@@ -144,11 +148,18 @@ class CourseDiscoveryPage extends ConsumerWidget {
                           context,
                           MaterialPageRoute(builder: (context) => CourseDetailPage(courseId: course.id)),
                         ),
-                      )).toList(),
-                    );
-                  },
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (e, __) => Text('Error: $e'),
+                      );
+                    },
+                  ),
+                  error: (err, stack) => Center(child: Text('Error: $err')),
+                  loading: () => ListView.builder(
+                    itemCount: 3,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => const Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: CourseCardSkeleton(),
+                    ),
+                  ),
                 ),
               ] else ...[
                 const _SectionHeader(title: 'Featured Curriculum', subtitle: "EDITOR'S CHOICE"),
@@ -159,7 +170,12 @@ class CourseDiscoveryPage extends ConsumerWidget {
                     stream: CourseRepository().getFeaturedCourses(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 3,
+                          separatorBuilder: (context, index) => const SizedBox(width: 16),
+                          itemBuilder: (context, index) => const CourseCardSkeleton(isVertical: true),
+                        );
                       }
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return const Center(child: Text("No courses found"));
@@ -171,8 +187,10 @@ class CourseDiscoveryPage extends ConsumerWidget {
                         separatorBuilder: (context, index) => const SizedBox(width: 16),
                         itemBuilder: (context, index) {
                           final course = courses[index];
-                          return _FeaturedCard(
+                          return AppCourseCard(
+                            isVertical: true,
                             title: course.title,
+                            category: course.category,
                             rating: course.rating,
                             imageUrl: course.thumbnailUrl.isNotEmpty ? course.thumbnailUrl : 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070',
                             onTap: () => Navigator.push(
@@ -195,19 +213,25 @@ class CourseDiscoveryPage extends ConsumerWidget {
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) return const SizedBox();
                     final courses = snapshot.data!;
-                    return Column(
-                      children: courses.map((course) => _CourseListItem(
-                        title: course.title,
-                        rating: course.rating,
-                        category: course.category,
-                        imageUrl: course.thumbnailUrl.isNotEmpty ? course.thumbnailUrl : 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070',
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CourseDetailPage(courseId: course.id),
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: courses.length,
+                      itemBuilder: (context, index) {
+                        final course = courses[index];
+                        return AppCourseCard(
+                          title: course.title,
+                          rating: course.rating,
+                          category: course.category,
+                          imageUrl: course.thumbnailUrl.isNotEmpty ? course.thumbnailUrl : 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070',
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CourseDetailPage(courseId: course.id),
+                            ),
                           ),
-                        ),
-                      )).toList(),
+                        );
+                      },
                     );
                   },
                 ),
@@ -260,176 +284,7 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-class _FeaturedCard extends StatelessWidget {
-  final String title;
-  final double rating;
-  final String imageUrl;
-  final VoidCallback onTap;
-
-  const _FeaturedCard({
-    required this.title,
-    required this.rating,
-    required this.imageUrl,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 280,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.white : Theme.of(context).colorScheme.surfaceContainerHigh,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-              child: Image.network(imageUrl, height: 160, width: double.infinity, fit: BoxFit.cover),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold, 
-                      fontSize: 16,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      const Spacer(),
-                      const Icon(Symbols.star, color: Colors.amber, size: 16),
-                      const SizedBox(width: 4),
-                      Text(
-                        rating.toString(),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold, 
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CourseListItem extends StatelessWidget {
-  final String title;
-  final double rating;
-  final String category;
-  final String imageUrl;
-  final VoidCallback onTap;
-
-  const _CourseListItem({
-    required this.title,
-    required this.rating,
-    required this.category,
-    required this.imageUrl,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.white : Theme.of(context).colorScheme.surfaceContainerHigh,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.02),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(imageUrl, width: 80, height: 80, fit: BoxFit.cover),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                          maxLines: 1,
-                        ),
-                      ),
-                      Text(
-                        rating.toString(),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.grey.shade100 : Theme.of(context).colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      category.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.1,
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// _CourseListItem removed in favor of AppCourseCard
 
 class _CategoriesSection extends ConsumerWidget {
   const _CategoriesSection();

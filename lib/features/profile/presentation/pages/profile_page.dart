@@ -14,71 +14,148 @@ class ProfilePage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset('assets/images/logo.png', fit: BoxFit.contain),
-        ),
-        title: const Text('Profile', style: TextStyle(fontWeight: FontWeight.bold)),
-      ),
       body: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(currentUserProvider);
           await ref.read(currentUserProvider.future);
         },
-        child: SingleChildScrollView(
+        child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: user?.profileImageUrl != null ? NetworkImage(user!.profileImageUrl!) : null,
-                  child: user?.profileImageUrl == null ? const Icon(Symbols.person, size: 40) : null,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  user?.fullName ?? 'User', 
-                  style: TextStyle(
-                    fontSize: 24, 
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
+          slivers: [
+            SliverAppBar(
+              expandedHeight: 220,
+              pinned: true,
+              backgroundColor: AppTheme.primaryColor,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  decoration: const BoxDecoration(
+                    gradient: AppTheme.primaryGradient,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 48),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 3),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 20),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.white24,
+                          backgroundImage: user?.profileImageUrl != null && user!.profileImageUrl!.isNotEmpty 
+                            ? NetworkImage(user.profileImageUrl!) 
+                            : null,
+                          child: (user?.profileImageUrl == null || user!.profileImageUrl!.isEmpty)
+                            ? const Icon(Symbols.person, size: 40, color: Colors.white)
+                            : null,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        user?.fullName ?? 'User',
+                        style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        user?.email ?? '',
+                        style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 13),
+                      ),
+                    ],
                   ),
                 ),
-                Text(user?.email ?? '', style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6))),
-                const SizedBox(height: 48),
-                ListTile(
-                  leading: const Icon(Symbols.badge),
-                  title: const Text('My Certificates'),
-                  onTap: () {},
-                ),
-                ListTile(
-                  leading: const Icon(Symbols.settings),
-                  title: const Text('Settings'),
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const SettingsPage()),
-                  ),
-                ),
-                const SizedBox(height: 100), // Some space for scrollability
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => ref.read(authRepositoryProvider).signOut(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.error, 
-                      foregroundColor: Theme.of(context).colorScheme.onError,
-                    ),
-                    child: const Text('Logout'),
-                  ),
-                ),
-                const SizedBox(height: 40),
-              ],
+              ),
             ),
-          ),
+            SliverPadding(
+              padding: const EdgeInsets.all(24),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  _ProfileCard(
+                    icon: Symbols.badge,
+                    title: 'My Certificates',
+                    subtitle: 'View and download your earned certificates',
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 16),
+                  _ProfileCard(
+                    icon: Symbols.settings,
+                    title: 'Settings',
+                    subtitle: 'Privacy, security and notifications',
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const SettingsPage()),
+                    ),
+                  ),
+                  const SizedBox(height: 48),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () => ref.read(authRepositoryProvider).signOut(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.error.withOpacity(0.1),
+                        foregroundColor: Theme.of(context).colorScheme.error,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
+                      icon: const Icon(Symbols.logout),
+                      label: const Text('Sign Out'),
+                    ),
+                  ),
+                  const SizedBox(height: 100),
+                ]),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _ProfileCard({required this.icon, required this.title, required this.subtitle, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardTheme.color,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: AppTheme.softShadow,
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const SizedBox(height: 4),
+                  Text(subtitle, style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5), fontSize: 12)),
+                ],
+              ),
+            ),
+            Icon(Symbols.chevron_right, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.3)),
+          ],
         ),
       ),
     );
