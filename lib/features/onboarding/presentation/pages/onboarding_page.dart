@@ -129,7 +129,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                   decoration: BoxDecoration(
                     color: _currentIndex == index
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
+                        : Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),

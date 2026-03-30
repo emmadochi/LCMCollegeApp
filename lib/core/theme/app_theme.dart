@@ -33,6 +33,13 @@ class AppTheme {
           fontWeight: FontWeight.bold,
           color: onSurfaceColor,
         ),
+        headlineSmall: GoogleFonts.manrope(
+          fontWeight: FontWeight.bold,
+          color: onSurfaceColor,
+        ),
+        bodyMedium: GoogleFonts.manrope(
+          color: onSurfaceColor.withOpacity(0.8),
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -73,6 +80,13 @@ class AppTheme {
         titleLarge: GoogleFonts.manrope(
           fontWeight: FontWeight.bold,
           color: const Color(0xFFE1E2E4),
+        ),
+        headlineSmall: GoogleFonts.manrope(
+          fontWeight: FontWeight.bold,
+          color: const Color(0xFFE1E2E4),
+        ),
+        bodyMedium: GoogleFonts.manrope(
+          color: const Color(0xFFE1E2E4).withOpacity(0.8),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
