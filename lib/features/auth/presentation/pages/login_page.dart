@@ -57,26 +57,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
   }
 
-  Future<void> _handleLinkedInLogin() async {
-    setState(() => _isLoading = true);
-    try {
-      await ref.read(authRepositoryProvider).signInWithLinkedIn();
-    } on UnimplementedError catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.message ?? 'Not implemented')),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('LinkedIn Login failed: ${e.toString()}')),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,24 +108,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               const SizedBox(height: 40),
               // Social Login
-              Row(
-                children: [
-                  Expanded(
-                    child: _SocialButton(
-                      icon: Icons.g_mobiledata, // Placeholder for Google
-                      label: 'Google',
-                      onPressed: _isLoading ? () {} : _handleGoogleLogin,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: _SocialButton(
-                      icon: Icons.work, // Placeholder for LinkedIn
-                      label: 'LinkedIn',
-                      onPressed: _isLoading ? () {} : _handleLinkedInLogin,
-                    ),
-                  ),
-                ],
+              _SocialButton(
+                icon: Icons.g_mobiledata, // Placeholder for Google
+                label: 'Continue with Google',
+                onPressed: _isLoading ? () {} : _handleGoogleLogin,
               ),
               const SizedBox(height: 32),
               // Divider

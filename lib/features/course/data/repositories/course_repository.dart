@@ -35,4 +35,8 @@ class CourseRepository {
     if (!doc.exists) throw Exception('Course not found');
     return CourseModel.fromMap(doc.data()!, doc.id);
   }
+
+  Future<void> updateCourse(CourseModel course) async {
+    await _firestore.collection('courses').doc(course.id).update(course.toMap());
+  }
 }

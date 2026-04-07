@@ -68,15 +68,7 @@ class CourseDiscoveryPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (!isSearching) ...[
-                Text(
-                  'Explore your next\nacademic frontier',
-                  style: GoogleFonts.manrope(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w800,
-                    color: Theme.of(context).colorScheme.primary,
-                    height: 1.2,
-                  ),
-                ),
+                Text('Explore your next\nacademic frontier', style: GoogleFonts.manrope(fontSize: 32, fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.primary, height: 1.2)),
                 const SizedBox(height: 24),
               ],
               // Search Bar
@@ -187,6 +179,8 @@ class CourseDiscoveryPage extends ConsumerWidget {
                     },
                   ),
                 ),
+                const SizedBox(height: 48),
+                const _AboutCollegeSection(),
                 const SizedBox(height: 40),
                 const _SectionHeader(title: 'Popular Academy Tracks'),
                 const SizedBox(height: 16),
@@ -417,7 +411,7 @@ class _CourseListItem extends StatelessWidget {
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.1,
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                       ),
                     ),
                   ),
@@ -509,5 +503,97 @@ class _CategoriesSection extends ConsumerWidget {
       case 'code': return Symbols.code;
       default: return Symbols.category;
     }
+  }
+}
+
+class _AboutCollegeSection extends StatelessWidget {
+  const _AboutCollegeSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.1)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            child: Image.asset(
+              'assets/images/college_about.png',
+              height: 200,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                height: 200,
+                color: Theme.of(context).colorScheme.primaryContainer,
+                child: const Icon(Symbols.school, size: 48),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Symbols.school, color: Colors.white, size: 20),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      'About LCM College',
+                      style: GoogleFonts.manrope(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'LCM College is a premier institution dedicated to academic excellence and scholarly innovation. Our mission is to empower the next generation of leaders through a rigorous curriculum, cutting-edge research, and a supportive scholarly community.',
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    height: 1.6,
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: Theme.of(context).colorScheme.primary),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                    child: Text(
+                      'Learn Our History',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

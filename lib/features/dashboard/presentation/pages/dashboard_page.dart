@@ -4,15 +4,17 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../course/presentation/pages/course_discovery_page.dart';
 import '../../../profile/presentation/pages/profile_page.dart';
 import '../../../learning/presentation/pages/my_courses_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 
-class DashboardPage extends StatefulWidget {
+class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({super.key});
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  ConsumerState<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _DashboardPageState extends ConsumerState<DashboardPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
@@ -20,6 +22,18 @@ class _DashboardPageState extends State<DashboardPage> {
     const MyCoursesPage(),
     const Center(child: Text('Search')),
     const ProfilePage(),
+    const Center(child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Symbols.admin_panel_settings, size: 64, color: Colors.blue),
+        SizedBox(height: 16),
+        Text('Admin Dashboard', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        Padding(
+          padding: EdgeInsets.all(24.0),
+          child: Text('Use the "Edit Course" buttons on course detail pages to manage curriculum.', textAlign: TextAlign.center),
+        ),
+      ],
+    )),
   ];
 
   @override
@@ -62,6 +76,13 @@ class _DashboardPageState extends State<DashboardPage> {
               isActive: _selectedIndex == 3,
               onTap: () => setState(() => _selectedIndex = 3),
             ),
+            if (ref.watch(currentUserProvider).value?.isAdmin ?? false)
+              _NavItem(
+                icon: Symbols.admin_panel_settings,
+                label: 'Admin',
+                isActive: _selectedIndex == 4,
+                onTap: () => setState(() => _selectedIndex = 4),
+              ),
           ],
         ),
       ),

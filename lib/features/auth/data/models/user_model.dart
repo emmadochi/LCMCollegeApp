@@ -5,6 +5,7 @@ class UserModel {
   final String? profileImageUrl;
   final List<String> enrolledCourses;
   final List<String> completedCourses;
+  final bool isAdmin;
 
   UserModel({
     required this.id,
@@ -13,6 +14,7 @@ class UserModel {
     this.profileImageUrl,
     this.enrolledCourses = const [],
     this.completedCourses = const [],
+    this.isAdmin = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +25,7 @@ class UserModel {
       'profileImageUrl': profileImageUrl,
       'enrolledCourses': enrolledCourses,
       'completedCourses': completedCourses,
+      'isAdmin': isAdmin,
     };
   }
 
@@ -34,6 +37,7 @@ class UserModel {
       profileImageUrl: map['profileImageUrl'],
       enrolledCourses: List<String>.from(map['enrolledCourses'] ?? []),
       completedCourses: List<String>.from(map['completedCourses'] ?? []),
+      isAdmin: map['isAdmin'] ?? false,
     );
   }
 }

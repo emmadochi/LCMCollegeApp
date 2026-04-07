@@ -16,6 +16,7 @@ import '../providers/learning_providers.dart';
 import '../../data/models/progress_model.dart';
 import '../../data/repositories/learning_repository.dart';
 import '../../../quiz/presentation/providers/quiz_providers.dart';
+import 'course_completion_page.dart';
 
 class LessonPlayerScreen extends ConsumerWidget {
   final LessonModel lesson;
@@ -214,8 +215,14 @@ class LessonPlayerScreen extends ConsumerWidget {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Lesson completed! Moving to next.')));
                     } else {
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Course completed!')));
+                      // Course completed!
+                      await ref.read(authRepositoryProvider).completeCourse(user.id, lesson.courseId);
+                      if (context.mounted) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => CourseCompletionPage(courseId: lesson.courseId)),
+                        );
+                      }
                     }
                   }
                 }
@@ -317,7 +324,7 @@ class _AssignmentTabState extends ConsumerState<_AssignmentTab> {
                   const SizedBox(height: 8),
                   Text('Due: ${assignment.dueDate.day}/${assignment.dueDate.month}/${assignment.dueDate.year}', style: const TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 16),
-                  Text(assignment.instructions, style: TextStyle(color: Colors.grey.shade700)),
+                  Text(assignment.instructions, style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7))),
                   const SizedBox(height: 32),
                   const Text('Your Submission', style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 12),

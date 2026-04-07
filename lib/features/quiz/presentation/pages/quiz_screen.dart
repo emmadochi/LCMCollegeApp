@@ -15,6 +15,7 @@ import '../../../../features/profile/presentation/pages/certificate_screen.dart'
 import '../../../../features/course/presentation/providers/course_providers.dart';
 import '../../../../features/course/data/models/course_model.dart';
 import 'package:intl/intl.dart';
+import '../../../learning/presentation/pages/course_completion_page.dart';
 
 class QuizScreen extends ConsumerStatefulWidget {
   final String courseId;
@@ -138,7 +139,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Question ${_currentQuestionIndex + 1} of ${_questions.length}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4))),
+                Text('Question ${_currentQuestionIndex + 1} of ${_questions.length}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5))),
                 Text('${(progress * 100).toInt()}% Complete', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.secondary)),
               ],
             ),
@@ -213,7 +214,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            Text('Auto-saving progress...', style: TextStyle(fontSize: 10, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4), fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+            Text('Auto-saving progress...', style: TextStyle(fontSize: 10, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5), fontWeight: FontWeight.bold, letterSpacing: 1.2)),
             const SizedBox(height: 24),
           ],
         ),
@@ -304,11 +305,23 @@ class _ResultView extends ConsumerWidget {
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (passed && nextLesson != null) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (_) => LessonPlayerScreen(lesson: nextLesson)),
-                          );
+                        if (passed) {
+                          if (nextLesson != null) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => LessonPlayerScreen(lesson: nextLesson)),
+                            );
+                          } else {
+                            // Course completed via quiz!
+                            final user = ref.read(currentUserProvider).value;
+                            if (user != null) {
+                              ref.read(authRepositoryProvider).completeCourse(user.id, courseId);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (_) => CourseCompletionPage(courseId: courseId)),
+                              );
+                            }
+                          }
                         } else {
                           Navigator.pop(context);
                         }
@@ -326,30 +339,6 @@ class _ResultView extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  if (passed && nextLesson == null) ...[
-                    const SizedBox(height: 16),
-                    TextButton.icon(
-                      onPressed: () async {
-                        final user = ref.read(currentUserProvider).value;
-                        final CourseModel course = await ref.read(courseByIdProvider(courseId).future);
-                        if (context.mounted && user != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => CertificateScreen(
-                                userName: user.fullName,
-                                courseName: course.title,
-                                date: DateFormat('MMM dd, yyyy').format(DateTime.now()),
-                                certificateId: 'CERT-${courseId.substring(0, 4).toUpperCase()}-${user.id.substring(0, 4).toUpperCase()}',
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      icon: const Icon(Symbols.workspace_premium),
-                      label: const Text('Download Certificate', style: TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                  ],
                 ],
               ),
             ),

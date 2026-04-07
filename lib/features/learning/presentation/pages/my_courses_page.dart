@@ -105,7 +105,7 @@ class MyCoursesPage extends ConsumerWidget {
               ref.watch(completedCoursesProvider).when(
                 data: (courses) {
                   if (courses.isEmpty) {
-                    return const Text('No completed courses yet.', style: TextStyle(color: Colors.grey, fontSize: 12));
+                    return Text('No completed courses yet.', style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4), fontSize: 12));
                   }
                   return SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -287,7 +287,7 @@ class _EnrolledCourseCard extends ConsumerWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Progress', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey)),
+                    Text('Progress', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)),
                     Text(
                       '${(progress * 100).toInt()}%', 
                       style: TextStyle(

@@ -41,4 +41,13 @@ class LearningRepository {
     if (!doc.exists) return null;
     return LessonModel.fromMap(doc.data()!, doc.id);
   }
+
+  Future<void> requestCertificate(String userId, String courseId) async {
+    await _firestore.collection('certificate_requests').add({
+      'userId': userId,
+      'courseId': courseId,
+      'requestedAt': FieldValue.serverTimestamp(),
+      'status': 'pending',
+    });
+  }
 }

@@ -15,6 +15,7 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../data/models/review_model.dart';
 import '../providers/review_providers.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'admin_course_edit_page.dart';
 
 class CourseDetailPage extends ConsumerWidget {
   final String courseId;
@@ -194,8 +195,42 @@ class CourseDetailPage extends ConsumerWidget {
                             ],
                           ),
                           const SizedBox(height: 48),
+                          // Course Description
+                          Text('About this Course', style: GoogleFonts.manrope(fontSize: 24, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)),
+                          const SizedBox(height: 16),
+                          Text(
+                            course.description.isNotEmpty ? course.description : 'No description available for this course.',
+                            style: GoogleFonts.inter(
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                              height: 1.6,
+                            ),
+                          ),
+                          const SizedBox(height: 48),
                           // Curriculum
-                          Text('Curriculum', style: GoogleFonts.manrope(fontSize: 24, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Curriculum', style: GoogleFonts.manrope(fontSize: 24, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)),
+                              if (user?.isAdmin ?? false)
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => AdminCourseEditPage(course: course),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Symbols.edit, size: 18),
+                                  label: const Text('Edit Course'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                                    foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                                  ),
+                                ),
+                            ],
+                          ),
                           const SizedBox(height: 24),
                           if (lessons.isEmpty)
                             const Padding(
@@ -355,7 +390,7 @@ class _ReviewsSection extends ConsumerWidget {
           children: [
             Text('Rate this course', style: GoogleFonts.manrope(fontSize: 22, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            const Text('Share your experience with other students', style: TextStyle(color: Colors.grey)),
+            Text('Share your experience with other students', style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5))),
             const SizedBox(height: 24),
             Center(
               child: RatingBar.builder(
@@ -458,7 +493,7 @@ class _ReviewItem extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Text(review.comment, style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7), fontSize: 13)),
+          Text(review.comment, style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 13)),
           const SizedBox(height: 8),
           Text(
             '${review.createdAt.day}/${review.createdAt.month}/${review.createdAt.year}',

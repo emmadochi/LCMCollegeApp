@@ -48,10 +48,6 @@ class AuthRepositoryImpl implements AuthRepository {
     return _handleUserAfterSocialLogin(userCredential);
   }
 
-  @override
-  Future<UserModel?> signInWithLinkedIn() async {
-    throw UnimplementedError('LinkedIn login requires a custom OAuth setup or a third-party API that is not yet configured.');
-  }
 
   Future<UserModel?> _handleUserAfterSocialLogin(UserCredential userCredential) async {
     if (userCredential.user != null) {
@@ -119,6 +115,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> enrollInCourse(String userId, String courseId) async {
     await _firestore.collection('users').doc(userId).update({
       'enrolledCourses': FieldValue.arrayUnion([courseId])
+    });
+  }
+
+  @override
+  Future<void> completeCourse(String userId, String courseId) async {
+    await _firestore.collection('users').doc(userId).update({
+      'completedCourses': FieldValue.arrayUnion([courseId])
     });
   }
 
