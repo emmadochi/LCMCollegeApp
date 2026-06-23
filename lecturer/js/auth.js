@@ -1,5 +1,5 @@
 /**
- * LCM Bible College — Lecturer Portal Auth Controller
+ * LCM Ministerial College — Lecturer Portal Auth Controller
  */
 
 // Decode JWT helper

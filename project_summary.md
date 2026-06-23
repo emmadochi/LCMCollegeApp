@@ -1,11 +1,11 @@
-# LCM Bible College App Project Summary
+# LCM Ministerial College App Project Summary
 
-A consolidated overview of the status, architecture, and features of the LCM Bible College App.
+A consolidated overview of the status, architecture, and features of the LCM Ministerial College App.
 
 ## 📋 General Information
-- **Project Name:** LCM Bible College App (lcm_college)
+- **Project Name:** LCM Ministerial College App (lcm_college)
 - **Type:** Multi-Platform E-Learning System (Flutter Mobile App + Student Web Portal + Admin Panel)
-- **Objective:** Provide direct access to courses, interactive quizzes, schedules, and digital certifications for Bible college students, with complete coordinator course management tools.
+- **Objective:** Provide direct access to courses, interactive quizzes, schedules, and digital certifications for Ministerial college students, with complete coordinator course management tools.
 - **Start Date:** April 2026
 - **Status:** Active Development (Build Stabilization Phase)
 - **Expected Completion:** Q3/Q4 2026

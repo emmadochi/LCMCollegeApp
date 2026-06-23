@@ -1,5 +1,5 @@
 /**
- * LCM Bible College — Student Portal Auth Handler
+ * LCM Ministerial College — Student Portal Auth Handler
  * Uses local PHP REST API with JWT. No Firebase.
  */
 

@@ -1,5 +1,5 @@
 /**
- * LCM Bible College — Shared Notifications Controller
+ * LCM Ministerial College — Shared Notifications Controller
  * Handles notification fetching, dropdown open/close, badge updating,
  * and feed rendering for both Dashboard and Chat pages.
  */
