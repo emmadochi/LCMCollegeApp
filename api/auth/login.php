@@ -38,9 +38,15 @@ if (!check_login_rate_limit($ipAddress, $conn)) {
 
 try {
     // Select user by email
-    $stmt = $conn->prepare("SELECT id, name, password_hash, role FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT id, name, password_hash, role, is_active, created_by FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
+
+    if ($user && (int)$user['is_active'] === 0) {
+        header("HTTP/1.1 403 Forbidden");
+        echo json_encode(["message" => "Your account has been deactivated. Please contact support."]);
+        exit();
+    }
 
     if ($user && password_verify($password, $user['password_hash'])) {
         // Successful login: reset rate limit attempts
@@ -82,6 +88,7 @@ try {
                 "name" => $user['name'],
                 "email" => $email,
                 "role" => $user['role'],
+                "created_by" => $user['created_by'],
                 "enrolledCourses" => $enrolledCourses,
                 "completedCourses" => $completedCourses
             ]

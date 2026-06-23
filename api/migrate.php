@@ -47,6 +47,18 @@ try {
         $conn->exec("ALTER TABLE chat_messages ADD COLUMN seq INT AUTO_INCREMENT UNIQUE KEY");
     }
 
+    // Check if 'created_by' column exists in users, if not, add it
+    $checkCreatedBy = $conn->query("SHOW COLUMNS FROM users LIKE 'created_by'");
+    if ($checkCreatedBy->rowCount() === 0) {
+        $conn->exec("ALTER TABLE users ADD COLUMN created_by VARCHAR(36) NULL, ADD CONSTRAINT fk_users_created_by FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL");
+    }
+
+    // Check if 'is_active' column exists in users, if not, add it
+    $checkActive = $conn->query("SHOW COLUMNS FROM users LIKE 'is_active'");
+    if ($checkActive->rowCount() === 0) {
+        $conn->exec("ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT TRUE");
+    }
+
     echo json_encode([
         "status" => "success",
         "message" => "Database tables migration checked and executed successfully."
