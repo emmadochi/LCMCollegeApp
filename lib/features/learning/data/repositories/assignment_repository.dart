@@ -1,52 +1,122 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../models/assignment_model.dart';
 
 class AssignmentRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
+  AssignmentRepository();
 
   Stream<AssignmentModel?> getAssignmentForLesson(String lessonId) {
-    return _firestore
-        .collection('assignments')
-        .where('lessonId', isEqualTo: lessonId)
-        .snapshots()
-        .map((snapshot) {
-      if (snapshot.docs.isEmpty) return null;
-      return AssignmentModel.fromMap(snapshot.docs.first.data(), snapshot.docs.first.id);
-    });
+    return Stream.fromFuture(_fetchAssignment(lessonId));
+  }
+
+  Future<AssignmentModel?> _fetchAssignment(String lessonId) async {
+    try {
+      final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.assignments}').replace(queryParameters: {'lesson_id': lessonId});
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data == null) return null;
+        return AssignmentModel.fromMap(data, data['id'] ?? '');
+      } else {
+        throw Exception('Failed to load assignment: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch assignment: $e');
+    }
   }
 
   Stream<SubmissionModel?> getUserSubmission(String assignmentId, String userId) {
-    return _firestore
-        .collection('assignment_submissions')
-        .where('assignmentId', isEqualTo: assignmentId)
-        .where('userId', isEqualTo: userId)
-        .snapshots()
-        .map((snapshot) {
-      if (snapshot.docs.isEmpty) return null;
-      return SubmissionModel.fromMap(snapshot.docs.first.data(), snapshot.docs.first.id);
-    });
+    return Stream.fromFuture(_fetchUserSubmission(assignmentId, userId));
+  }
+
+  Future<SubmissionModel?> _fetchUserSubmission(String assignmentId, String userId) async {
+    try {
+      final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.submissions}').replace(queryParameters: {
+        'assignment_id': assignmentId,
+        'user_id': userId,
+      });
+
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      final headers = <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      };
+      if (token != null) {
+        headers['Authorization'] = 'Bearer $token';
+      }
+
+      final response = await http.get(uri, headers: headers);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data == null) return null;
+        return SubmissionModel.fromMap(data, data['id'] ?? '');
+      } else {
+        throw Exception('Failed to load user submission: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch user submission: $e');
+    }
   }
 
   Future<void> submitAssignment({
     required SubmissionModel submission,
     File? file,
   }) async {
-    String fileUrl = submission.fileUrl;
-    
-    if (file != null) {
-      final ref = _storage.ref().child('assignments/${submission.userId}/${DateTime.now().millisecondsSinceEpoch}_${submission.fileName}');
-      await ref.putFile(file);
-      fileUrl = await ref.getDownloadURL();
+    try {
+      final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.submissions}');
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      if (file != null) {
+        // If file upload is needed, use http.MultipartRequest
+        final request = http.MultipartRequest('POST', uri);
+        if (token != null) {
+          request.headers['Authorization'] = 'Bearer $token';
+        }
+
+        request.fields['userId'] = submission.userId;
+        request.fields['assignmentId'] = submission.assignmentId;
+        request.fields['lessonId'] = submission.lessonId;
+        request.fields['submissionType'] = submission.submissionType;
+        request.fields['text'] = submission.text;
+        request.fields['fileName'] = submission.fileName;
+
+        request.files.add(await http.MultipartFile.fromPath('file', file.path));
+
+        final streamedResponse = await request.send();
+        final response = await http.Response.fromStream(streamedResponse);
+
+        if (response.statusCode != 200 && response.statusCode != 201) {
+          final data = jsonDecode(response.body);
+          throw Exception(data['message'] ?? 'Failed to submit assignment with file');
+        }
+      } else {
+        // Standard JSON POST
+        final headers = <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        };
+        if (token != null) {
+          headers['Authorization'] = 'Bearer $token';
+        }
+
+        final response = await http.post(
+          uri,
+          headers: headers,
+          body: jsonEncode(submission.toMap()),
+        );
+
+        if (response.statusCode != 200 && response.statusCode != 201) {
+          final data = jsonDecode(response.body);
+          throw Exception(data['message'] ?? 'Failed to submit assignment');
+        }
+      }
+    } catch (e) {
+      throw Exception('Assignment submission failed: $e');
     }
-
-    final finalSubmission = {
-      ...submission.toMap(),
-      'fileUrl': fileUrl,
-    };
-
-    await _firestore.collection('assignment_submissions').add(finalSubmission);
   }
 }

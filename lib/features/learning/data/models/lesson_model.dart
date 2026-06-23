@@ -41,15 +41,19 @@ class LessonModel {
   factory LessonModel.fromMap(Map<String, dynamic> map, String id) {
     return LessonModel(
       id: id,
-      courseId: map['courseId'] ?? '',
+      courseId: map['courseId'] ?? map['course_id'] ?? '',
       title: map['title'] ?? '',
-      contentUrl: map['contentUrl'] ?? '',
-      contentType: map['contentType'] ?? 'video',
-      videoSource: map['videoSource'],
-      moduleId: map['moduleId'],
+      contentUrl: map['contentUrl'] ?? map['content_url'] ?? '',
+      contentType: map['contentType'] ?? map['content_type'] ?? 'video',
+      videoSource: map['videoSource'] ?? map['video_source'],
+      moduleId: map['moduleId'] ?? map['module_id'],
       notes: map['notes'],
-      order: map['order'] ?? 0,
-      hasQuiz: map['hasQuiz'] ?? true,
+      order: map['order'] is int 
+          ? map['order'] 
+          : (map['order_index'] is int 
+              ? map['order_index'] 
+              : int.tryParse(map['order']?.toString() ?? map['order_index']?.toString() ?? '0') ?? 0),
+      hasQuiz: map['hasQuiz'] == null || map['hasQuiz'] == true || map['hasQuiz'] == 1 || map['hasQuiz'] == '1',
     );
   }
 }

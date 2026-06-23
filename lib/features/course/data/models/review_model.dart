@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class ReviewModel {
   final String id;
   final String courseId;
@@ -32,21 +30,26 @@ class ReviewModel {
       'userEmail': userEmail,
       'rating': rating,
       'comment': comment,
-      'createdAt': Timestamp.fromDate(createdAt),
+      'createdAt': createdAt.toIso8601String(),
     };
   }
 
   factory ReviewModel.fromMap(Map<String, dynamic> map, String id) {
+    DateTime parseDate(dynamic val) {
+      if (val == null) return DateTime.now();
+      if (val is String) return DateTime.tryParse(val) ?? DateTime.now();
+      return DateTime.now();
+    }
     return ReviewModel(
       id: id,
-      courseId: map['courseId'] ?? '',
-      courseName: map['courseName'] ?? '',
-      userId: map['userId'] ?? '',
-      userName: map['userName'] ?? 'Anonymous',
-      userEmail: map['userEmail'] ?? '',
-      rating: (map['rating'] ?? 0.0).toDouble(),
+      courseId: map['courseId'] ?? map['course_id'] ?? '',
+      courseName: map['courseName'] ?? map['course_name'] ?? '',
+      userId: map['userId'] ?? map['user_id'] ?? '',
+      userName: map['userName'] ?? map['user_name'] ?? 'Anonymous',
+      userEmail: map['userEmail'] ?? map['user_email'] ?? '',
+      rating: double.tryParse(map['rating']?.toString() ?? '0.0') ?? 0.0,
       comment: map['comment'] ?? '',
-      createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      createdAt: parseDate(map['createdAt'] ?? map['created_at']),
     );
   }
 }

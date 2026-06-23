@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCM Bible College — Lecturer Portal</title>
+    <meta name="description" content="Access the lecturer portal at LCM Bible College to monitor students, review assignments, and provide feedback.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --green:        #7DC026;
+            --green-mid:    #abcf47;
+            --green-dark:   #2E7D32;
+            --green-darker: #1b5e20;
+            --orange:       #F5A623;
+            --red:          #ef4444;
+            --red-bg:       #fef2f2;
+            --red-border:   #fecaca;
+            --gray-50:  #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html, body { height: 100%; }
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            min-height: 100vh;
+            background: var(--gray-50);
+        }
+
+        .brand-panel {
+            width: 44%;
+            min-height: 100vh;
+            background: linear-gradient(148deg, var(--gray-900) 0%, var(--gray-800) 55%, #1e2836 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px 52px;
+            flex-shrink: 0;
+        }
+
+        .bp-glow-1 {
+            position: absolute;
+            top: -140px; right: -140px;
+            width: 460px; height: 460px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(125,192,38,0.1) 0%, transparent 70%);
+        }
+        .bp-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 44px 44px;
+        }
+
+        .bp-top { position: relative; z-index: 2; }
+        .bp-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 60px;
+            text-decoration: none;
+        }
+        .bp-logo img {
+            width: 42px; height: 42px;
+            object-fit: contain;
+        }
+        .bp-logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 16px;
+            color: rgba(255,255,255,0.95);
+            letter-spacing: -0.3px;
+        }
+
+        .bp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 50px;
+            padding: 5px 14px 5px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.9);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+        .bp-badge-dot {
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-mid), var(--orange));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px;
+        }
+
+        .bp-headline {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(30px, 2.8vw, 44px);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 18px;
+        }
+        .bp-headline .accent {
+            background: linear-gradient(135deg, var(--green-mid) 0%, var(--orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .bp-desc {
+            font-size: 15px;
+            color: rgba(255,255,255,0.62);
+            line-height: 1.75;
+            margin-bottom: 44px;
+            max-width: 340px;
+        }
+
+        .bp-features { display: flex; flex-direction: column; gap: 14px; }
+        .bp-feature {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+        .bp-feature-icon {
+            width: 38px; height: 38px;
+            border-radius: 11px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.08);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px;
+            color: var(--green-mid);
+            flex-shrink: 0;
+        }
+        .bp-feature-text {
+            font-size: 13.5px;
+            color: rgba(255,255,255,0.78);
+            font-weight: 500;
+            line-height: 1.45;
+        }
+
+        .form-panel {
+            flex: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 32px;
+            overflow-y: auto;
+        }
+
+        .form-card { width: 100%; max-width: 400px; }
+
+        .form-header { margin-bottom: 28px; }
+        .form-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--gray-900);
+            letter-spacing: -0.6px;
+            margin-bottom: 6px;
+        }
+        .form-header p { font-size: 14.5px; color: var(--gray-500); }
+
+        .form-alert {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13.5px;
+            font-weight: 500;
+            margin-bottom: 18px;
+            border: 1px solid transparent;
+            gap: 9px;
+            align-items: flex-start;
+        }
+        .form-alert.show { display: flex; }
+        .form-alert.error { background: var(--red-bg); color: #b91c1c; border-color: var(--red-border); }
+        .form-alert.success { background: #f0fdf4; color: var(--green-dark); border-color: #bbf7d0; }
+        .form-alert i { margin-top: 2px; flex-shrink: 0; }
+
+        .field-group { margin-bottom: 18px; }
+        .field-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 7px;
+        }
+        .field-wrap { position: relative; }
+        .field-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 13px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .field-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 44px 0 40px;
+            background: var(--gray-50);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--gray-900);
+            outline: none;
+            transition: var(--transition);
+        }
+        .field-input::placeholder { color: var(--gray-300); }
+        .field-input:focus {
+            background: #fff;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3.5px rgba(125,192,38,0.13);
+        }
+        .field-input.is-error { border-color: var(--red); background: var(--red-bg); }
+
+        .pwd-toggle {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray-400);
+            font-size: 14px;
+            padding: 4px;
+            outline: none;
+            transition: color 0.2s;
+            z-index: 1;
+        }
+        .pwd-toggle:hover { color: var(--green-dark); }
+
+        .btn-submit {
+            width: 100%;
+            height: 48px;
+            background: linear-gradient(135deg, var(--green-dark), #1b5e20);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 24px;
+            box-shadow: 0 4px 14px rgba(46,125,50,0.2);
+        }
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(46,125,50,0.3);
+        }
+        .btn-submit:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s infinite linear;
+            display: none;
+        }
+        .btn-submit.loading .spinner { display: block; }
+        .btn-submit.loading span { display: none; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 900px) {
+            .brand-panel { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BRAND LEFT SIDEBAR -->
+    <div class="brand-panel">
+        <div class="bp-glow-1"></div>
+        <div class="bp-grid"></div>
+        
+        <div class="bp-top">
+            <a href="#" class="bp-logo">
+                <img src="../logo.png" alt="LCM College Logo" onerror="this.style.display='none'">
+                <span class="bp-logo-text">LCM COLLEGE LECTURERS</span>
+            </a>
+            
+            <div class="bp-badge">
+                <div class="bp-badge-dot"><i class="fa-solid fa-graduation-cap text-white"></i></div>
+                <span>Mentor Dashboard</span>
+            </div>
+            
+            <h2 class="bp-headline">Guide the next generation of <span class="accent">Faith Leaders.</span></h2>
+            <p class="bp-desc">LCM Lecturers Portal connects you to your students, allowing you to grade homework, answer questions, and monitor real-time class progress.</p>
+        </div>
+        
+        <div class="bp-features">
+            <div class="bp-feature">
+                <div class="bp-feature-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="bp-feature-text">View and manage assigned student rosters</div>
+            </div>
+            <div class="bp-feature">
+                <div class="bp-feature-icon"><i class="fa-solid fa-file-signature"></i></div>
+                <div class="bp-feature-text">Review and grade academic assignments</div>
+            </div>
+            <div class="bp-feature">
+                <div class="bp-feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="bp-feature-text">Track lesson and quiz completion rates</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORM CONTAINER -->
+    <div class="form-panel">
+        <div class="form-card">
+            
+            <div class="form-header">
+                <h1>Lecturer Sign In</h1>
+                <p>Welcome back! Please enter your credentials to log in.</p>
+            </div>
+
+            <!-- Error Banner -->
+            <div class="form-alert error" id="alertBanner">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span id="alertMessage">Invalid email or password.</span>
+            </div>
+
+            <form id="loginForm">
+                <div class="field-group">
+                    <label class="field-label" for="loginEmail">Email Address</label>
+                    <div class="field-wrap">
+                        <i class="fa-regular fa-envelope field-icon"></i>
+                        <input class="field-input" type="email" id="loginEmail" placeholder="name@lcmcollege.org" required>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label" for="loginPassword">Password</label>
+                    <div class="field-wrap">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input class="field-input" type="password" id="loginPassword" placeholder="Enter your password" required>
+                        <button type="button" class="pwd-toggle" id="pwdToggleBtn" aria-label="Toggle Password Visibility">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="btn-submit" type="submit" id="submitBtn">
+                    <div class="spinner"></div>
+                    <span>Sign In <i class="fa-solid fa-arrow-right-to-bracket ml-1.5"></i></span>
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+    <script type="module" src="js/auth.js"></script>
+</body>
+</html>

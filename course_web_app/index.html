@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../landing_page/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCM Bible College — Student Portal</title>
+    <meta name="description" content="Sign in or create your student account at LCM Bible College to access theology courses, lessons, and ministry training.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --green:        #7DC026;
+            --green-mid:    #abcf47;
+            --green-dark:   #2E7D32;
+            --green-darker: #1b5e20;
+            --orange:       #F5A623;
+            --red:          #ef4444;
+            --red-bg:       #fef2f2;
+            --red-border:   #fecaca;
+            --gray-50:  #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html, body { height: 100%; }
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            min-height: 100vh;
+            background: var(--gray-50);
+        }
+
+        /* ============================
+           LEFT — BRAND PANEL
+           ============================ */
+        .brand-panel {
+            width: 44%;
+            min-height: 100vh;
+            background: linear-gradient(148deg, var(--green-darker) 0%, var(--green-dark) 55%, #376b38 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 48px 52px;
+            flex-shrink: 0;
+        }
+
+        /* Decorative BG elements */
+        .bp-glow-1 {
+            position: absolute;
+            top: -140px; right: -140px;
+            width: 460px; height: 460px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(125,192,38,0.18) 0%, transparent 70%);
+        }
+        .bp-glow-2 {
+            position: absolute;
+            bottom: -100px; left: -80px;
+            width: 380px; height: 380px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
+        }
+        .bp-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 44px 44px;
+        }
+        .bp-ring {
+            position: absolute;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 50%;
+        }
+        .bp-ring-1 { width: 300px; height: 300px; top: 50px; right: -100px; }
+        .bp-ring-2 { width: 200px; height: 200px; bottom: 80px; left: 20px; }
+
+        .bp-top { position: relative; z-index: 2; }
+        .bp-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 60px;
+            text-decoration: none;
+        }
+        .bp-logo img {
+            width: 42px; height: 42px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            opacity: 0.92;
+        }
+        .bp-logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 16px;
+            color: rgba(255,255,255,0.95);
+            letter-spacing: -0.3px;
+        }
+
+        .bp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 50px;
+            padding: 5px 14px 5px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.9);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+        .bp-badge-dot {
+            width: 22px; height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-mid), var(--orange));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 9px;
+        }
+
+        .bp-headline {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(30px, 2.8vw, 44px);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 18px;
+        }
+        .bp-headline .accent {
+            background: linear-gradient(135deg, var(--green-mid) 0%, var(--orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .bp-desc {
+            font-size: 15px;
+            color: rgba(255,255,255,0.62);
+            line-height: 1.75;
+            margin-bottom: 44px;
+            max-width: 340px;
+        }
+
+        .bp-features { display: flex; flex-direction: column; gap: 14px; }
+        .bp-feature {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+        .bp-feature-icon {
+            width: 38px; height: 38px;
+            border-radius: 11px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px;
+            color: var(--green-mid);
+            flex-shrink: 0;
+        }
+        .bp-feature-text {
+            font-size: 13.5px;
+            color: rgba(255,255,255,0.78);
+            font-weight: 500;
+            line-height: 1.45;
+        }
+
+        /* Testimonial */
+        .bp-bottom { position: relative; z-index: 2; }
+        .bp-testimonial {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 18px;
+            padding: 22px 24px;
+            backdrop-filter: blur(14px);
+        }
+        .bp-quote-icon {
+            font-size: 22px;
+            color: var(--green-mid);
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+        .bp-testimonial-text {
+            font-size: 14px;
+            font-style: italic;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.65;
+            margin-bottom: 16px;
+        }
+        .bp-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .bp-avatar {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-mid), var(--orange));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .bp-author-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.92);
+        }
+        .bp-author-role {
+            font-size: 11.5px;
+            color: rgba(255,255,255,0.45);
+            margin-top: 1px;
+        }
+
+        /* ============================
+           RIGHT — FORM PANEL
+           ============================ */
+        .form-panel {
+            flex: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 32px;
+            overflow-y: auto;
+        }
+
+        .form-card { width: 100%; max-width: 440px; }
+
+        /* Tab switcher */
+        .tab-switcher {
+            display: flex;
+            background: var(--gray-100);
+            border-radius: 14px;
+            padding: 5px;
+            margin-bottom: 32px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 11px 10px;
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--gray-400);
+            cursor: pointer;
+            transition: var(--transition);
+            outline: none;
+            letter-spacing: 0.1px;
+        }
+        .tab-btn.active {
+            background: #fff;
+            color: var(--green-dark);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .tab-btn:hover:not(.active) { color: var(--gray-600); }
+        .tab-btn i { margin-right: 7px; font-size: 12px; }
+
+        /* Form header */
+        .form-header { margin-bottom: 24px; }
+        .form-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 27px;
+            font-weight: 800;
+            color: var(--gray-900);
+            letter-spacing: -0.6px;
+            margin-bottom: 5px;
+        }
+        .form-header p { font-size: 14px; color: var(--gray-400); }
+
+        /* Alert banner */
+        .form-alert {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13.5px;
+            font-weight: 500;
+            margin-bottom: 18px;
+            border: 1px solid transparent;
+            gap: 9px;
+            align-items: flex-start;
+        }
+        .form-alert.show { display: flex; }
+        .form-alert.error { background: var(--red-bg); color: #b91c1c; border-color: var(--red-border); }
+        .form-alert.success { background: #f0fdf4; color: var(--green-dark); border-color: #bbf7d0; }
+        .form-alert i { margin-top: 1px; flex-shrink: 0; }
+
+        /* Sections */
+        .form-section { display: none; }
+        .form-section.active {
+            display: block;
+            animation: fadeUp 0.28s ease;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Fields */
+        .field-group { margin-bottom: 16px; }
+        .field-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 7px;
+        }
+        .field-wrap { position: relative; }
+        .field-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 13px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .field-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 44px 0 40px;
+            background: var(--gray-50);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: var(--gray-900);
+            outline: none;
+            transition: var(--transition);
+        }
+        .field-input::placeholder { color: var(--gray-300); }
+        .field-input:focus {
+            background: #fff;
+            border-color: var(--green);
+            box-shadow: 0 0 0 3.5px rgba(125,192,38,0.13);
+        }
+        .field-input.is-error { border-color: var(--red); background: var(--red-bg); }
+        .field-input.is-success { border-color: #22c55e; }
+
+        .field-error {
+            font-size: 12px;
+            color: var(--red);
+            margin-top: 5px;
+            display: none;
+            align-items: center;
+            gap: 5px;
+        }
+        .field-error.show { display: flex; }
+
+        /* Password toggle */
+        .pwd-toggle {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray-400);
+            font-size: 14px;
+            padding: 4px;
+            outline: none;
+            transition: color 0.2s;
+            z-index: 1;
+        }
+        .pwd-toggle:hover { color: var(--green-dark); }
+
+        /* Password strength */
+        .pwd-strength { margin-top: 9px; display: none; }
+        .pwd-bars { display: flex; gap: 4px; margin-bottom: 5px; }
+        .pwd-bar {
+            flex: 1; height: 3px;
+            border-radius: 2px;
+            background: var(--gray-200);
+            transition: background 0.3s;
+        }
+        .pwd-strength-lbl {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--gray-400);
+        }
+
+        /* Login extras */
+        .login-extras {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 4px 0 22px;
+        }
+        .check-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            color: var(--gray-600);
+            cursor: pointer;
+            user-select: none;
+        }
+        .check-label input { accent-color: var(--green-dark); width: 15px; height: 15px; cursor: pointer; }
+        .forgot-link {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--green-dark);
+            text-decoration: none;
+        }
+        .forgot-link:hover { color: var(--green); }
+
+        /* Submit button */
+        .btn-submit {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: 13px;
+            background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 6px 22px rgba(46,125,50,0.28);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            letter-spacing: 0.2px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(46,125,50,0.38);
+        }
+        .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+        .btn-spinner {
+            width: 18px; height: 18px;
+            border: 2.5px solid rgba(255,255,255,0.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+            flex-shrink: 0;
+        }
+        .btn-submit.loading .btn-spinner { display: block; }
+        .btn-submit.loading .btn-label { opacity: 0.7; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Switch row */
+        .switch-row {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: var(--gray-400);
+        }
+        .switch-btn {
+            background: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--green-dark);
+            cursor: pointer;
+            padding: 0;
+            margin-left: 4px;
+            transition: color 0.2s;
+        }
+        .switch-btn:hover { color: var(--green); }
+
+        /* Terms note */
+        .terms-note {
+            font-size: 12px;
+            color: var(--gray-400);
+            text-align: center;
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+        .terms-note a { color: var(--green-dark); text-decoration: none; }
+        .terms-note a:hover { text-decoration: underline; }
+
+        /* Stats strip at the top of form panel */
+        .form-stats {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .fs-item { text-align: center; }
+        .fs-val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--green-dark);
+        }
+        .fs-lbl { font-size: 11.5px; color: var(--gray-400); font-weight: 500; }
+        .fs-divider { width: 1px; height: 36px; background: var(--gray-200); }
+
+        /* Responsive */
+        @media (max-width: 860px) {
+            .brand-panel { display: none; }
+            .form-panel { padding: 32px 20px; }
+        }
+        @media (max-width: 480px) {
+            .form-card { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ====== LEFT BRAND PANEL ====== -->
+    <div class="brand-panel">
+        <div class="bp-glow-1"></div>
+        <div class="bp-glow-2"></div>
+        <div class="bp-grid"></div>
+        <div class="bp-ring bp-ring-1"></div>
+        <div class="bp-ring bp-ring-2"></div>
+
+        <div class="bp-top">
+            <a href="../landing_page/" class="bp-logo">
+                <img src="../logo.png" alt="LCM Bible College Logo">
+                <span class="bp-logo-text">LCM Bible College</span>
+            </a>
+
+            <div class="bp-badge">
+                <span class="bp-badge-dot">✦</span>
+                Enrolment Now Open
+            </div>
+
+            <h1 class="bp-headline">
+                Your Faith.<br>
+                Your <span class="accent">Journey.</span>
+            </h1>
+            <p class="bp-desc">
+                Access world-class theological education, ministry training, and a thriving community of believers — all in one beautifully designed platform.
+            </p>
+
+            <div class="bp-features">
+                <div class="bp-feature">
+                    <div class="bp-feature-icon"><i class="fa-solid fa-book-bible"></i></div>
+                    <span class="bp-feature-text">Structured theology courses with video lectures</span>
+                </div>
+                <div class="bp-feature">
+                    <div class="bp-feature-icon"><i class="fa-solid fa-certificate"></i></div>
+                    <span class="bp-feature-text">Earn verified certificates upon completion</span>
+                </div>
+                <div class="bp-feature">
+                    <div class="bp-feature-icon"><i class="fa-solid fa-users"></i></div>
+                    <span class="bp-feature-text">Join a community of next-gen ministry leaders</span>
+                </div>
+                <div class="bp-feature">
+                    <div class="bp-feature-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+                    <span class="bp-feature-text">Learn anywhere — web &amp; mobile app available</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bp-bottom">
+            <div class="bp-testimonial">
+                <div class="bp-quote-icon"><i class="fa-solid fa-quote-left"></i></div>
+                <p class="bp-testimonial-text">
+                    "Enrolling at LCM Bible College transformed my understanding of scripture. The structured courses and pastoral support are unlike anything I've experienced."
+                </p>
+                <div class="bp-author">
+                    <div class="bp-avatar">SO</div>
+                    <div>
+                        <div class="bp-author-name">Samuel Okonkwo</div>
+                        <div class="bp-author-role">Ministry Student, Class of 2025</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== RIGHT FORM PANEL ====== -->
+    <div class="form-panel">
+        <div class="form-card">
+
+            <!-- Stats strip -->
+            <div class="form-stats">
+                <div class="fs-item">
+                    <div class="fs-val">500+</div>
+                    <div class="fs-lbl">Students</div>
+                </div>
+                <div class="fs-divider"></div>
+                <div class="fs-item">
+                    <div class="fs-val">20+</div>
+                    <div class="fs-lbl">Courses</div>
+                </div>
+                <div class="fs-divider"></div>
+                <div class="fs-item">
+                    <div class="fs-val">100%</div>
+                    <div class="fs-lbl">Free Access</div>
+                </div>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="tab-switcher" role="tablist" aria-label="Authentication mode">
+                <button class="tab-btn active" id="tabLogin" role="tab" aria-selected="true" onclick="switchTab('login')">
+                    <i class="fa-solid fa-right-to-bracket"></i>Sign In
+                </button>
+                <button class="tab-btn" id="tabRegister" role="tab" aria-selected="false" onclick="switchTab('register')">
+                    <i class="fa-solid fa-user-plus"></i>Create Account
+                </button>
+            </div>
+
+            <!-- Shared alert -->
+            <div class="form-alert" id="formAlert" role="alert" aria-live="polite">
+                <i></i>
+                <span id="formAlertText"></span>
+            </div>
+
+            <!-- ===========================
+                 LOGIN SECTION
+                 =========================== -->
+            <div class="form-section active" id="loginSection" role="tabpanel">
+                <div class="form-header">
+                    <h1>Welcome back</h1>
+                    <p>Sign in to continue your learning journey</p>
+                </div>
+
+                <form id="loginForm" novalidate autocomplete="on">
+                    <div class="field-group">
+                        <label class="field-label" for="loginEmail">Email Address</label>
+                        <div class="field-wrap">
+                            <i class="fa-regular fa-envelope field-icon"></i>
+                            <input type="email" id="loginEmail" name="email" class="field-input"
+                                   placeholder="you@example.com" autocomplete="email" required>
+                        </div>
+                        <span class="field-error" id="loginEmailError">
+                            <i class="fa-solid fa-circle-exclamation" style="font-size:11px;"></i>
+                            <span></span>
+                        </span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="loginPassword">Password</label>
+                        <div class="field-wrap">
+                            <i class="fa-solid fa-lock field-icon"></i>
+                            <input type="password" id="loginPassword" name="password" class="field-input"
+                                   placeholder="••••••••" autocomplete="current-password" required>
+                            <button type="button" class="pwd-toggle" onclick="togglePwd('loginPassword', this)" aria-label="Show password">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="field-error" id="loginPasswordError">
+                            <i class="fa-solid fa-circle-exclamation" style="font-size:11px;"></i>
+                            <span></span>
+                        </span>
+                    </div>
+
+                    <div class="login-extras">
+                        <label class="check-label">
+                            <input type="checkbox" id="rememberMe">
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-link">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="loginSubmitBtn">
+                        <div class="btn-spinner"></div>
+                        <span class="btn-label">Sign In to Portal</span>
+                    </button>
+                </form>
+
+                <div class="switch-row">
+                    Don't have an account?
+                    <button class="switch-btn" onclick="switchTab('register')">Enrol for free</button>
+                </div>
+            </div>
+
+            <!-- ===========================
+                 REGISTER SECTION
+                 =========================== -->
+            <div class="form-section" id="registerSection" role="tabpanel">
+                <div class="form-header">
+                    <h1>Start your journey</h1>
+                    <p>Create your free student account today</p>
+                </div>
+
+                <form id="registerForm" novalidate autocomplete="on">
+                    <div class="field-group">
+                        <label class="field-label" for="regName">Full Name</label>
+                        <div class="field-wrap">
+                            <i class="fa-regular fa-user field-icon"></i>
+                            <input type="text" id="regName" name="name" class="field-input"
+                                   placeholder="John Doe" autocomplete="name" required>
+                        </div>
+                        <span class="field-error" id="regNameError">
+                            <i class="fa-solid fa-circle-exclamation" style="font-size:11px;"></i>
+                            <span></span>
+                        </span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="regEmail">Email Address</label>
+                        <div class="field-wrap">
+                            <i class="fa-regular fa-envelope field-icon"></i>
+                            <input type="email" id="regEmail" name="email" class="field-input"
+                                   placeholder="you@example.com" autocomplete="email" required>
+                        </div>
+                        <span class="field-error" id="regEmailError">
+                            <i class="fa-solid fa-circle-exclamation" style="font-size:11px;"></i>
+                            <span></span>
+                        </span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="regPassword">Create Password</label>
+                        <div class="field-wrap">
+                            <i class="fa-solid fa-lock field-icon"></i>
+                            <input type="password" id="regPassword" name="password" class="field-input"
+                                   placeholder="Min. 8 chars with uppercase &amp; number"
+                                   autocomplete="new-password" required oninput="onPwdInput(this.value)">
+                            <button type="button" class="pwd-toggle" onclick="togglePwd('regPassword', this)" aria-label="Show password">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                        <!-- Strength meter -->
+                        <div class="pwd-strength" id="pwdStrengthWidget">
+                            <div class="pwd-bars">
+                                <div class="pwd-bar" id="sBar1"></div>
+                                <div class="pwd-bar" id="sBar2"></div>
+                                <div class="pwd-bar" id="sBar3"></div>
+                                <div class="pwd-bar" id="sBar4"></div>
+                            </div>
+                            <span class="pwd-strength-lbl" id="pwdStrengthLbl"></span>
+                        </div>
+                        <span class="field-error" id="regPasswordError">
+                            <i class="fa-solid fa-circle-exclamation" style="font-size:11px;"></i>
+                            <span></span>
+                        </span>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="regConfirm">Confirm Password</label>
+                        <div class="field-wrap">
+                            <i class="fa-solid fa-shield-halved field-icon"></i>
+                            <input type="password" id="regConfirm" name="confirmPassword" class="field-input"
+                                   placeholder="Repeat your password"
+                                   autocomplete="new-password" required oninput="onConfirmInput()">
+                            <button type="button" class="pwd-toggle" onclick="togglePwd('regConfirm', this)" aria-label="Show confirm password">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="field-error" id="regConfirmError">
+                            <i class="fa-solid fa-circle-exclamation" style="font-size:11px;"></i>
+                            <span></span>
+                        </span>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="registerSubmitBtn" style="margin-top:10px;">
+                        <div class="btn-spinner"></div>
+                        <span class="btn-label">
+                            <i class="fa-solid fa-rocket" style="margin-right:8px;font-size:13px;"></i>Create My Account
+                        </span>
+                    </button>
+
+                    <p class="terms-note">
+                        By creating an account you agree to our
+                        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                    </p>
+                </form>
+
+                <div class="switch-row">
+                    Already have an account?
+                    <button class="switch-btn" onclick="switchTab('login')">Sign in instead</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Auth Logic (PHP API, no Firebase) -->
+    <script src="js/auth.js"></script>
+
+    <script>
+        /* ==============================
+           UI HELPER FUNCTIONS
+           ============================== */
+
+        // Tab switching
+        function switchTab(mode) {
+            const isRegister = (mode === 'register');
+            document.getElementById('loginSection').classList.toggle('active', !isRegister);
+            document.getElementById('registerSection').classList.toggle('active', isRegister);
+            document.getElementById('tabLogin').classList.toggle('active', !isRegister);
+            document.getElementById('tabRegister').classList.toggle('active', isRegister);
+            document.getElementById('tabLogin').setAttribute('aria-selected', String(!isRegister));
+            document.getElementById('tabRegister').setAttribute('aria-selected', String(isRegister));
+            clearAllFieldErrors();
+            hideAlert();
+        }
+
+        // Check URL param on load
+        (function initFromUrl() {
+            const p = new URLSearchParams(window.location.search);
+            if (p.get('mode') === 'register') switchTab('register');
+        })();
+
+        // Password show/hide
+        function togglePwd(inputId, btn) {
+            const el = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (el.type === 'password') {
+                el.type = 'text';
+                icon.className = 'fa-regular fa-eye-slash';
+            } else {
+                el.type = 'password';
+                icon.className = 'fa-regular fa-eye';
+            }
+        }
+
+        // Password strength meter
+        const STRENGTH_COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e'];
+        const STRENGTH_LABELS = ['Too weak', 'Weak', 'Good', 'Strong'];
+
+        function onPwdInput(val) {
+            const widget = document.getElementById('pwdStrengthWidget');
+            const bars   = ['sBar1','sBar2','sBar3','sBar4'].map(id => document.getElementById(id));
+            const lbl    = document.getElementById('pwdStrengthLbl');
+
+            if (!val) { widget.style.display = 'none'; return; }
+            widget.style.display = 'block';
+
+            let score = 0;
+            if (val.length >= 8)             score++;
+            if (/[A-Z]/.test(val))           score++;
+            if (/[0-9]/.test(val))           score++;
+            if (/[^A-Za-z0-9]/.test(val))    score++;
+
+            bars.forEach((bar, i) => {
+                bar.style.background = (i < score) ? STRENGTH_COLORS[score - 1] : '#e5e7eb';
+            });
+            lbl.textContent  = STRENGTH_LABELS[score - 1] || '';
+            lbl.style.color  = STRENGTH_COLORS[score - 1] || '#9ca3af';
+
+            // Also re-validate confirm
+            if (document.getElementById('regConfirm').value) onConfirmInput();
+        }
+
+        // Confirm password live check
+        function onConfirmInput() {
+            const pwd  = document.getElementById('regPassword').value;
+            const conf = document.getElementById('regConfirm').value;
+            const inp  = document.getElementById('regConfirm');
+
+            clearFieldError('regConfirm', 'regConfirmError');
+
+            if (!conf) { inp.classList.remove('is-success', 'is-error'); return; }
+
+            if (pwd === conf) {
+                inp.classList.add('is-success');
+                inp.classList.remove('is-error');
+            } else {
+                inp.classList.add('is-error');
+                inp.classList.remove('is-success');
+                setFieldError('regConfirm', 'regConfirmError', 'Passwords do not match');
+            }
+        }
+
+        /* ==============================
+           ALERT & FIELD ERROR HELPERS
+           (exposed globally for auth.js)
+           ============================== */
+        window.showAlert = function(msg, type) {
+            type = type || 'error';
+            const alert = document.getElementById('formAlert');
+            const icon  = alert.querySelector('i');
+            icon.className = (type === 'error')
+                ? 'fa-solid fa-circle-xmark'
+                : 'fa-solid fa-circle-check';
+            document.getElementById('formAlertText').textContent = msg;
+            alert.className = 'form-alert ' + type + ' show';
+        };
+        window.hideAlert = function() {
+            document.getElementById('formAlert').className = 'form-alert';
+        };
+
+        function setFieldError(inputId, errorId, msg) {
+            const input = document.getElementById(inputId);
+            const errEl = document.getElementById(errorId);
+            if (input)  input.classList.add('is-error');
+            if (errEl) {
+                errEl.querySelector('span').textContent = msg;
+                errEl.classList.add('show');
+            }
+        }
+        function clearFieldError(inputId, errorId) {
+            const input = document.getElementById(inputId);
+            const errEl = document.getElementById(errorId);
+            if (input)  input.classList.remove('is-error', 'is-success');
+            if (errEl)  errEl.classList.remove('show');
+        }
+        function clearAllFieldErrors() {
+            document.querySelectorAll('.field-input').forEach(f => f.classList.remove('is-error','is-success'));
+            document.querySelectorAll('.field-error').forEach(e => e.classList.remove('show'));
+        }
+
+        // Expose to auth.js
+        window.setFieldError    = setFieldError;
+        window.clearFieldErrors = clearAllFieldErrors;
+        // Legacy compat for old toggleView calls
+        window.toggleView = switchTab;
+    </script>
+</body>
+</html>

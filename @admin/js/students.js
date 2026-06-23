@@ -1,15 +1,14 @@
-import { db } from './firebase-config.js';
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAdminAuthHeader } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-    if (!window.location.pathname.endsWith('students.html')) return;
+    if (!window.location.pathname.endsWith('students.html') &&
+        !window.location.pathname.includes('students.html')) return;
 
     const studentsListEl = document.getElementById('studentsList');
     const searchInput    = document.getElementById('studentSearch');
     const countEl        = document.getElementById('studentCount');
     if (!studentsListEl) return;
 
-    // Cache all student rows for client-side filtering
     let allRows = [];
 
     function updateCount(visible, total) {
@@ -28,7 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (match) visible++;
         });
 
-        // Show/hide no-results row
         let noResultRow = studentsListEl.querySelector('.no-results-row');
         if (visible === 0 && allRows.length > 0) {
             if (!noResultRow) {
@@ -44,27 +42,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateCount(visible, allRows.length);
     }
 
-    // Wire up search input (live filter)
     searchInput?.addEventListener('input', (e) => applySearch(e.target.value));
 
     try {
         studentsListEl.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">Loading students...</td></tr>`;
 
-        const usersSnapshot = await getDocs(collection(db, "users"));
+        const response = await fetch('../api/admin/students.php', {
+            headers: getAdminAuthHeader()
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.message || 'Failed to load students');
+        }
+
+        const students = await response.json();
         studentsListEl.innerHTML = '';
 
-        if (usersSnapshot.empty) {
+        if (!students || students.length === 0) {
             studentsListEl.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-gray-500">No students registered yet.</td></tr>`;
             updateCount(0, 0);
             return;
         }
 
-        usersSnapshot.forEach((docSnap) => {
-            const data      = docSnap.data();
-            const email     = data.email || 'N/A';
-            const name      = data.name  || email.split('@')[0];
-            const createdAt = data.createdAt
-                ? new Date(data.createdAt.seconds * 1000).toLocaleDateString()
+        students.forEach((student) => {
+            const name      = student.name || student.email.split('@')[0];
+            const email     = student.email || 'N/A';
+            const createdAt = student.created_at
+                ? new Date(student.created_at).toLocaleDateString()
                 : 'N/A';
 
             const tr = document.createElement('tr');
@@ -86,12 +91,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <a href="student_detail.html?studentId=${docSnap.id}" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-lg transition-colors">View Profile</a>
+                    <a href="student_detail.html?studentId=${student.id}" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-lg transition-colors">View Profile</a>
                 </td>
             `;
             studentsListEl.appendChild(tr);
 
-            // Store searchable data alongside the row element
             allRows.push({
                 tr,
                 name:  name.toLowerCase(),
@@ -101,11 +105,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         updateCount(allRows.length, allRows.length);
 
-        // Apply any query that was already typed while data was loading
         if (searchInput?.value) applySearch(searchInput.value);
 
     } catch (error) {
         console.error("Error loading students:", error);
-        studentsListEl.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Failed to load students.</td></tr>`;
+        studentsListEl.innerHTML = `<tr><td colspan="5" class="px-6 py-4 text-center text-red-500">Failed to load students: ${error.message}</td></tr>`;
     }
 });

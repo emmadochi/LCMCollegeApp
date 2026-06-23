@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -47,9 +47,18 @@
                 </a>
             </div>
             <div class="adm-nav-section">
+                <span class="adm-nav-label">Financials</span>
+                <a href="payments.html" class="adm-nav-item">
+                    <span class="material-icons">payments</span> Transactions
+                </a>
+            </div>
+            <div class="adm-nav-section">
                 <span class="adm-nav-label">Users</span>
                 <a href="students.html" class="adm-nav-item active">
                     <span class="material-icons">people</span> Students
+                </a>
+                <a href="lecturers.html" class="adm-nav-item">
+                    <span class="material-icons">school</span> Lecturers
                 </a>
                 <a href="reviews.html" class="adm-nav-item">
                     <span class="material-icons">rate_review</span> Reviews
@@ -77,9 +86,9 @@
                 <span id="studentCount" style="font-size:13px;color:var(--text-muted);"></span>
                 <div class="adm-search">
                     <span class="material-icons">search</span>
-                    <input id="studentSearch" type="text" placeholder="Search by name or email…">
+                    <input id="studentSearch" type="text" placeholder="Search by name or emailâ€¦">
                 </div>
-                <div class="adm-avatar">A</div>
+                <div class="adm-avatar" id="adminAvatar">A</div>
             </div>
         </header>
 
@@ -107,9 +116,8 @@
             </div>
         </div>
     </main>
-
-    <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/auth.js"></script>
     <script type="module" src="js/students.js"></script>
 </body>
 </html>
+

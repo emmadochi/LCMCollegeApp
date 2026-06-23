@@ -1,5 +1,4 @@
-import { db } from './firebase-config.js';
-import { collection, getDocs, addDoc, serverTimestamp, deleteDoc, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAdminAuthHeader } from './auth.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     await loadCategories();
@@ -12,29 +11,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     categoryIconInput.addEventListener('input', (e) => {
         iconPreview.textContent = e.target.value.trim() || 'category';
     });
+    
     categoryForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const id = document.getElementById('categoryId').value;
-        const name = document.getElementById('categoryName').value;
-        const icon = document.getElementById('categoryIcon').value;
+        const name = document.getElementById('categoryName').value.trim();
+        const icon = document.getElementById('categoryIcon').value.trim();
 
         try {
+            const payload = { name, icon };
             if (id) {
-                // Update
-                await updateDoc(doc(db, "categories", id), {
-                    name,
-                    icon,
-                    updatedAt: serverTimestamp()
-                });
-            } else {
-                // Add
-                await addDoc(collection(db, "categories"), {
-                    name,
-                    icon,
-                    updatedAt: serverTimestamp()
-                });
+                payload.id = id;
             }
+
+            const response = await fetch('../api/categories/index.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAdminAuthHeader()
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message || "Failed to save category");
+            }
+
             hideModal();
             loadCategories();
         } catch (error) {
@@ -49,37 +53,38 @@ async function loadCategories() {
     if (!listEl) return;
 
     try {
-        const snapshot = await getDocs(collection(db, "categories"));
+        const response = await fetch('../api/categories/index.php');
+        if (!response.ok) throw new Error("Failed to load categories");
+        
+        const categories = await response.json();
         listEl.innerHTML = '';
 
-        if (snapshot.empty) {
+        if (categories.length === 0) {
             listEl.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No categories found.</td></tr>';
             return;
         }
 
-        snapshot.forEach(docSnap => {
-            const data = docSnap.data();
-            const id = docSnap.id;
+        categories.forEach(cat => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td class="px-6 py-4 border-b border-gray-100">
                     <div class="h-10 w-10 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center">
-                        <span class="material-symbols-outlined">${data.icon || 'category'}</span>
+                        <span class="material-symbols-outlined">${cat.icon || 'category'}</span>
                     </div>
                 </td>
-                <td class="px-6 py-4 border-b border-gray-100 font-bold">${data.name}</td>
+                <td class="px-6 py-4 border-b border-gray-100 font-bold">${cat.name}</td>
                 <td class="px-6 py-4 border-b border-gray-100 text-xs text-gray-500">
-                    ${data.updatedAt ? new Date(data.updatedAt.seconds * 1000).toLocaleDateString() : 'New'}
+                    Active
                 </td>
                 <td class="px-6 py-4 border-b border-gray-100 text-right">
-                    <button class="text-indigo-600 mr-3 edit-btn" data-id="${id}" data-name="${data.name}" data-icon="${data.icon}">Edit</button>
-                    <button class="text-red-500 delete-btn" data-id="${id}">Delete</button>
+                    <button class="text-indigo-600 mr-3 edit-btn" data-id="${cat.id}" data-name="${cat.name}" data-icon="${cat.icon}">Edit</button>
+                    <button class="text-red-500 delete-btn" data-id="${cat.id}">Delete</button>
                 </td>
             `;
             listEl.appendChild(tr);
         });
 
-        // Event listeners
+        // Event listeners for edit button
         document.querySelectorAll('.edit-btn').forEach(btn => {
             btn.onclick = () => {
                 document.getElementById('modalTitle').innerText = 'Edit Category';
@@ -91,11 +96,25 @@ async function loadCategories() {
             };
         });
 
+        // Event listeners for delete button
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.onclick = async () => {
-                if (confirm('Are you sure?')) {
-                    await deleteDoc(doc(db, "categories", btn.dataset.id));
-                    loadCategories();
+                if (confirm('Are you sure you want to delete this category?')) {
+                    try {
+                        const response = await fetch(`../api/categories/index.php?id=${btn.dataset.id}`, {
+                            method: 'DELETE',
+                            headers: getAdminAuthHeader()
+                        });
+                        
+                        if (!response.ok) {
+                            const errData = await response.json();
+                            throw new Error(errData.message || "Failed to delete category");
+                        }
+                        
+                        loadCategories();
+                    } catch (err) {
+                        alert("Error: " + err.message);
+                    }
                 }
             };
         });
@@ -104,3 +123,12 @@ async function loadCategories() {
         console.error("Error loading categories:", error);
     }
 }
+
+// Global modal helper fallback matching original modal controls
+function hideModal() {
+    document.getElementById('categoryModal').classList.add('hidden');
+    document.getElementById('categoryForm').reset();
+    document.getElementById('categoryId').value = '';
+    document.getElementById('iconPreview').textContent = 'category';
+}
+window.hideModal = hideModal;

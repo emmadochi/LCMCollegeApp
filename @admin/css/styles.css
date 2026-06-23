@@ -714,8 +714,230 @@ body {
 /* ┌──────────────────────────────────────────────────────────
    │ ACTIVE NAV (legacy compat — Tailwind @apply fallback)
    └────────────────────────────────────────────────────────── */
-.active-nav {
-  background: rgba(99,102,241,0.12);
-  color: #818cf8;
-  border-left: 3px solid #6366f1;
+/* ┌──────────────────────────────────────────────────────────
+   │ CHAT UNREAD BADGE
+   └────────────────────────────────────────────────────────── */
+.chat-unread-badge {
+  background-color: #ef4444;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 99px;
+  margin-left: auto;
+  line-height: 1.3;
 }
+
+
+/* ============================================================
+   LCM College Admin — Mobile Responsiveness Upgrades
+   ============================================================ */
+
+/* ── Screen sizes <= 1024px (Tablets & Landscape Mobile) ──── */
+@media (max-width: 1024px) {
+  .adm-sidebar-toggle-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    margin-right: 12px;
+    color: var(--text-main);
+  }
+  .adm-sidebar-toggle-btn .material-icons {
+    font-size: 24px;
+  }
+
+  .adm-sidebar {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    height: 100vh !important;
+    z-index: 100 !important;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  body.sidebar-open .adm-sidebar {
+    transform: translateX(0) !important;
+  }
+
+  .adm-sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+  body.sidebar-open .adm-sidebar-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Padding adjustments */
+  div[style*="padding:28px 32px"], 
+  div[style*="padding: 28px 32px"],
+  div[style*="padding:28px 32px;"],
+  div[style*="padding: 28px 32px;"] {
+    padding: 16px 20px !important;
+  }
+
+  /* Grids and flex layouts */
+  div[style*="grid-template-columns:repeat(4,1fr)"],
+  div[style*="grid-template-columns:repeat(4, 1fr)"],
+  div[style*="grid-template-columns: repeat(4,1fr)"],
+  div[style*="grid-template-columns: repeat(4, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  div[style*="grid-template-columns:2fr 1fr"],
+  div[style*="grid-template-columns: 2fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  .adm-table-wrap {
+    overflow-x: auto !important;
+  }
+  .adm-table {
+    min-width: 600px;
+  }
+}
+
+/* ── Screen sizes <= 768px (Portrait Tablets & Mobile) ────── */
+@media (max-width: 768px) {
+  /* Prevent avatar and initials squeeze */
+  .adm-avatar, .adm-initials {
+    flex-shrink: 0 !important;
+  }
+
+  /* Forms columns */
+  div[style*="grid-template-columns:1fr 1fr"],
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  div[style*="grid-template-columns:1fr 1fr 1fr 1fr 1fr"],
+  div[style*="grid-template-columns: 1fr 1fr 1fr 1fr 1fr"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .form-section-card {
+    padding: 20px !important;
+  }
+
+  /* Chat dual panel responsiveness */
+  .chat-layout {
+    position: relative !important;
+    width: 100% !important;
+  }
+  .thread-sidebar {
+    width: 100% !important;
+    display: flex !important;
+  }
+  .chat-window {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 10;
+    transform: translateX(100%);
+    transition: transform 0.25s ease-in-out;
+  }
+  body.thread-open .chat-window {
+    transform: translateX(0) !important;
+  }
+  body.thread-open .chat-back-btn {
+    display: inline-flex !important;
+  }
+}
+
+/* ── Screen sizes <= 640px (Small Mobile) ─────────────────── */
+@media (max-width: 640px) {
+  /* Prevent title wrapping and overlap */
+  .adm-header-title {
+    font-size: 14px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 120px !important;
+    flex-shrink: 1 !important;
+  }
+
+  /* Hide minor text stats/counts in the header to save space */
+  .adm-header-right > span {
+    display: none !important;
+  }
+
+  div[style*="grid-template-columns:repeat(4,1fr)"],
+  div[style*="grid-template-columns:repeat(4, 1fr)"],
+  div[style*="grid-template-columns: repeat(4,1fr)"],
+  div[style*="grid-template-columns: repeat(4, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  div[style*="grid-template-columns:1fr 1fr 1fr 1fr 1fr"],
+  div[style*="grid-template-columns: 1fr 1fr 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  div[style*="margin-top:28px"] {
+    margin-top: 12px !important;
+  }
+
+  /* Header adjustments */
+  .adm-header {
+    padding: 0 12px !important;
+    gap: 8px !important;
+  }
+  .adm-header-right {
+    gap: 8px !important;
+    flex: 1 !important;
+    justify-content: flex-end !important;
+  }
+  .adm-search input {
+    width: 110px !important;
+  }
+  .adm-header-right span[style*="font-size:12px"] {
+    display: none !important;
+  }
+
+  /* Toolbars and section layouts */
+  div[style*="display:flex;align-items:flex-start;justify-content:space-between"],
+  div[style*="display:flex;align-items:center;justify-content:space-between"],
+  div[style*="display: flex; align-items: center; justify-content: space-between"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+
+  div[style*="display:flex;align-items:center;gap:12px;flex-wrap:wrap;"],
+  div[style*="display:flex;align-items:center;gap:12px;flex-wrap:wrap"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  .adm-search {
+    width: 100% !important;
+  }
+  .adm-search input {
+    width: 100% !important;
+  }
+  .page-heading {
+    font-size: 20px !important;
+  }
+  
+  /* Buttons */
+  .btn-primary, .btn-secondary {
+    justify-content: center;
+  }
+}
+
+

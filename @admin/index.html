@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -47,9 +47,18 @@
                 </a>
             </div>
             <div class="adm-nav-section">
+                <span class="adm-nav-label">Financials</span>
+                <a href="payments.html" class="adm-nav-item">
+                    <span class="material-icons">payments</span> Transactions
+                </a>
+            </div>
+            <div class="adm-nav-section">
                 <span class="adm-nav-label">Users</span>
                 <a href="students.html" class="adm-nav-item">
                     <span class="material-icons">people</span> Students
+                </a>
+                <a href="lecturers.html" class="adm-nav-item">
+                    <span class="material-icons">school</span> Lecturers
                 </a>
                 <a href="reviews.html" class="adm-nav-item">
                     <span class="material-icons">rate_review</span> Reviews
@@ -76,7 +85,7 @@
             <div style="display:flex;align-items:center;gap:16px;">
                 <div class="adm-search">
                     <span class="material-icons">search</span>
-                    <input type="text" placeholder="Search courses, students…">
+                    <input type="text" placeholder="Search courses, studentsâ€¦">
                 </div>
             </div>
             <div class="adm-header-right">
@@ -108,7 +117,7 @@
                     <div>
                         <p class="stat-label">Total Students</p>
                         <p class="stat-value" id="statStudents"><span class="stat-loader"></span></p>
-                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loading…</p>
+                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loadingâ€¦</p>
                     </div>
                     <div class="stat-card-icon indigo">
                         <span class="material-icons">group</span>
@@ -118,7 +127,7 @@
                     <div>
                         <p class="stat-label">Active Courses</p>
                         <p class="stat-value" id="statCourses"><span class="stat-loader"></span></p>
-                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loading…</p>
+                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loadingâ€¦</p>
                     </div>
                     <div class="stat-card-icon blue">
                         <span class="material-icons">menu_book</span>
@@ -128,7 +137,7 @@
                     <div>
                         <p class="stat-label">Certificates Issued</p>
                         <p class="stat-value" id="statCerts"><span class="stat-loader"></span></p>
-                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loading…</p>
+                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loadingâ€¦</p>
                     </div>
                     <div class="stat-card-icon amber">
                         <span class="material-icons">workspace_premium</span>
@@ -138,7 +147,7 @@
                     <div>
                         <p class="stat-label">Avg Completion</p>
                         <p class="stat-value" id="statCompletion"><span class="stat-loader"></span></p>
-                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loading…</p>
+                        <p class="stat-trend syncing"><span class="material-icons">update</span> Loadingâ€¦</p>
                     </div>
                     <div class="stat-card-icon emerald">
                         <span class="material-icons">donut_large</span>
@@ -156,7 +165,7 @@
                             <span class="material-icons" style="font-size:17px;color:var(--brand);">menu_book</span>
                             Recently Added Courses
                         </span>
-                        <a href="courses.html" style="font-size:13px;font-weight:600;color:var(--brand);text-decoration:none;">View all →</a>
+                        <a href="courses.html" style="font-size:13px;font-weight:600;color:var(--brand);text-decoration:none;">View all â†’</a>
                     </div>
                     <div style="overflow-x:auto;">
                         <table class="adm-table" style="width:100%;">
@@ -171,7 +180,7 @@
                                 <tr>
                                     <td colspan="3" style="text-align:center;padding:32px;color:var(--text-muted);">
                                         <span class="loader" style="margin:0 auto 8px;"></span>
-                                        <p style="font-size:12px;margin-top:8px;">Fetching latest data…</p>
+                                        <p style="font-size:12px;margin-top:8px;">Fetching latest dataâ€¦</p>
                                     </td>
                                 </tr>
                             </tbody>
@@ -238,9 +247,8 @@
             </div>
         </div>
     </main>
-
-    <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/auth.js"></script>
     <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
+

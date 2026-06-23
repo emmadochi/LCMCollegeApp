@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// Unused firestore import removed
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -25,6 +25,7 @@ class CourseDetailPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider).value;
     final isEnrolled = user?.enrolledCourses.contains(courseId) ?? false;
+    final courseAsync = ref.watch(courseByIdProvider(courseId));
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -36,19 +37,10 @@ class CourseDetailPage extends ConsumerWidget {
           IconButton(onPressed: () {}, icon: const Icon(Symbols.notifications)),
         ],
       ),
-      body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance.collection('courses').doc(courseId).snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (!snapshot.hasData || !snapshot.data!.exists) {
-            return const Center(child: Text("Course not found"));
-          }
-          
-          final courseData = snapshot.data!.data() as Map<String, dynamic>;
-          final course = CourseModel.fromMap(courseData, snapshot.data!.id);
-
+      body: courseAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (err, stack) => Center(child: Text("Course not found: $err")),
+        data: (course) {
           return StreamBuilder<List<LessonModel>>(
             stream: LearningRepository().getLessons(courseId),
             builder: (context, lessonSnapshot) {

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../landing_page/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - LCM College</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#abcf47', // LCM Green
+                        primaryDark: '#8ba838', // LCM Dark Green
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script type="module" src="js/guard.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+        .brand-gradient-bg {
+            background: linear-gradient(135deg, #abcf47, #8ba838);
+        }
+        @media (max-width: 640px) {
+            .bg-white.rounded-\[20px\] {
+                padding: 24px 18px !important;
+                border-radius: 16px !important;
+            }
+            #questionText {
+                font-size: 20px !important;
+                margin-bottom: 24px !important;
+                line-height: 1.4 !important;
+            }
+            #nextQuestionBtn {
+                width: 100%;
+                justify-content: center;
+                padding-top: 12px;
+                padding-bottom: 12px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#fafafa] min-h-screen flex flex-col" style="display: none;">
+
+    <!-- Header -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b border-black/5 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a id="exitQuizLink" href="course.html" class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg mr-2"></i> Exit Quiz
+                </a>
+                <div id="quizTitle" class="font-heading font-bold text-gray-900">Module Quiz</div>
+                <div class="text-sm font-medium text-primaryDark bg-[#abcf471a] px-3 py-1 rounded-full">
+                    Untimed
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Quiz Content -->
+    <main id="quizMainContent" class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex flex-col justify-center">
+        
+        <!-- Progress -->
+        <div class="mb-8">
+            <div class="flex justify-between items-end mb-2">
+                <span id="questionCounter" class="text-sm font-bold text-gray-500 uppercase tracking-widest">Loading Quiz...</span>
+                <span id="progressPercentage" class="text-sm font-semibold text-primaryDark">0%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div id="progressBar" class="brand-gradient-bg rounded-full h-2 transition-all duration-500" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="bg-white rounded-[20px] shadow-sm border border-[#00000014] p-8 md:p-12">
+            <h2 id="questionText" class="text-2xl font-bold text-gray-900 mb-8 leading-relaxed">
+                Loading assessment questions...
+            </h2>
+
+            <!-- Options -->
+            <div id="optionsContainer" class="space-y-4">
+                <!-- Dynamic choices populated here -->
+            </div>
+            
+            <div class="mt-10 flex justify-end">
+                <button id="nextQuestionBtn" class="px-8 py-3 brand-gradient-bg border border-transparent rounded-[100px] text-sm font-bold text-gray-900 shadow-[0_4px_15px_rgba(171,207,71,0.3)] hover:opacity-90 transition-all outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center">
+                    Next Question <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <script type="module" src="js/quiz.js"></script>
+</body>
+</html>

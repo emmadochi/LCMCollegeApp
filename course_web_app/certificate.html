@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../landing_page/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate - LCM College</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#abcf47', // LCM Green
+                        primaryDark: '#8ba838', // LCM Dark Green
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                        serif: ['Georgia', 'serif'], // Used for traditional certificate feel
+                    }
+                }
+            }
+        }
+    </script>
+    <script type="module" src="js/guard.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #2F3640; }
+        .certificate-container {
+            background-color: #fff;
+            background-image: radial-gradient(#fafafa, #f1f2f6);
+        }
+        .outer-border { border: 12px solid #8ba838; }
+        .inner-border { border: 2px solid #abcf47; border-radius: 4px;}
+        @media print {
+            body { background: white; margin: 0; padding: 0;}
+            nav, .print-btn-container { display: none !important; }
+            .certificate-wrapper { padding: 0 !important; width: 100%; height: 100vh; display: flex; align-items: center; justify-content: center;}
+            .certificate-container { box-shadow: none !important; width: 100%; max-width: none; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center" style="display: none;">
+
+    <!-- Non-print Navigation -->
+    <nav class="w-full bg-[#1A1F24] shadow-md border-b border-white/10 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a href="profile.html" class="flex items-center text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back to Profile
+                </a>
+                <div class="print-btn-container">
+                    <button onclick="window.print()" class="px-5 py-2 bg-primary hover:bg-primaryDark text-gray-900 rounded-[100px] text-sm font-bold transition-colors shadow-lg shadow-primary/20">
+                        <i class="fa-solid fa-print mr-2"></i> Print Document
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Certificate Render -->
+    <main class="certificate-wrapper p-4 sm:p-8 w-full flex-grow flex items-center justify-center">
+        
+        <div class="certificate-container w-full max-w-4xl p-2 sm:p-4 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <div class="outer-border p-2 min-h-[550px] relative">
+                <div class="inner-border w-full h-full p-4 sm:p-8 md:p-16 flex flex-col items-center text-center relative z-10">
+                    
+                    <!-- Decorative Background Logo (Watermark) -->
+                    <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] z-0">
+                        <i class="fa-solid fa-graduation-cap text-[150px] sm:text-[300px]"></i>
+                    </div>
+ 
+                    <div class="z-10 w-full flex flex-col items-center">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-50 shadow-sm border border-gray-200 mb-6 flex items-center justify-center text-2xl sm:text-3xl text-primaryDark">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        
+                        <h1 class="text-xl sm:text-4xl md:text-5xl font-serif text-gray-900 mb-2 font-bold tracking-widest uppercase">Certificate of Completion</h1>
+                        <p class="text-primaryDark uppercase tracking-widest text-xs sm:text-sm font-bold mb-6 sm:mb-10">LCM Bible College</p>
+ 
+                        <p class="text-gray-500 italic mb-4 font-serif text-base sm:text-lg">This is to certify that</p>
+                        
+                        <h2 class="text-2xl sm:text-4xl font-heading font-bold text-gray-900 border-b border-gray-300 pb-2 mb-4 w-3/4 max-w-md mx-auto" id="userNameLabel">John Doe</h2>
+                        
+                        <p class="text-gray-500 italic mb-4 sm:mb-8 font-serif text-base sm:text-lg">has successfully completed the requirements for the course</p>
+                        
+                        <h3 class="text-lg sm:text-2xl font-heading font-bold text-primaryDark mb-8 sm:mb-12">Church History Part 1</h3>
+                        
+                        <div class="flex flex-col sm:flex-row gap-6 sm:gap-0 justify-between items-center w-full max-w-2xl mt-auto pt-8 border-t border-gray-200">
+                            <div class="text-center sm:text-left">
+                                <p class="text-gray-700 font-bold">Oct 12, 2025</p>
+                                <p class="text-xs text-gray-500 uppercase tracking-widest">Date Issued</p>
+                            </div>
+                            <div class="text-center sm:text-right">
+                                <p class="text-gray-700 font-bold font-serif italic text-lg sm:text-xl">Dr. Admin Signature</p>
+                                <p class="text-xs text-gray-500 uppercase tracking-widest border-t border-gray-300 pt-1 mt-1">Lead Instructor</p>
+                            </div>
+                        </div>
+                    </div>
+ 
+                </div>
+            </div>
+        </div>
+ 
+    </main>
+
+    <script>
+        (function() {
+            var _user = JSON.parse(localStorage.getItem('user') || '{}');
+            var nameLabel = document.getElementById('userNameLabel');
+            if (nameLabel && _user.name) {
+                nameLabel.innerText = _user.name;
+            }
+
+            var urlParams = new URLSearchParams(window.location.search);
+            var courseTitle = urlParams.get('courseTitle') || urlParams.get('course_title');
+            if (courseTitle) {
+                var titleEl = document.querySelector('main h3');
+                if (titleEl) titleEl.innerText = decodeURIComponent(courseTitle);
+            }
+
+            // Set dynamic Date Issued to today
+            var dateEl = document.querySelector('main p.text-gray-700.font-bold');
+            if (dateEl) {
+                var today = new Date();
+                var options = { year: 'numeric', month: 'short', day: 'numeric' };
+                dateEl.textContent = today.toLocaleDateString('en-US', options);
+            }
+        })();
+    </script>
+</body>
+</html>

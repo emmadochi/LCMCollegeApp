@@ -45,11 +45,13 @@ class CourseModel {
       description: map['description'] ?? '',
       thumbnailUrl: map['thumbnailUrl'] ?? '',
       category: map['category'] ?? '',
-      totalLessons: map['totalLessons'] ?? 0,
-      rating: (map['rating'] ?? 0.0).toDouble(),
-      isFeatured: map['isFeatured'] ?? false,
+      totalLessons: map['totalLessons'] is int 
+          ? map['totalLessons'] 
+          : int.tryParse(map['totalLessons']?.toString() ?? '0') ?? 0,
+      rating: double.tryParse(map['rating']?.toString() ?? '0.0') ?? 0.0,
+      isFeatured: map['isFeatured'] == true || map['isFeatured'] == 1 || map['isFeatured'] == '1',
       duration: map['duration'] ?? 'Self-paced',
-      hasQuizzes: map['hasQuizzes'] ?? true,
+      hasQuizzes: map['hasQuizzes'] == null || map['hasQuizzes'] == true || map['hasQuizzes'] == 1 || map['hasQuizzes'] == '1',
     );
   }
 }

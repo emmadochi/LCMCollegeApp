@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Chat — LCM Lecturers Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#abcf47',
+                        primaryDark: '#8ba838',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+
+        .brand-gradient-bg { background: linear-gradient(135deg, #abcf47, #8ba838); }
+
+        /* Sidebar active tab */
+        .active-tab {
+            background: rgba(139,168,56,0.08);
+            color: #8ba838;
+            border-left: 4px solid #abcf47;
+        }
+
+        /* Thread list */
+        .thread-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 16px;
+            border-left: 3px solid transparent;
+            border-bottom: 1px solid #f8fafc;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .thread-item:hover { background: #f8fafc; }
+        .thread-item.active {
+            background: rgba(139,168,56,0.07);
+            border-left-color: #abcf47;
+        }
+
+        /* Message bubbles */
+        .msg-wrapper { display: flex; flex-direction: column; margin-bottom: 6px; }
+        .msg-wrapper.from-me { align-items: flex-end; }
+        .msg-wrapper.from-student { align-items: flex-start; }
+
+        .msg-bubble {
+            max-width: 68%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .from-me .msg-bubble {
+            background: linear-gradient(135deg, #abcf47, #8ba838);
+            color: #1a2900;
+            border-bottom-right-radius: 4px;
+            font-weight: 500;
+        }
+        .from-student .msg-bubble {
+            background: #fff;
+            color: #1e293b;
+            border: 1px solid #e8ecf0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg-meta { font-size: 9.5px; color: #94a3b8; margin-top: 4px; padding: 0 4px; }
+
+        /* Date divider */
+        .msg-date-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 16px 0;
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .msg-date-divider::before,
+        .msg-date-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e8ecf0;
+        }
+
+        /* Pulse dot */
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: pulse-anim 2s infinite;
+        }
+        @keyframes pulse-anim {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Skeleton loader */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Notifications Dropdown Styles */
+        .notif-tab {
+            color: #6b7280;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+        .notif-tab:hover { color: #374151; }
+        .active-notif-tab {
+            color: #8ba838;
+            border-bottom-color: #abcf47;
+            background: rgba(171,207,71,0.05);
+        }
+
+        .notif-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 13px 18px;
+            border-bottom: 1px solid #f8fafc;
+            cursor: pointer;
+            transition: background 0.12s ease;
+        }
+        .notif-item:hover { background: #f9fafb; }
+        .notif-item:last-child { border-bottom: none; }
+
+        .notif-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .notif-icon-amber  { background: #fef3c7; color: #d97706; }
+        .notif-icon-blue   { background: #dbeafe; color: #2563eb; }
+        .notif-icon-green  { background: #dcfce7; color: #16a34a; }
+        .notif-icon-red    { background: #fee2e2; color: #dc2626; }
+
+        .notif-title  { font-size: 12.5px; font-weight: 600; color: #111827; line-height: 1.4; text-align: left; }
+        .notif-detail { font-size: 11.5px; color: #6b7280; margin-top: 2px; line-height: 1.4; text-align: left; }
+        .notif-time   { font-size: 10px; color: #9ca3af; margin-top: 4px; text-align: left; }
+
+        .notif-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+            color: #9ca3af;
+            gap: 8px;
+            text-align: center;
+        }
+        .notif-empty i { font-size: 32px; color: #d1d5db; }
+        .notif-empty p { font-size: 12px; }
+
+        .notif-section-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #9ca3af;
+            padding: 10px 18px 5px;
+            background: #f9fafb;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0); }
+            15%  { transform: rotate(15deg); }
+            30%  { transform: rotate(-12deg); }
+            45%  { transform: rotate(8deg); }
+            60%  { transform: rotate(-4deg); }
+            75%  { transform: rotate(2deg); }
+        }
+        .bell-ring {
+            animation: bellRing 0.6s ease;
+        }
+    </style>
+</head>
+<body class="bg-[#f5f7f2] min-h-screen flex flex-col md:flex-row overflow-hidden" style="display:none;">
+
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebarBackdrop" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
+
+    <!-- ── LEFT SIDEBAR ──────────────────────────────────────────────── -->
+    <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-40 w-72 md:w-80 bg-white border-r border-[#00000014] flex flex-col h-full md:h-screen shadow-2xl md:shadow-none flex-shrink-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <!-- Logo -->
+        <div class="p-6 border-b border-[#00000014] flex justify-between items-center bg-gray-50/50">
+            <div class="flex items-center gap-3">
+                <img src="../logo.png" alt="LCM Logo" class="w-10 h-10 object-contain">
+                <div>
+                    <h2 class="text-sm font-black text-gray-900 leading-tight">LCM COLLEGE</h2>
+                    <span class="text-[10px] font-bold text-primaryDark uppercase tracking-wider">Lecturers Portal</span>
+                </div>
+            </div>
+            <button class="md:hidden text-gray-500 hover:text-gray-900" id="hamburgerBtnClose">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Lecturer Info -->
+        <div class="p-6 border-b border-[#00000014] flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full brand-gradient-bg flex items-center justify-center text-white font-extrabold text-base shadow-sm" id="lecturerAvatar">L</div>
+            <div>
+                <h3 class="font-bold text-gray-900 text-sm truncate" id="lecturerNameDisplay">Lecturer Name</h3>
+                <span class="text-[11px] font-medium text-gray-400" id="lecturerEmailDisplay">lecturer@lcmcollege.org</span>
+            </div>
+        </div>
+
+        <!-- Sidebar Nav -->
+        <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto">
+            <a href="dashboard.html" class="w-full flex items-center p-3 text-sm rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fa-solid fa-gauge mr-3 text-base"></i> Overview
+            </a>
+            <a href="dashboard.html#students" class="w-full flex items-center p-3 text-sm rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fa-solid fa-users mr-3 text-base"></i> My Students
+            </a>
+            <a href="dashboard.html#submissions" class="w-full flex items-center p-3 text-sm rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fa-solid fa-file-invoice mr-3 text-base"></i> Submissions
+            </a>
+            <a href="dashboard.html#assignments" class="w-full flex items-center p-3 text-sm rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fa-solid fa-file-signature mr-3 text-base"></i> Assignments
+            </a>
+            <a href="chat.html" class="w-full flex items-center p-3 text-sm rounded-xl active-tab transition-all relative">
+                <i class="fa-solid fa-comments mr-3 text-base"></i> Student Chat
+                <span id="chatUnreadBadge" class="hidden ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">0</span>
+            </a>
+        </nav>
+
+        <!-- Logout -->
+        <div class="p-4 border-t border-[#00000014] bg-gray-50/50">
+            <button id="logoutBtn" class="w-full py-2.5 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ───────────────────────────────────────────────── -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden bg-[#fafafa]">
+
+        <!-- Top Bar -->
+        <header class="h-16 bg-white border-b border-[#00000014] flex items-center justify-between px-6 flex-shrink-0 relative z-30">
+            <div class="flex items-center gap-3">
+                <button class="md:hidden p-2 -ml-2 text-gray-600 hover:text-gray-900" id="hamburgerBtnOpen" aria-label="Open Menu">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <i class="fa-solid fa-comments text-primaryDark text-lg"></i>
+                <h1 class="text-lg font-bold text-gray-900">Student Chat</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="px-3 py-1 bg-primary/10 border border-primary/20 text-primaryDark text-[11px] font-bold rounded-full uppercase" id="unreadBadgeHeader">0 Unread</span>
+
+                <!-- ── Notification Bell ── -->
+                <div class="relative" id="notifContainer">
+                    <button id="notifBtn" class="relative w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 hover:bg-gray-100 transition-all flex items-center justify-center group" aria-label="Notifications">
+                        <i class="fa-regular fa-bell text-gray-600 group-hover:text-gray-900 text-base transition-colors"></i>
+                        <!-- Badge -->
+                        <span id="notifBadge" class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1 shadow-sm border-2 border-white leading-none">0</span>
+                    </button>
+
+                    <!-- Dropdown Panel -->
+                    <div id="notifDropdown" class="hidden absolute right-0 top-[calc(100%+10px)] w-[400px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+
+                        <!-- Dropdown Header -->
+                        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50/60">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-bell text-primaryDark text-sm"></i>
+                                <h3 class="font-bold text-gray-900 text-sm">Notifications</h3>
+                                <span id="notifTotalBadge" class="px-2 py-0.5 bg-primary/15 text-primaryDark text-[10px] font-bold rounded-full">0</span>
+                            </div>
+                            <button id="notifRefreshBtn" class="text-gray-400 hover:text-primaryDark transition-colors text-xs flex items-center gap-1 font-medium">
+                                <i class="fa-solid fa-rotate-right text-xs"></i> Refresh
+                            </button>
+                        </div>
+
+                        <!-- Category Filter Tabs -->
+                        <div class="flex border-b border-gray-100 bg-white">
+                            <button class="notif-tab active-notif-tab flex-1 py-2.5 text-[11px] font-semibold transition-all relative" data-notif-tab="all">All</button>
+                            <button class="notif-tab flex-1 py-2.5 text-[11px] font-semibold transition-all relative" data-notif-tab="submissions">
+                                <i class="fa-solid fa-file-invoice mr-1"></i>Tasks
+                                <span id="tabBadgeSubmissions" class="hidden ml-1 bg-amber-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">0</span>
+                            </button>
+                            <button class="notif-tab flex-1 py-2.5 text-[11px] font-semibold transition-all relative" data-notif-tab="chat">
+                                <i class="fa-solid fa-comments mr-1"></i>Chat
+                                <span id="tabBadgeChat" class="hidden ml-1 bg-blue-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">0</span>
+                            </button>
+                            <button class="notif-tab flex-1 py-2.5 text-[11px] font-semibold transition-all relative" data-notif-tab="enrollments">
+                                <i class="fa-solid fa-user-plus mr-1"></i>New
+                            </button>
+                            <button class="notif-tab flex-1 py-2.5 text-[11px] font-semibold transition-all relative" data-notif-tab="alerts">
+                                <i class="fa-solid fa-triangle-exclamation mr-1"></i>Alerts
+                            </button>
+                        </div>
+
+                        <!-- Notification Feed -->
+                        <div id="notifFeed" class="overflow-y-auto max-h-[380px]">
+                            <div class="flex flex-col items-center justify-center py-10 text-gray-400 gap-2">
+                                <i class="fa-solid fa-spinner fa-spin text-xl text-gray-300"></i>
+                                <p class="text-xs">Loading notifications…</p>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="px-5 py-3 border-t border-gray-100 bg-gray-50/40 text-center">
+                            <a href="chat.html" class="text-xs font-semibold text-primaryDark hover:underline">
+                                <i class="fa-solid fa-comments mr-1"></i>Open Student Chat →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- ── End Notification Bell ── -->
+            </div>
+        </header>
+
+        <!-- Two-Column Chat Layout -->
+        <div class="flex flex-1 overflow-hidden relative">
+
+            <!-- Thread Sidebar -->
+            <div id="threadsSidebarPanel" class="w-full md:w-80 flex-shrink-0 bg-white border-r border-[#00000014] flex flex-col overflow-hidden">
+                <!-- Search -->
+                <div class="p-4 border-b border-[#00000014]">
+                    <div class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5">
+                        <i class="fa-solid fa-magnifying-glass text-gray-400 text-sm"></i>
+                        <input type="text" id="threadSearch" placeholder="Search student or course…" class="flex-1 bg-transparent border-none outline-none text-sm text-gray-700 placeholder-gray-400">
+                    </div>
+                </div>
+
+                <!-- Thread List -->
+                <div class="flex-1 overflow-y-auto" id="threadsListContainer">
+                    <!-- Skeleton loaders -->
+                    <div class="p-4 flex flex-col gap-3">
+                        <div class="skeleton h-16 rounded-xl"></div>
+                        <div class="skeleton h-16 rounded-xl"></div>
+                        <div class="skeleton h-16 rounded-xl"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Window -->
+            <div class="flex-1 flex flex-col overflow-hidden bg-[#f8faf5] hidden md:flex" id="chatWindowPanel">
+
+                <!-- Empty state -->
+                <div id="chatEmptyState" class="flex-1 flex flex-col items-center justify-center gap-4 p-12 text-center">
+                    <div class="w-20 h-20 rounded-full brand-gradient-bg flex items-center justify-center text-white shadow-lg shadow-primary/30">
+                        <i class="fa-solid fa-comments text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mt-2">No Conversation Selected</h3>
+                    <p class="text-gray-400 text-sm max-w-xs leading-relaxed">Choose a student from the left panel to view your conversation and respond to their messages.</p>
+                </div>
+
+                <!-- Active Conversation (hidden by default) -->
+                <div id="activeConversation" class="hidden flex-col h-full overflow-hidden">
+
+                    <!-- Conversation Header -->
+                    <div class="h-16 bg-white border-b border-[#00000014] px-6 flex items-center justify-between flex-shrink-0">
+                        <div class="flex items-center gap-3">
+                            <button id="chatMobileBackBtn" class="md:hidden p-2 -ml-2 text-gray-500 hover:text-gray-900" aria-label="Back to inbox">
+                                <i class="fa-solid fa-arrow-left text-base"></i>
+                            </button>
+                            <div class="w-10 h-10 rounded-full brand-gradient-bg flex items-center justify-center text-white font-extrabold text-sm shadow-sm font-heading" id="chatHeaderAvatar">?</div>
+                            <div>
+                                <h3 class="font-bold text-gray-900 text-sm leading-tight" id="activeStudentName">—</h3>
+                                <p class="text-xs text-primaryDark font-semibold" id="activeCourseTitle">—</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-gray-400 font-medium">
+                            <div class="pulse-dot"></div>
+                            Live
+                        </div>
+                    </div>
+
+                    <!-- Message Stream -->
+                    <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-1" id="chatStream">
+                        <!-- Messages render here -->
+                    </div>
+
+                    <!-- Input Bar -->
+                    <form id="chatSendForm" class="flex items-center gap-3 px-5 py-4 bg-white border-t border-[#00000014] flex-shrink-0">
+                        <input
+                            type="text"
+                            id="chatMessageInput"
+                            placeholder="Type your reply…"
+                            autocomplete="off"
+                            class="flex-1 bg-gray-50 border border-gray-200 rounded-2xl px-5 py-3 text-sm text-gray-800 outline-none focus:border-primaryDark focus:ring-1 focus:ring-primaryDark transition-all placeholder-gray-400"
+                        >
+                        <button type="submit" id="chatSendBtn" class="w-11 h-11 rounded-full brand-gradient-bg text-gray-900 flex items-center justify-center shadow-md hover:opacity-90 transition-all flex-shrink-0">
+                            <i class="fa-solid fa-paper-plane text-sm"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 bg-gray-900 text-white rounded-xl shadow-lg flex items-center gap-3 z-50 transform translate-y-20 opacity-0 transition-all duration-300">
+        <i class="fa-solid fa-circle-check text-primary" id="toastIcon"></i>
+        <span class="text-xs font-semibold" id="toastMessage">Success!</span>
+    </div>
+
+    <script type="module" src="js/chat.js"></script>
+</body>
+</html>

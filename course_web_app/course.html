@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="../landing_page/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Viewer - LCM College</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#abcf47', // LCM Green
+                        primaryDark: '#8ba838', // LCM Dark Green
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script type="module" src="js/guard.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+        /* Custom scrollbar for sidebar */
+        .sidebar-scroll::-webkit-scrollbar { width: 6px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .brand-gradient-bg {
+            background: linear-gradient(135deg, #abcf47, #8ba838);
+        }
+        @media (max-width: 480px) {
+            .flex.gap-3 button, .flex.gap-3 a {
+                flex: 1;
+                justify-content: center;
+                padding-left: 8px;
+                padding-right: 8px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#fafafa] min-h-screen flex flex-col md:flex-row overflow-hidden" style="display: none;">
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden transition-opacity duration-300"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 w-80 bg-white border-r border-[#00000014] flex flex-col h-screen z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex-shrink-0">
+        <!-- Sidebar Header -->
+        <div class="p-4 border-b border-[#00000014] flex justify-between items-center bg-gray-50/50">
+            <a href="dashboard.html" class="flex items-center font-medium text-sm text-gray-600 hover:text-primaryDark transition-colors">
+                <i class="fa-solid fa-arrow-left mr-2"></i> Back to Dashboard
+            </a>
+            <button id="closeSidebarBtn" class="md:hidden text-gray-500 hover:text-gray-900 focus:outline-none p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Course Info -->
+        <div class="p-6 border-b border-[#00000014]">
+            <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#abcf4726] text-primaryDark mb-2" id="courseCategoryBadge">Theology</span>
+            <h2 class="text-xl font-bold text-gray-900 leading-tight mb-3" id="courseTitleSidebar">Introduction to Biblical Studies</h2>
+            
+            <div class="flex items-center mt-3">
+                <div class="w-full bg-gray-100 rounded-full h-2">
+                    <div class="brand-gradient-bg rounded-full h-2" style="width: 45%"></div>
+                </div>
+                <span class="ml-3 text-xs font-bold text-gray-600">45%</span>
+            </div>
+        </div>
+
+        <!-- Modules List -->
+        <div class="flex-1 overflow-y-auto sidebar-scroll p-4" id="courseModulesList">
+            <!-- Simulated list of modules/lectures -->
+            <div class="space-y-1">
+                <p class="font-bold text-xs text-gray-400 uppercase tracking-widest px-2 mb-3 mt-4">Module 1: Foundations</p>
+                
+                <a href="#" class="flex items-center p-3 text-sm rounded-xl hover:bg-gray-50 bg-[#abcf471a] text-primaryDark border-l-4 border-primary transition-all">
+                    <div class="flex-shrink-0 mr-3">
+                        <div class="w-7 h-7 rounded-full brand-gradient-bg text-gray-900 flex items-center justify-center text-xs shadow-sm">
+                            <i class="fa-solid fa-play ml-0.5"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <span class="block font-semibold truncate text-gray-900">1. Welcome to the Course</span>
+                        <span class="block text-xs text-primaryDark">5 mins</span>
+                    </div>
+                </a>
+
+                <a href="#" class="flex items-center p-3 text-sm rounded-xl hover:bg-gray-50 text-gray-700 transition-all border-l-4 border-transparent">
+                    <div class="flex-shrink-0 mr-3">
+                        <div class="w-7 h-7 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center text-xs border border-gray-200">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <span class="block font-medium truncate">2. Historical Contexts</span>
+                        <span class="block text-xs text-gray-500">15 mins</span>
+                    </div>
+                </a>
+                
+                <a href="#" class="flex items-center p-3 text-sm rounded-xl hover:bg-gray-50 text-gray-700 transition-all border-l-4 border-transparent mt-1">
+                    <div class="flex-shrink-0 mr-3">
+                        <div class="w-7 h-7 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center text-xs border border-gray-200">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <span class="block font-medium truncate">3. Core Reading Material</span>
+                        <span class="block text-xs text-gray-500"><i class="fa-regular fa-file-pdf mr-1"></i> PDF</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-[#fafafa] relative">
+        <!-- Mobile Top Nav -->
+        <div class="md:hidden flex items-center justify-between p-4 bg-white border-b border-[#00000014] sticky top-0 z-30">
+            <button id="mobileMenuToggle" class="text-gray-600 hover:text-primaryDark p-2 focus:outline-none">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <span class="font-bold text-gray-800 text-sm truncate px-4 flex-1 text-center min-w-0" id="mobileCourseTitle">LCM Course Viewer</span>
+            <a href="dashboard.html" class="text-gray-600 hover:text-primaryDark p-2">
+                <i class="fa-solid fa-house"></i>
+            </a>
+        </div>
+        <div class="flex-1 max-w-5xl mx-auto w-full p-4 md:p-8">
+            
+            <!-- Video/Content Frame -->
+            <div class="bg-gray-900 rounded-[20px] overflow-hidden shadow-xl aspect-video flex items-center justify-center relative mb-8">
+                <!-- Placeholder for actual video player -->
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-white">
+                    <!-- Custom blob for style -->
+                    <div class="absolute w-64 h-64 brand-gradient-bg rounded-full mix-blend-overlay filter blur-3xl opacity-30"></div>
+                    
+                    <div class="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center mb-4 cursor-pointer hover:bg-primary/90 hover:text-gray-900 transition-colors backdrop-blur-sm shadow-[0_0_30px_rgba(171,207,71,0.2)] z-10 text-white">
+                        <i class="fa-solid fa-play text-3xl ml-1.5"></i>
+                    </div>
+                    <h3 class="text-xl font-heading font-medium z-10">1. Welcome to the Course</h3>
+                </div>
+            </div>
+
+            <!-- Content Details -->
+            <div class="bg-white rounded-[20px] shadow-sm border border-[#00000014] p-6 text-gray-800 md:p-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-6 border-b border-gray-100">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900 mb-2" id="lessonTitle">Welcome to the Course</h1>
+                        <p class="text-gray-500 text-sm flex items-center font-medium">
+                            <i class="fa-regular fa-clock mr-2 text-primaryDark"></i> 5 Mins &bull; Video Lecture
+                        </p>
+                    </div>
+                    <div class="mt-4 md:mt-0 flex gap-3">
+                        <button id="prevLessonBtn" class="px-5 py-2.5 bg-white border border-gray-200 rounded-[100px] text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                             Previous
+                        </button>
+                        <button id="nextLessonBtn" class="px-5 py-2.5 brand-gradient-bg border border-transparent rounded-[100px] text-sm font-bold text-gray-900 shadow-[0_4px_15px_rgba(171,207,71,0.3)] hover:opacity-90 transition-all outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center">
+                             Mark Valid & Next <i class="fa-solid fa-chevron-right ml-2 text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stepper Progress Tracker -->
+                <div id="lessonSlideProgressContainer" class="flex justify-between items-center mb-6 text-xs font-semibold text-gray-500 uppercase tracking-wider hidden border-b border-gray-100 pb-3">
+                    <span id="lessonSlideIndicator">Page 1 of 1</span>
+                    <div class="flex gap-2" id="lessonSlideDots"></div>
+                </div>
+
+                <div class="prose prose-green max-w-none text-gray-600 leading-relaxed" id="lessonDescription">
+                    <p>Welcome to Introduction to Biblical Studies. In this introductory lecture, we will outline the syllabus, discuss our primary objectives for this semester, and introduce some of the core methodologies we will employ to study these foundational texts.</p>
+                    <p>Please ensure you have read the prerequisite material provided in the syllabus document before moving on to module 2.</p>
+                </div>
+
+                <!-- Bottom Navigation (mirrored) -->
+                <div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-100">
+                    <button id="prevLessonBtnBottom" class="px-5 py-2.5 bg-white border border-gray-200 rounded-[100px] text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                        <i class="fa-solid fa-chevron-left mr-2 text-xs"></i> Previous
+                    </button>
+                    <button id="nextLessonBtnBottom" class="px-5 py-2.5 brand-gradient-bg border border-transparent rounded-[100px] text-sm font-bold text-gray-900 shadow-[0_4px_15px_rgba(171,207,71,0.3)] hover:opacity-90 transition-all outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center">
+                        Mark Valid &amp; Next <i class="fa-solid fa-chevron-right ml-2 text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ASSIGNMENT SUBMISSION PANEL (shown dynamically when lesson has assignment) -->
+            <div id="assignmentPanel" class="mt-8 hidden">
+                <div class="bg-white rounded-[20px] shadow-sm border border-[#00000014] p-6 md:p-8">
+                    <!-- Assignment Header -->
+                    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6 pb-6 border-b border-gray-100">
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 text-[11px] font-bold rounded-full uppercase">📝 Assignment Required</span>
+                            </div>
+                            <h2 class="text-xl font-bold text-gray-900" id="assignmentTitle">Assignment</h2>
+                            <p class="text-sm text-gray-500 mt-1">Due: <span id="assignmentDueDate" class="font-semibold text-gray-700">—</span></p>
+                        </div>
+                        <div id="assignmentStatusBadge" class="flex-shrink-0">
+                            <!-- Rendered dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Assignment Instructions -->
+                    <div class="mb-6" id="assignmentInstructionsContainer">
+                        <h3 class="text-sm font-bold text-gray-700 mb-2">Instructions</h3>
+                        <div class="prose prose-sm max-w-none text-gray-600 bg-gray-50 rounded-xl p-4 border border-gray-100" id="assignmentInstructions">
+                            No instructions provided.
+                        </div>
+                    </div>
+
+                    <!-- Feedback (shown when rejected) -->
+                    <div id="assignmentFeedbackContainer" class="mb-6 hidden p-4 bg-red-50 rounded-xl border border-red-100">
+                        <h3 class="text-sm font-bold text-red-700 mb-1">📋 Lecturer Feedback</h3>
+                        <p class="text-sm text-red-600" id="assignmentFeedbackText"></p>
+                    </div>
+
+                    <!-- Approval Banner (shown when approved/graded) -->
+                    <div id="assignmentApprovedBanner" class="mb-6 hidden p-4 bg-green-50 rounded-xl border border-green-200 flex items-center gap-3">
+                        <i class="fa-solid fa-circle-check text-green-600 text-xl"></i>
+                        <div>
+                            <p class="text-sm font-bold text-green-800">Assignment Approved!</p>
+                            <p class="text-xs text-green-600 mt-0.5">Your submission has been reviewed and approved by the lecturer. You may now mark this lesson as complete.</p>
+                        </div>
+                    </div>
+
+                    <!-- Submission Form -->
+                    <div id="assignmentSubmissionForm">
+                        <h3 class="text-sm font-bold text-gray-700 mb-3">Your Submission</h3>
+                        <form id="submitAssignmentForm" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-2">Submission Type</label>
+                                <div class="flex gap-3">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="submissionType" value="text" id="typeText" checked class="accent-primaryDark">
+                                        <span class="text-sm font-medium text-gray-700">Text Response</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="submissionType" value="file" id="typeFile" class="accent-primaryDark">
+                                        <span class="text-sm font-medium text-gray-700">File Upload</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Text Area -->
+                            <div id="submissionTextArea">
+                                <label for="submissionText" class="block text-xs font-semibold text-gray-600 mb-2">Your Answer</label>
+                                <textarea id="submissionText" rows="6" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-1 focus:ring-primaryDark focus:border-primaryDark outline-none resize-none transition-all" placeholder="Write your response here..."></textarea>
+                            </div>
+
+                            <!-- File Upload -->
+                            <div id="submissionFileArea" class="hidden">
+                                <label class="block text-xs font-semibold text-gray-600 mb-2">Upload File</label>
+                                <div class="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-primaryDark transition-colors cursor-pointer" id="fileDropZone">
+                                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-300 mb-2"></i>
+                                    <p class="text-sm text-gray-500">Click or drag file here</p>
+                                    <p class="text-xs text-gray-400 mt-1">PDF, Word, TXT, ZIP, Images — max 10MB</p>
+                                    <input type="file" id="submissionFile" class="hidden" accept=".pdf,.doc,.docx,.txt,.zip,.png,.jpg,.jpeg">
+                                    <p id="selectedFileName" class="text-xs font-semibold text-primaryDark mt-2 hidden"></p>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end pt-2">
+                                <button type="submit" id="submitAssignmentBtn" class="px-6 py-2.5 brand-gradient-bg text-gray-900 rounded-[100px] text-sm font-bold shadow-md shadow-primary/20 hover:opacity-90 transition-all flex items-center gap-2">
+                                    <i class="fa-solid fa-paper-plane text-xs"></i> Submit Assignment
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Reviews Section -->
+            <div class="mt-8 bg-white rounded-[20px] shadow-sm border border-[#00000014] p-6 text-gray-800 md:p-8">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-gray-100">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Course Reviews</h2>
+                        <p class="text-gray-500 text-sm">Hear from other students or share your own experience</p>
+                    </div>
+                    <button id="writeReviewBtn" class="px-5 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-[100px] text-sm font-semibold transition-colors border border-gray-100 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-primaryDark"></i> Write a Review
+                    </button>
+                </div>
+
+                <!-- Write Review Form (Collapsible/Hidden by default) -->
+                <div id="reviewFormContainer" class="hidden mb-8 p-6 bg-gray-50 rounded-2xl border border-gray-100 animate-fade-in">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Share Your Thoughts</h3>
+                    <form id="courseReviewForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Your Rating</label>
+                            <div class="flex items-center gap-1.5" id="starRatingSelect">
+                                <button type="button" data-rating="1" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors focus:outline-none"><i class="fa-solid fa-star"></i></button>
+                                <button type="button" data-rating="2" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors focus:outline-none"><i class="fa-solid fa-star"></i></button>
+                                <button type="button" data-rating="3" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors focus:outline-none"><i class="fa-solid fa-star"></i></button>
+                                <button type="button" data-rating="4" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors focus:outline-none"><i class="fa-solid fa-star"></i></button>
+                                <button type="button" data-rating="5" class="text-3xl text-gray-300 hover:text-amber-400 transition-colors focus:outline-none"><i class="fa-solid fa-star"></i></button>
+                            </div>
+                            <input type="hidden" id="selectedRatingVal" value="0">
+                        </div>
+                        <div>
+                            <label for="reviewComment" class="block text-sm font-semibold text-gray-700 mb-2">Review Comment</label>
+                            <textarea id="reviewComment" rows="4" class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl focus:border-primaryDark focus:ring-1 focus:ring-primaryDark outline-none transition-all text-sm resize-none" placeholder="What did you like or dislike about this course? How can it be improved?"></textarea>
+                        </div>
+                        <div class="flex justify-end gap-3 pt-2">
+                            <button type="button" id="cancelReviewBtn" class="px-5 py-2 bg-white border border-gray-200 rounded-[100px] text-xs font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-5 py-2 brand-gradient-bg text-gray-900 rounded-[100px] text-xs font-bold shadow-md shadow-primary/10 hover:opacity-90 transition-all">
+                                Submit Review
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Reviews List Container -->
+                <div id="reviewsListContainer" class="space-y-6">
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fa-solid fa-spinner fa-spin text-2xl mb-3 text-gray-400"></i>
+                        <p class="text-sm">Loading course reviews...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="h-24"></div>
+        </div>
+    </main>
+
+    <!-- CHAT FAB BUTTON AND PANEL -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <!-- Floating Chatbot Style Notification Bubble -->
+        <div id="chatBubbleNotification" class="absolute bottom-16 right-0 mb-2 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 p-3.5 flex flex-col gap-1.5 hidden animate-bounce origin-bottom-right transition-all duration-300">
+            <div class="flex items-center justify-between">
+                <span class="text-[10px] font-bold text-primaryDark uppercase tracking-wider flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 bg-red-500 rounded-full animate-ping"></span> New Message
+                </span>
+                <button id="closeBubbleBtn" class="text-gray-400 hover:text-gray-600 text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p id="chatBubbleText" class="text-xs text-gray-700 font-medium line-clamp-2 italic leading-relaxed">...</p>
+            <span class="text-[9px] text-gray-400 self-end" id="chatBubbleTime">Just now</span>
+        </div>
+
+        <!-- FAB Button -->
+        <button id="chatFabBtn" class="w-14 h-14 rounded-full brand-gradient-bg text-gray-900 flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-all outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 relative">
+            <i class="fa-solid fa-comments text-xl"></i>
+            <span id="chatFabUnreadBadge" class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+        </button>
+
+        <!-- Chat Panel -->
+        <div id="chatPanel" class="absolute bottom-16 right-0 w-80 sm:w-96 h-[500px] bg-white rounded-2xl shadow-2xl border border-gray-100 flex flex-col hidden overflow-hidden transition-all duration-200 origin-bottom-right">
+            <!-- Header -->
+            <div class="brand-gradient-bg p-4 flex justify-between items-center text-gray-900">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                        <i class="fa-solid fa-graduation-cap text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm leading-tight">Chat with Lecturer</h3>
+                        <p class="text-[10px] opacity-75">Ask questions about this course</p>
+                    </div>
+                </div>
+                <button id="closeChatBtn" class="w-8 h-8 rounded-full hover:bg-black/10 flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Message Area -->
+            <div id="chatMessagesContainer" class="flex-1 p-4 overflow-y-auto space-y-3 bg-gray-50/50">
+                <!-- Messages populate here -->
+                <div class="text-center py-8 text-gray-400 text-xs">
+                    <i class="fa-regular fa-comment-dots text-2xl mb-2 text-gray-300 block"></i>
+                    No messages yet. Send a message to start conversation with the lecturer.
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <form id="chatForm" class="p-3 border-t border-gray-100 bg-white flex gap-2">
+                <input type="text" id="chatInput" class="flex-1 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-full text-xs focus:ring-1 focus:ring-primaryDark focus:border-primaryDark outline-none" placeholder="Type a message..." autocomplete="off">
+                <button type="submit" class="w-10 h-10 rounded-full brand-gradient-bg text-gray-900 flex items-center justify-center shadow-md hover:opacity-90 active:scale-95 transition-all">
+                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="js/course.js"></script>
+</body>
+</html>

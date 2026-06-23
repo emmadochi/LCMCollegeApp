@@ -1,0 +1,98 @@
+<?php
+require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../utils/security.php';
+
+// Handle CORS
+handle_cors();
+
+// Set appropriate headers
+header("Content-Type: application/json; charset=UTF-8");
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("HTTP/1.1 405 Method Not Allowed");
+    echo json_encode(["message" => "Only POST method is allowed."]);
+    exit();
+}
+
+// Get raw POST data
+$inputData = json_decode(file_get_contents("php://input"), true);
+
+$email = sanitize_input($inputData['email'] ?? '');
+$password = $inputData['password'] ?? '';
+
+if (empty($email) || empty($password)) {
+    header("HTTP/1.1 400 Bad Request");
+    echo json_encode(["message" => "Email and password are required fields."]);
+    exit();
+}
+
+// Fetch IP address for rate limiting
+$ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+
+// Check rate limit
+if (!check_login_rate_limit($ipAddress, $conn)) {
+    header("HTTP/1.1 429 Too Many Requests");
+    echo json_encode(["message" => "Too many failed login attempts. Please try again after 15 minutes."]);
+    exit();
+}
+
+try {
+    // Select user by email
+    $stmt = $conn->prepare("SELECT id, name, password_hash, role FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($password, $user['password_hash'])) {
+        // Successful login: reset rate limit attempts
+        record_login_attempt($ipAddress, true, $conn);
+
+        // Generate JWT token
+        $token = generate_jwt($user['id'], $user['role']);
+
+        // Fetch enrolled course IDs
+        $stmtEnroll = $conn->prepare("SELECT course_id FROM enrollments WHERE user_id = ?");
+        $stmtEnroll->execute([$user['id']]);
+        $enrolledCourses = $stmtEnroll->fetchAll(PDO::FETCH_COLUMN) ?: [];
+
+        // Fetch completed course IDs (where completed lessons >= total lessons)
+        $stmtComplete = $conn->prepare("
+            SELECT c.id 
+            FROM courses c
+            JOIN (
+                SELECT course_id, COUNT(*) as total 
+                FROM lessons 
+                GROUP BY course_id
+            ) l ON c.id = l.course_id
+            JOIN (
+                SELECT course_id, COUNT(*) as completed 
+                FROM user_progress 
+                WHERE user_id = ? AND is_completed = 1 
+                GROUP BY course_id
+            ) p ON c.id = p.course_id
+            WHERE p.completed >= l.total AND l.total > 0
+        ");
+        $stmtComplete->execute([$user['id']]);
+        $completedCourses = $stmtComplete->fetchAll(PDO::FETCH_COLUMN) ?: [];
+
+        echo json_encode([
+            "message" => "Login successful.",
+            "token" => $token,
+            "user" => [
+                "id" => $user['id'],
+                "name" => $user['name'],
+                "email" => $email,
+                "role" => $user['role'],
+                "enrolledCourses" => $enrolledCourses,
+                "completedCourses" => $completedCourses
+            ]
+        ]);
+    } else {
+        // Failed login: record attempt and increment rate limit
+        record_login_attempt($ipAddress, false, $conn);
+
+        header("HTTP/1.1 401 Unauthorized");
+        echo json_encode(["message" => "Invalid email or password."]);
+    }
+} catch (Exception $e) {
+    secure_error_handler($e, "Failed to authenticate user due to an internal server error.");
+}

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -46,6 +46,9 @@
                 <a href="students.html" class="adm-nav-item">
                     <span class="material-icons">people</span> Students
                 </a>
+                <a href="lecturers.html" class="adm-nav-item">
+                    <span class="material-icons">school</span> Lecturers
+                </a>
                 <a href="reviews.html" class="adm-nav-item">
                     <span class="material-icons">rate_review</span> Reviews
                 </a>
@@ -70,7 +73,7 @@
                 <h1 class="adm-header-title">Settings</h1>
             </div>
             <div class="adm-header-right">
-                <div class="adm-avatar">A</div>
+                <div class="adm-avatar" id="adminAvatar">A</div>
             </div>
         </header>
 
@@ -109,9 +112,8 @@
             </div>
         </div>
     </main>
-
-    <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/auth.js"></script>
     <script type="module" src="js/settings.js"></script>
 </body>
 </html>
+

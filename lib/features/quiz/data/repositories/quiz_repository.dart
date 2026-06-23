@@ -1,18 +1,27 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../models/quiz_model.dart';
 
 class QuizRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  QuizRepository();
 
   Future<QuizModel?> getQuizByLessonId(String lessonId) async {
-    final snapshot = await _firestore
-        .collection('quizzes')
-        .where('lessonId', isEqualTo: lessonId)
-        .limit(1)
-        .get();
-
-    if (snapshot.docs.isEmpty) return null;
-    return QuizModel.fromMap(snapshot.docs.first.data(), snapshot.docs.first.id);
+    try {
+      final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.quizzes}').replace(queryParameters: {'lesson_id': lessonId});
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data == null) return null;
+        return QuizModel.fromMap(data, data['id'] ?? '');
+      } else {
+        throw Exception('Failed to load quiz: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch quiz: $e');
+    }
   }
 
   Future<void> submitQuizResult({
@@ -21,14 +30,39 @@ class QuizRepository {
     required String lessonId,
     required int score,
   }) async {
-    final docId = '${userId}_${lessonId}';
-    await _firestore.collection('user_progress').doc(docId).set({
-      'userId': userId,
-      'courseId': courseId,
-      'lessonId': lessonId,
-      'lastQuizScore': score,
-      'isCompleted': score >= 70, // Standard pass threshold
-      'updatedAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+    try {
+      final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.progress}');
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      final headers = <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      };
+      if (token != null) {
+        headers['Authorization'] = 'Bearer $token';
+      }
+
+      final body = {
+        'userId': userId,
+        'courseId': courseId,
+        'lessonId': lessonId,
+        'lastQuizScore': score,
+        'isCompleted': score >= 70, // Pass mark standard threshold
+        'attempts': 1 // Add basic attempt increment
+      };
+
+      final response = await http.post(
+        uri,
+        headers: headers,
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        final responseData = jsonDecode(response.body);
+        throw Exception(responseData['message'] ?? 'Failed to submit quiz result');
+      }
+    } catch (e) {
+      throw Exception('Quiz submission failed: $e');
+    }
   }
 }

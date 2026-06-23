@@ -1,12 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import '../../../../core/constants/api_constants.dart';
 import '../models/category_model.dart';
 
 class CategoryRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   Stream<List<CategoryModel>> getCategories() {
-    return _firestore.collection('categories').snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) => CategoryModel.fromMap(doc.data(), doc.id)).toList();
-    });
+    return Stream.fromFuture(_fetchCategories());
+  }
+
+  Future<List<CategoryModel>> _fetchCategories() async {
+    try {
+      final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.categories}');
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.map((json) => CategoryModel.fromMap(json, json['id']?.toString() ?? '')).toList();
+      } else {
+        throw Exception('Failed to load categories: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch categories: $e');
+    }
   }
 }

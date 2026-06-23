@@ -1,21 +1,18 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../data/models/user_model.dart';
-
-final firebaseAuthProvider = Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
-final firestoreProvider = Provider<FirebaseFirestore>((ref) => FirebaseFirestore.instance);
+import '../../../../core/services/api_client.dart';
+import '../../../../core/providers/shared_prefs_provider.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepositoryImpl(
-    ref.watch(firebaseAuthProvider),
-    ref.watch(firestoreProvider),
+    ref.watch(apiClientProvider),
+    ref.watch(sharedPrefsProvider),
   );
 });
 
-final authStateProvider = StreamProvider<User?>((ref) {
+final authStateProvider = StreamProvider<UserModel?>((ref) {
   return ref.watch(authRepositoryProvider).authStateChanges;
 });
 

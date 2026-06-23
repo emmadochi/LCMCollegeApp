@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,6 +28,9 @@
             <div class="adm-nav-section">
                 <span class="adm-nav-label">Users</span>
                 <a href="students.html" class="adm-nav-item"><span class="material-icons">people</span> Students</a>
+                <a href="lecturers.html" class="adm-nav-item">
+                    <span class="material-icons">school</span> Lecturers
+                </a>
                 <a href="reviews.html" class="adm-nav-item active">
                     <span class="material-icons">rate_review</span> Reviews
                 </a>
@@ -49,7 +52,7 @@
             <h1 class="adm-header-title">Course Reviews</h1>
             <div class="adm-header-right">
                 <span class="badge badge-indigo badge-dot" id="reviewCount" style="font-size:13px;padding:5px 14px;">0 Reviews</span>
-                <div class="adm-avatar">A</div>
+                <div class="adm-avatar" id="adminAvatar">A</div>
             </div>
         </header>
 
@@ -75,7 +78,7 @@
                         <tr>
                             <td colspan="6" style="text-align:center;padding:48px;color:var(--text-muted);">
                                 <span class="loader" style="margin:0 auto 12px;"></span>
-                                <p style="font-size:13px;margin-top:8px;">Loading reviews data…</p>
+                                <p style="font-size:13px;margin-top:8px;">Loading reviews dataâ€¦</p>
                             </td>
                         </tr>
                     </tbody>
@@ -83,9 +86,8 @@
             </div>
         </div>
     </main>
-
-    <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/auth.js"></script>
     <script type="module" src="js/reviews.js"></script>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,6 +37,9 @@
             <div class="adm-nav-section">
                 <span class="adm-nav-label">Users</span>
                 <a href="students.html" class="adm-nav-item"><span class="material-icons">people</span> Students</a>
+                <a href="lecturers.html" class="adm-nav-item">
+                    <span class="material-icons">school</span> Lecturers
+                </a>
                 <a href="reviews.html" class="adm-nav-item"><span class="material-icons">rate_review</span> Reviews</a>
             </div>
             <div class="adm-nav-section">
@@ -54,7 +57,7 @@
         <header class="adm-header">
             <h1 class="adm-header-title">Assignments Management</h1>
             <div class="adm-header-right">
-                <div class="adm-avatar">A</div>
+                <div class="adm-avatar" id="adminAvatar">A</div>
             </div>
         </header>
 
@@ -73,14 +76,13 @@
             <div id="assignmentsGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(350px, 1fr));gap:20px;">
                 <div style="grid-column:1/-1;padding:48px;text-align:center;color:var(--text-muted);">
                     <span class="loader" style="margin:0 auto 12px;"></span>
-                    <p style="font-size:13px;margin-top:8px;">Loading assignments…</p>
+                    <p style="font-size:13px;margin-top:8px;">Loading assignmentsâ€¦</p>
                 </div>
             </div>
         </div>
     </main>
-
-    <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/auth.js"></script>
     <script type="module" src="js/assignments-list.js"></script>
 </body>
 </html>
+

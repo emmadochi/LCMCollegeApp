@@ -1,8 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import '../../data/models/user_model.dart';
 
 abstract class AuthRepository {
-  Stream<User?> get authStateChanges;
+  Stream<UserModel?> get authStateChanges;
   Future<UserModel?> signIn(String email, String password);
   Future<UserModel?> signInWithGoogle();
   Future<UserModel?> signUp(String email, String password, String fullName);

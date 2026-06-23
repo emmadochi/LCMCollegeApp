@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecturer Portal — LCM Bible College</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#abcf47', // LCM Green
+                        primaryDark: '#8ba838', // LCM Dark Green
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; }
+        .brand-gradient-bg {
+            background: linear-gradient(135deg, #abcf47, #8ba838);
+        }
+        .active-tab {
+            background: rgba(139, 168, 56, 0.08);
+            color: #8ba838;
+            border-left: 4px solid #abcf47;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-[#fcfdfa] min-h-screen flex flex-col md:flex-row overflow-hidden" style="display: none;">
+
+    <!-- Mobile Sidebar Backdrop -->
+    <div id="sidebarBackdrop" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
+
+    <!-- Left Sidebar -->
+    <aside id="sidebar" class="fixed md:relative inset-y-0 left-0 z-40 w-72 md:w-80 bg-white border-r border-[#00000014] flex flex-col h-full md:h-screen shadow-2xl md:shadow-none flex-shrink-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <!-- Logo Header -->
+        <div class="p-6 border-b border-[#00000014] flex justify-between items-center bg-gray-50/50">
+            <div class="flex items-center gap-3">
+                <img src="../logo.png" alt="LCM Logo" class="w-10 h-10 object-contain">
+                <div>
+                    <h2 class="text-sm font-black text-gray-900 leading-tight">LCM COLLEGE</h2>
+                    <span class="text-[10px] font-bold text-primaryDark uppercase tracking-wider">Lecturers Portal</span>
+                </div>
+            </div>
+            <button class="md:hidden text-gray-500 hover:text-gray-900" id="hamburgerBtnClose">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Lecturer Info Profile -->
+        <div class="p-6 border-b border-[#00000014] flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full brand-gradient-bg flex items-center justify-center text-white font-extrabold text-base shadow-sm" id="lecturerAvatar">
+                L
+            </div>
+            <div>
+                <h3 class="font-bold text-gray-900 text-sm truncate" id="lecturerNameDisplay">Lecturer Name</h3>
+                <span class="text-[11px] font-medium text-gray-400" id="lecturerEmailDisplay">lecturer@lcmcollege.org</span>
+            </div>
+        </div>
+
+        <!-- Sidebar Navigation Options -->
+        <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto" id="sidebarMenu">
+            <button data-tab="overview" class="w-full flex items-center p-3 text-sm rounded-xl text-gray-600 hover:bg-gray-50 active-tab transition-all">
+                <i class="fa-solid fa-gauge mr-3 text-base"></i> Overview
+            </button>
+            <button data-tab="students" class="w-full flex items-center p-3 text-sm rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fa-solid fa-users mr-3 text-base"></i> My Students
+            </button>
+            <button data-tab="submissions" class="w-full flex items-center p-3 text-sm rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fa-solid fa-file-invoice mr-3 text-base"></i> Submissions
+            </button>
+            <button data-tab="assignments" class="w-full flex items-center p-3 text-sm rounded-xl text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fa-solid fa-file-signature mr-3 text-base"></i> Assignments
+            </button>
+            <a href="chat.html" class="w-full flex items-center p-3 text-sm rounded-xl text-gray-600 hover:bg-gray-50 transition-all relative">
+                <i class="fa-solid fa-comments mr-3 text-base"></i> Student Chat
+                <span id="chatUnreadBadge" class="hidden ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">0</span>
+            </a>
+        </nav>
+
+        <!-- Log Out Footer -->
+        <div class="p-4 border-t border-[#00000014] bg-gray-50/50">
+            <button id="logoutBtn" class="w-full py-2.5 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Panel -->
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-[#fafafa]">
+        <header class="h-20 bg-white border-b border-[#00000014] flex items-center justify-between px-6 md:px-8 flex-shrink-0 relative z-30">
+            <div class="flex items-center gap-3">
+                <button class="md:hidden p-2 -ml-2 text-gray-600 hover:text-gray-900" id="hamburgerBtnOpen" aria-label="Open Menu">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <h1 class="text-xl font-bold text-gray-900" id="pageTitle">Dashboard</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="px-3.5 py-1 bg-primary/10 border border-primary/20 text-primaryDark text-[11px] font-bold rounded-full uppercase" id="badgeTotalStudents">0 Students</span>
+
+                <!-- ── Notification Bell ── -->
+                <div class="relative" id="notifContainer">
+                    <button id="notifBtn" class="relative w-10 h-10 rounded-xl bg-gray-50 border border-gray-200 hover:bg-gray-100 transition-all flex items-center justify-center group" aria-label="Notifications">
+                        <i class="fa-regular fa-bell text-gray-600 group-hover:text-gray-900 text-base transition-colors"></i>
+                        <!-- Badge -->
+                        <span id="notifBadge" class="hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center px-1 shadow-sm border-2 border-white leading-none">0</span>
+                    </button>
+
+                    <!-- Dropdown Panel -->
+                    <div id="notifDropdown" class="hidden absolute right-0 top-[calc(100%+10px)] w-[400px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+
+                        <!-- Dropdown Header -->
+                        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-gray-50/60">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-bell text-primaryDark text-sm"></i>
+                                <h3 class="font-bold text-gray-900 text-sm">Notifications</h3>
+                                <span id="notifTotalBadge" class="px-2 py-0.5 bg-primary/15 text-primaryDark text-[10px] font-bold rounded-full">0</span>
+                            </div>
+                            <button id="notifRefreshBtn" class="text-gray-400 hover:text-primaryDark transition-colors text-xs flex items-center gap-1 font-medium">
+                                <i class="fa-solid fa-rotate-right text-xs"></i> Refresh
+                            </button>
+                        </div>
+
+                        <!-- Category Filter Tabs -->
+                        <div class="flex border-b border-gray-100 bg-white">
+                            <button class="notif-tab active-notif-tab flex-1 py-2.5 text-[11px] font-semibold transition-all relative" data-notif-tab="all">All</button>
+                            <button class="notif-tab flex-1 py-2.5 text-[11px] font-semibold transition-all relative" data-notif-tab="submissions">
+                                <i class="fa-solid fa-file-invoice mr-1"></i>Tasks
+                                <span id="tabBadgeSubmissions" class="hidden ml-1 bg-amber-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">0</span>
+                            </button>
+                            <button class="notif-tab flex-1 py-2.5 text-[11px] font-semibold transition-all relative" data-notif-tab="chat">
+                                <i class="fa-solid fa-comments mr-1"></i>Chat
+                                <span id="tabBadgeChat" class="hidden ml-1 bg-blue-500 text-white text-[9px] px-1.5 py-0.5 rounded-full font-bold">0</span>
+                            </button>
+                            <button class="notif-tab flex-1 py-2.5 text-[11px] font-semibold transition-all relative" data-notif-tab="enrollments">
+                                <i class="fa-solid fa-user-plus mr-1"></i>New
+                            </button>
+                            <button class="notif-tab flex-1 py-2.5 text-[11px] font-semibold transition-all relative" data-notif-tab="alerts">
+                                <i class="fa-solid fa-triangle-exclamation mr-1"></i>Alerts
+                            </button>
+                        </div>
+
+                        <!-- Notification Feed -->
+                        <div id="notifFeed" class="overflow-y-auto max-h-[380px]">
+                            <div class="flex flex-col items-center justify-center py-10 text-gray-400 gap-2">
+                                <i class="fa-solid fa-spinner fa-spin text-xl text-gray-300"></i>
+                                <p class="text-xs">Loading notifications…</p>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="px-5 py-3 border-t border-gray-100 bg-gray-50/40 text-center">
+                            <a href="chat.html" class="text-xs font-semibold text-primaryDark hover:underline">
+                                <i class="fa-solid fa-comments mr-1"></i>Open Student Chat →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- ── End Notification Bell ── -->
+            </div>
+        </header>
+
+        <!-- Notification Bell Styles -->
+        <style>
+            .notif-tab {
+                color: #6b7280;
+                border-bottom: 2px solid transparent;
+                padding-bottom: 10px;
+                padding-top: 10px;
+            }
+            .notif-tab:hover { color: #374151; }
+            .active-notif-tab {
+                color: #8ba838;
+                border-bottom-color: #abcf47;
+                background: rgba(171,207,71,0.05);
+            }
+
+            .notif-item {
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 13px 18px;
+                border-bottom: 1px solid #f8fafc;
+                cursor: pointer;
+                transition: background 0.12s ease;
+            }
+            .notif-item:hover { background: #f9fafb; }
+            .notif-item:last-child { border-bottom: none; }
+
+            .notif-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                flex-shrink: 0;
+                margin-top: 1px;
+            }
+            .notif-icon-amber  { background: #fef3c7; color: #d97706; }
+            .notif-icon-blue   { background: #dbeafe; color: #2563eb; }
+            .notif-icon-green  { background: #dcfce7; color: #16a34a; }
+            .notif-icon-red    { background: #fee2e2; color: #dc2626; }
+
+            .notif-title  { font-size: 12.5px; font-weight: 600; color: #111827; line-height: 1.4; }
+            .notif-detail { font-size: 11.5px; color: #6b7280; margin-top: 2px; line-height: 1.4; }
+            .notif-time   { font-size: 10px; color: #9ca3af; margin-top: 4px; }
+
+            .notif-empty {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 32px 16px;
+                color: #9ca3af;
+                gap: 8px;
+                text-align: center;
+            }
+            .notif-empty i { font-size: 32px; color: #d1d5db; }
+            .notif-empty p { font-size: 12px; }
+
+            .notif-section-label {
+                font-size: 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.07em;
+                color: #9ca3af;
+                padding: 10px 18px 5px;
+                background: #f9fafb;
+                border-bottom: 1px solid #f3f4f6;
+            }
+
+            @keyframes bellRing {
+                0%, 100% { transform: rotate(0); }
+                15%  { transform: rotate(15deg); }
+                30%  { transform: rotate(-12deg); }
+                45%  { transform: rotate(8deg); }
+                60%  { transform: rotate(-4deg); }
+                75%  { transform: rotate(2deg); }
+            }
+            .bell-ring { animation: bellRing 0.6s ease; }
+        </style>
+
+
+
+        <!-- Dynamic Content Body Section -->
+        <div class="flex-1 p-6 md:p-8" id="contentArea">
+            
+            <!-- SECTION 1: OVERVIEW -->
+            <section id="overviewSection" class="space-y-8 tab-section">
+                <!-- Welcome Banner -->
+                <div>
+                    <h2 class="text-3xl font-black text-gray-900" id="lecturerGreeting">Good morning, Lecturer 👋</h2>
+                    <p class="text-gray-500 text-sm mt-1">Here is a quick overview of your classes and grading tasks today.</p>
+                </div>
+
+                <!-- Stats Counters Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-3xl p-6 border border-[#00000012] shadow-sm flex items-center gap-5">
+                        <div class="w-12 h-12 rounded-2xl bg-primary/15 text-primaryDark flex items-center justify-center text-xl"><i class="fa-solid fa-users"></i></div>
+                        <div>
+                            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">Assigned Students</span>
+                            <span class="text-2xl font-black text-gray-900" id="statStudentsCount">0</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-3xl p-6 border border-[#00000012] shadow-sm flex items-center gap-5">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-xl"><i class="fa-solid fa-hourglass-half"></i></div>
+                        <div>
+                            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">Awaiting Review</span>
+                            <span class="text-2xl font-black text-gray-900" id="statPendingCount">0</span>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-3xl p-6 border border-[#00000012] shadow-sm flex items-center gap-5">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl"><i class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">Graded / Approved</span>
+                            <span class="text-2xl font-black text-gray-900" id="statGradedCount">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Overview Split Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Awaiting Review Submissions Panel -->
+                    <div class="bg-white rounded-3xl border border-[#00000012] shadow-sm p-6 flex flex-col">
+                        <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-4">
+                            <h3 class="font-bold text-gray-900"><i class="fa-solid fa-clock-rotate-left mr-2 text-primaryDark"></i> Pending Review Feed</h3>
+                            <span class="px-2 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-bold rounded-full" id="pendingBadgeCount">0 New</span>
+                        </div>
+                        <div class="flex-1 space-y-4 overflow-y-auto max-h-[350px] pr-2" id="overviewSubmissionsList">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+
+                    <!-- Course Rosters Quick Grid -->
+                    <div class="bg-white rounded-3xl border border-[#00000012] shadow-sm p-6 flex flex-col">
+                        <div class="flex items-center justify-between pb-4 border-b border-gray-100 mb-4">
+                            <h3 class="font-bold text-gray-900"><i class="fa-solid fa-graduation-cap mr-2 text-primaryDark"></i> Assigned Classes</h3>
+                        </div>
+                        <div class="flex-1 space-y-4 overflow-y-auto max-h-[350px] pr-2" id="overviewClassesList">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: MY STUDENTS -->
+            <section id="studentsSection" class="space-y-6 tab-section hidden">
+                <div class="bg-white rounded-3xl border border-[#00000012] shadow-sm p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">My Assigned Students Roster</h3>
+                    <p class="text-gray-400 text-xs mb-6">Displaying students assigned to your academic lessons or globally for courses.</p>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-gray-100 text-gray-400 text-xs font-semibold uppercase tracking-wider">
+                                    <th class="py-3 px-4">Student</th>
+                                    <th class="py-3 px-4">Email</th>
+                                    <th class="py-3 px-4">Course</th>
+                                    <th class="py-3 px-4">Class Progress</th>
+                                    <th class="py-3 px-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody" class="text-sm divide-y divide-gray-50 text-gray-600">
+                                <!-- Dynamic content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: SUBMISSIONS -->
+            <section id="submissionsSection" class="space-y-6 tab-section hidden">
+                <div class="bg-white rounded-3xl border border-[#00000012] shadow-sm p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Student Assignment Submissions</h3>
+                            <p class="text-gray-400 text-xs mt-1">Review, grade, and approve or reject submissions from your classes.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <select id="submissionFilterStatus" class="px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium focus:ring-1 focus:ring-primaryDark outline-none">
+                                <option value="all">All Submissions</option>
+                                <option value="pending" selected>Awaiting Review</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Needs Revision</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-gray-100 text-gray-400 text-xs font-semibold uppercase tracking-wider">
+                                    <th class="py-3 px-4">Student</th>
+                                    <th class="py-3 px-4">Course &amp; Assignment</th>
+                                    <th class="py-3 px-4">Submitted Date</th>
+                                    <th class="py-3 px-4">Type</th>
+                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="submissionsTableBody" class="text-sm divide-y divide-gray-50 text-gray-600">
+                                <!-- Dynamic content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: ASSIGNMENTS -->
+            <section id="assignmentsSection" class="space-y-6 tab-section hidden">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Course Assignments</h2>
+                        <p class="text-gray-500 text-sm mt-0.5">Manage tasks and homework questions for your lessons.</p>
+                    </div>
+                    <button id="btnCreateAssignment" class="px-5 py-2.5 brand-gradient-bg text-gray-900 rounded-[100px] text-xs font-bold shadow-md shadow-primary/20 hover:opacity-90 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-plus text-xs"></i> Create Assignment
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-3xl border border-[#00000012] shadow-sm p-6">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-gray-100 text-gray-400 text-xs font-semibold uppercase tracking-wider">
+                                    <th class="py-3 px-4">Assignment Title</th>
+                                    <th class="py-3 px-4">Course Context</th>
+                                    <th class="py-3 px-4">Lesson Context</th>
+                                    <th class="py-3 px-4">Due Date</th>
+                                    <th class="py-3 px-4">Total Submissions</th>
+                                    <th class="py-3 px-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assignmentsTableBody" class="text-sm divide-y divide-gray-50 text-gray-600">
+                                <!-- Dynamic content -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- GRADING MODAL POPUP -->
+    <div id="gradingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-all">
+        <div class="bg-white rounded-[24px] max-w-xl w-full overflow-hidden shadow-2xl border border-gray-100 animate-fade-in flex flex-col max-h-[90vh]">
+            <header class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900">Grade Assignment Submission</h3>
+                    <span class="text-xs text-gray-400" id="modalStudentInfo">Student: Emma Dochi</span>
+                </div>
+                <button class="text-gray-400 hover:text-gray-700" onclick="closeGradingModal()">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </header>
+            
+            <div class="p-6 overflow-y-auto space-y-5 flex-1">
+                <!-- Submission Details -->
+                <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase block mb-1">Student's Submission</span>
+                    <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap" id="modalSubmissionText">No text provided.</p>
+                    <div id="modalSubmissionFileContainer" class="mt-3 hidden">
+                        <a id="modalSubmissionFileLink" href="#" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
+                            <i class="fa-solid fa-file-pdf text-red-500 text-base"></i> View Uploaded File
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Grading Inputs -->
+                <form id="gradingForm" class="space-y-4">
+                    <input type="hidden" id="gradeSubmissionId">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="gradeScore" class="block text-xs font-semibold text-gray-700 mb-1.5">Grade / Score</label>
+                            <input type="text" id="gradeScore" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-primaryDark focus:ring-1 focus:ring-primaryDark outline-none transition-all text-sm" placeholder="e.g. A, B+, 95%" required>
+                        </div>
+                        <div>
+                            <label for="gradeStatus" class="block text-xs font-semibold text-gray-700 mb-1.5">Review Outcome</label>
+                            <select id="gradeStatus" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-primaryDark focus:ring-1 focus:ring-primaryDark outline-none transition-all text-sm" required>
+                                <option value="approved">Approved (Clear Lesson)</option>
+                                <option value="rejected">Needs Revision (Reject &amp; Feedback)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="gradeFeedback" class="block text-xs font-semibold text-gray-700 mb-1.5">Feedback / Comments</label>
+                        <textarea id="gradeFeedback" rows="4" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-primaryDark focus:ring-1 focus:ring-primaryDark outline-none transition-all text-sm resize-none" placeholder="Provide notes or revision guidelines..."></textarea>
+                    </div>
+                    <div class="flex justify-end gap-3 pt-2">
+                        <button type="button" class="px-5 py-2.5 bg-white border border-gray-200 rounded-[100px] text-xs font-semibold text-gray-600 hover:bg-gray-50 transition-colors" onclick="closeGradingModal()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-5 py-2.5 brand-gradient-bg text-gray-900 rounded-[100px] text-xs font-bold shadow-md hover:opacity-90 transition-all">
+                            Submit Review
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CREATE ASSIGNMENT MODAL POPUP -->
+    <div id="assignmentModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-all">
+        <div class="bg-white rounded-[24px] max-w-xl w-full overflow-hidden shadow-2xl border border-gray-100 animate-fade-in flex flex-col max-h-[90vh]">
+            <header class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <h3 class="text-lg font-bold text-gray-900" id="assignmentModalTitle">Create Course Assignment</h3>
+                <button class="text-gray-400 hover:text-gray-700" onclick="closeAssignmentModal()">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </header>
+            
+            <div class="p-6 overflow-y-auto flex-1">
+                <form id="assignmentForm" class="space-y-4">
+                    <input type="hidden" id="editAssignmentId">
+                    <div>
+                        <label for="assignTitle" class="block text-xs font-semibold text-gray-700 mb-1.5">Assignment Title</label>
+                        <input type="text" id="assignTitle" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-primaryDark focus:ring-1 focus:ring-primaryDark outline-none transition-all text-sm" placeholder="e.g. Essay on Pauline Epistles" required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="assignCourse" class="block text-xs font-semibold text-gray-700 mb-1.5">Target Course</label>
+                            <select id="assignCourse" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-primaryDark focus:ring-1 focus:ring-primaryDark outline-none transition-all text-sm" required>
+                                <option value="" disabled selected>Select Course</option>
+                                <!-- Dynamic courses options -->
+                            </select>
+                        </div>
+                        <div>
+                            <label for="assignLesson" class="block text-xs font-semibold text-gray-700 mb-1.5">Target Lesson</label>
+                            <select id="assignLesson" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-primaryDark focus:ring-1 focus:ring-primaryDark outline-none transition-all text-sm" required>
+                                <option value="" disabled selected>Select Lesson</option>
+                                <!-- Dynamic lessons options -->
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="assignDueDate" class="block text-xs font-semibold text-gray-700 mb-1.5">Due Date</label>
+                        <input type="datetime-local" id="assignDueDate" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:border-primaryDark focus:ring-1 focus:ring-primaryDark outline-none transition-all text-sm" required>
+                    </div>
+                    <div>
+                        <label for="assignInstructions" class="block text-xs font-semibold text-gray-700 mb-1.5">Instructions &amp; Guidelines</label>
+                        <textarea id="assignInstructions" rows="5" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-primaryDark focus:ring-1 focus:ring-primaryDark outline-none transition-all text-sm resize-none" placeholder="Provide homework description or guidelines..."></textarea>
+                    </div>
+                    <div class="flex justify-end gap-3 pt-2">
+                        <button type="button" class="px-5 py-2.5 bg-white border border-gray-200 rounded-[100px] text-xs font-semibold text-gray-600 hover:bg-gray-50 transition-colors" onclick="closeAssignmentModal()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="px-5 py-2.5 brand-gradient-bg text-gray-900 rounded-[100px] text-xs font-bold shadow-md hover:opacity-90 transition-all">
+                            Save Assignment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- STUDENT DETAILS VIEW MODAL -->
+    <div id="studentDetailModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4 transition-all">
+        <div class="bg-white rounded-[24px] max-w-2xl w-full overflow-hidden shadow-2xl border border-gray-100 animate-fade-in flex flex-col max-h-[90vh]">
+            <header class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                <h3 class="text-lg font-bold text-gray-900">Student Academic Profile</h3>
+                <button class="text-gray-400 hover:text-gray-700" onclick="closeStudentModal()">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </header>
+            
+            <div class="p-6 overflow-y-auto space-y-6 flex-1 text-sm text-gray-600">
+                <div class="flex items-center gap-4 border-b border-gray-100 pb-5">
+                    <div class="w-14 h-14 rounded-full brand-gradient-bg flex items-center justify-center text-white font-extrabold text-lg shadow-sm" id="modalStudentAvatar">
+                        S
+                    </div>
+                    <div>
+                        <h4 class="font-extrabold text-gray-900 text-base" id="modalStudentName">Name</h4>
+                        <p class="text-xs text-gray-400" id="modalStudentEmail">email@gmail.com</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h5 class="font-bold text-gray-900 text-sm mb-3">Enrolled Course Progress</h5>
+                    <div id="modalStudentProgressContainer" class="space-y-4">
+                        <!-- Dynamic Progress Lines -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 bg-gray-900 text-white rounded-xl shadow-lg flex items-center gap-3 z-50 transform translate-y-20 opacity-0 transition-all duration-300">
+        <i class="fa-solid fa-circle-check text-primary" id="toastIcon"></i>
+        <span class="text-xs font-semibold" id="toastMessage">Success message!</span>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

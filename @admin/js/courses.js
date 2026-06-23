@@ -1,6 +1,4 @@
-import { db, storage } from './firebase-config.js';
-import { collection, getDocs, addDoc, serverTimestamp, deleteDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+import { getAdminAuthHeader } from './auth.js';
 
 let selectedFile = null;
 
@@ -33,20 +31,40 @@ async function loadCategoriesForForm() {
     if (!categorySelect) return;
 
     try {
-        const snapshot = await getDocs(collection(db, "categories"));
-        if (snapshot.empty) {
-            categorySelect.innerHTML = '<option value="">No categories found</option>';
-            return;
-        }
-
-        categorySelect.innerHTML = '<option value="" disabled selected>Select a category</option>';
-        snapshot.forEach(docSnap => {
-            const data = docSnap.data();
-            const option = document.createElement('option');
-            option.value = data.name;
-            option.textContent = data.name;
-            categorySelect.appendChild(option);
+        // Fetch unique categories dynamically from the public courses endpoint
+        const response = await fetch('../api/courses/index.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                ...getAdminAuthHeader()
+            }
         });
+        
+        categorySelect.innerHTML = '<option value="" disabled selected>Select a category</option>';
+
+        if (response.ok) {
+            const courses = await response.json();
+            const categories = [...new Set(courses.map(c => c.category).filter(Boolean))];
+            
+            categories.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                categorySelect.appendChild(option);
+            });
+        }
+        
+        // Add default options if no categories found
+        const existingCount = categorySelect.options.length;
+        if (existingCount <= 1) {
+            const defaults = ['Theology', 'Ministry', 'Leadership', 'History'];
+            defaults.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                categorySelect.appendChild(option);
+            });
+        }
     } catch (error) {
         console.error("Error loading categories for form:", error);
     }
@@ -59,22 +77,39 @@ async function loadCoursesList() {
     try {
         coursesListEl.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center"><span class="loader align-middle mx-auto"></span><p class="mt-2 text-sm text-gray-500">Loading courses...</p></td></tr>`;
         
-        const coursesSnapshot = await getDocs(collection(db, "courses"));
-        coursesListEl.innerHTML = ''; // clear loading loader
+        // Fetch courses list from the secure API
+        const response = await fetch('../api/courses/index.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                ...getAdminAuthHeader()
+            }
+        });
 
-        if (coursesSnapshot.empty) {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const courses = await response.json();
+        coursesListEl.innerHTML = ''; // clear loader
+
+        if (courses.length === 0) {
             coursesListEl.innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500">No courses available. Click "Create Course" to add one.</td></tr>`;
             return;
         }
 
-        coursesSnapshot.forEach((docSnap) => {
-            const data = docSnap.data();
-            const id = docSnap.id;
-            
-            const initials = data.title ? data.title.substring(0, 2).toUpperCase() : 'CO';
+        courses.forEach((course) => {
+            const initials = course.title ? course.title.substring(0, 2).toUpperCase() : 'CO';
             
             const tr = document.createElement('tr');
             tr.className = 'hover:bg-gray-50 transition-colors group';
+            
+            // Adjust image relative path if necessary
+            let imageUrl = course.thumbnailUrl;
+            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('..')) {
+                imageUrl = '../' + imageUrl;
+            }
+
             tr.innerHTML = `
                 <td class="px-6 py-4 border-b border-gray-100 flex items-center justify-center">
                     <input type="checkbox" class="rounded text-indigo-600 focus:ring-indigo-500 mt-2">
@@ -82,21 +117,21 @@ async function loadCoursesList() {
                 <td class="px-6 py-4 border-b border-gray-100">
                     <div class="flex items-center">
                         <div class="h-12 w-16 bg-gray-200 rounded overflow-hidden flex-shrink-0 flex items-center justify-center relative group-hover:shadow-md transition-shadow">
-                            ${data.thumbnailUrl 
-                                ? `<img src="${data.thumbnailUrl}" alt="Course" class="h-full w-full object-cover">` 
+                            ${imageUrl 
+                                ? `<img src="${imageUrl}" alt="Course" class="h-full w-full object-cover">` 
                                 : `<span class="material-icons text-gray-500 text-2xl">image</span>`
                             }
                         </div>
                         <div class="ml-4">
-                            <div class="text-sm font-bold text-gray-900">${data.title || 'Untitled'}</div>
-                            <div class="text-xs text-gray-500 mt-0.5">ID: ${id.substring(0, 8)}... • ${data.totalLessons || 0} Modules</div>
+                            <div class="text-sm font-bold text-gray-900">${course.title || 'Untitled'}</div>
+                            <div class="text-xs text-gray-500 mt-0.5">ID: ${course.id.substring(0, 8)}... • ${course.totalLessons || 0} Modules</div>
                         </div>
                     </div>
                 </td>
 
                 <td class="px-6 py-4 border-b border-gray-100">
-                    <div class="text-sm text-gray-900 font-medium">0 Enrolled</div>
-                    <div class="text-xs text-gray-500 mt-0.5">Active Track</div>
+                    <div class="text-sm text-gray-900 font-medium">${course.category || 'General'}</div>
+                    <div class="text-xs text-gray-500 mt-0.5">${course.duration || 'Self-paced'}</div>
                 </td>
                 <td class="px-6 py-4 border-b border-gray-100">
                     <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800 border border-green-200">
@@ -105,13 +140,13 @@ async function loadCoursesList() {
                 </td>
                 <td class="px-6 py-4 text-right text-sm font-medium border-b border-gray-100">
                     <div class="flex items-center justify-end space-x-2">
-                        <a href="lessons.html?courseId=${id}" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 p-1.5 rounded-lg transition-colors tooltip" title="Manage Lessons">
+                        <a href="lessons.html?courseId=${course.id}" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 p-1.5 rounded-lg transition-colors tooltip" title="Manage Lessons">
                             <span class="material-icons text-xl">view_list</span>
                         </a>
-                        <button class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 p-1.5 rounded-lg transition-colors tooltip" onclick="window.location.href='edit_course.html?id=${id}'" title="Edit Course">
+                        <button class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 p-1.5 rounded-lg transition-colors tooltip" onclick="window.location.href='edit_course.html?id=${course.id}'" title="Edit Course">
                             <span class="material-icons text-xl">edit</span>
                         </button>
-                        <button class="text-red-500 hover:text-red-700 bg-red-50 p-1.5 rounded-lg transition-colors tooltip delete-btn" data-id="${id}" title="Delete">
+                        <button class="text-red-500 hover:text-red-700 bg-red-50 p-1.5 rounded-lg transition-colors tooltip delete-btn" data-id="${course.id}" title="Delete">
                             <span class="material-icons text-xl">delete_outline</span>
                         </button>
                     </div>
@@ -124,16 +159,31 @@ async function loadCoursesList() {
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
                 const id = e.currentTarget.getAttribute('data-id');
-                if (confirm("Are you sure you want to delete this course?")) {
-                    await deleteDoc(doc(db, "courses", id));
-                    loadCoursesList(); // reload
+                if (confirm("Are you sure you want to delete this course? This will delete all modules and lessons under it!")) {
+                    try {
+                        const deleteResponse = await fetch(`../api/admin/courses.php?id=${id}`, {
+                            method: 'DELETE',
+                            headers: getAdminAuthHeader()
+                        });
+
+                        if (deleteResponse.ok) {
+                            alert("Course deleted successfully!");
+                            loadCoursesList(); // reload
+                        } else {
+                            const errData = await deleteResponse.json();
+                            alert("Failed to delete: " + (errData.message || "Unknown error"));
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert("Network connection error. Failed to delete course.");
+                    }
                 }
             });
         });
 
     } catch (error) {
         console.error("Error loading courses:", error);
-        coursesListEl.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">Failed to load courses. Check console permissions.</td></tr>`;
+        coursesListEl.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">Failed to load courses. Check administrative permissions.</td></tr>`;
     }
 }
 
@@ -147,7 +197,6 @@ function setupThumbnailUpload() {
 
     if (!dropZone || !fileInput) return;
 
-    // Handle click on dropZone to trigger file input
     dropZone.addEventListener('click', (e) => {
         if (e.target.closest('#removeThumbnail')) return;
         fileInput.click();
@@ -209,11 +258,34 @@ function setupThumbnailUpload() {
     }
 }
 
+/**
+ * Uploads a file to the PHP backend upload API and returns the server URL
+ */
+async function uploadThumbnailFile() {
+    if (!selectedFile) return "";
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    const response = await fetch('../api/admin/upload.php', {
+        method: 'POST',
+        headers: getAdminAuthHeader(), // Pass admin token (without Content-Type so browser sets correct boundary)
+        body: formData
+    });
+
+    if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message || "Failed to upload image file to server.");
+    }
+
+    const data = await response.json();
+    return data.url; // Returns relative path, e.g., "../uploads/filename.jpg"
+}
+
 function setupAddCourseForm() {
     const courseForm = document.getElementById('courseForm');
     const publishBtn = document.getElementById('publishBtn');
     
-    // Header button triggers form submit
     if (publishBtn) {
         publishBtn.addEventListener('click', () => {
              courseForm.dispatchEvent(new Event('submit'));
@@ -225,7 +297,6 @@ function setupAddCourseForm() {
     courseForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Disable buttons
         const submitBtn = courseForm.querySelector('button[type="submit"]');
         const ogText = submitBtn.innerHTML;
         submitBtn.innerHTML = 'Uploading & Saving...';
@@ -237,34 +308,51 @@ function setupAddCourseForm() {
         const category = document.getElementById('courseCategory').value;
         const duration = document.getElementById('courseDuration').value;
         const rating = parseFloat(document.getElementById('courseRating').value) || 0;
+        const price = parseFloat(document.getElementById('coursePrice').value) || 0;
+        const currency = document.getElementById('courseCurrency').value;
         const isFeatured = document.getElementById('isFeatured').checked;
         const hasQuizzes = document.getElementById('hasQuizzes').checked;
 
         try {
             let thumbnailUrl = "";
 
-            // Upload thumbnail if selected
+            // Upload thumbnail to local PHP server if selected
             if (selectedFile) {
-                const storageRef = ref(storage, `course_thumbnails/${Date.now()}_${selectedFile.name}`);
-                const snapshot = await uploadBytes(storageRef, selectedFile);
-                thumbnailUrl = await getDownloadURL(snapshot.ref);
+                thumbnailUrl = await uploadThumbnailFile();
             }
 
-            await addDoc(collection(db, "courses"), {
-                title: title,
-                description: description,
-                category: category,
-                duration: duration,
-                rating: rating,
-                isFeatured: isFeatured,
-                hasQuizzes: hasQuizzes,
-                totalLessons: 0,
-                thumbnailUrl: thumbnailUrl,
-                createdAt: serverTimestamp()
+            // Post course details to admin courses endpoint
+            const response = await fetch('../api/admin/courses.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAdminAuthHeader()
+                },
+                body: JSON.stringify({
+                    action: 'create',
+                    title,
+                    description,
+                    category,
+                    duration,
+                    rating,
+                    price,
+                    currency,
+                    isFeatured,
+                    hasQuizzes,
+                    thumbnailUrl
+                })
             });
 
-            alert('Course saved successfully!');
-            window.location.href = 'courses.html'; 
+            if (response.ok) {
+                alert('Course saved successfully!');
+                window.location.href = 'courses.html'; 
+            } else {
+                const errData = await response.json();
+                alert("Failed to save: " + (errData.message || "Unknown error"));
+                submitBtn.innerHTML = ogText;
+                submitBtn.disabled = false;
+                if(publishBtn) publishBtn.disabled = false;
+            }
 
         } catch (error) {
             console.error("Error adding course: ", error);
@@ -283,21 +371,47 @@ async function loadCourseDataForEdit() {
     if (!courseId) return;
 
     try {
-        const docSnap = await getDoc(doc(db, "courses", courseId));
-        if (docSnap.exists()) {
-            const data = docSnap.data();
+        const response = await fetch(`../api/courses/index.php?id=${courseId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                ...getAdminAuthHeader()
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
             document.getElementById('courseId').value = courseId;
             document.getElementById('courseTitle').value = data.title || '';
             document.getElementById('courseDescription').value = data.description || '';
-            document.getElementById('courseCategory').value = data.category || '';
+            
+            // Handle category pre-selection
+            const catSelect = document.getElementById('courseCategory');
+            if (data.category) {
+                // Check if option exists in dropdown, if not create it
+                if (!Array.from(catSelect.options).some(o => o.value === data.category)) {
+                    const opt = document.createElement('option');
+                    opt.value = data.category;
+                    opt.textContent = data.category;
+                    catSelect.appendChild(opt);
+                }
+                catSelect.value = data.category;
+            }
+
             document.getElementById('courseDuration').value = data.duration || '';
             document.getElementById('courseRating').value = data.rating || 0;
+            document.getElementById('coursePrice').value = data.price || 0.00;
+            document.getElementById('courseCurrency').value = data.currency || 'USD';
             document.getElementById('isFeatured').checked = data.isFeatured || false;
             document.getElementById('hasQuizzes').checked = data.hasQuizzes !== false;
             
             if (data.thumbnailUrl) {
+                let imageUrl = data.thumbnailUrl;
+                if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('..')) {
+                    imageUrl = '../' + imageUrl;
+                }
                 document.getElementById('existingThumbnailUrl').value = data.thumbnailUrl;
-                document.getElementById('thumbnailPreview').src = data.thumbnailUrl;
+                document.getElementById('thumbnailPreview').src = imageUrl;
                 document.getElementById('uploadPrompt').style.display = 'none';
                 document.getElementById('previewContainer').style.display = 'block';
             }
@@ -327,27 +441,57 @@ function setupEditCourseForm() {
         submitBtn.innerHTML = 'Updating...';
         submitBtn.disabled = true;
 
-        const updates = {
-            title: document.getElementById('courseTitle').value,
-            description: document.getElementById('courseDescription').value,
-            category: document.getElementById('courseCategory').value,
-            duration: document.getElementById('courseDuration').value,
-            rating: parseFloat(document.getElementById('courseRating').value) || 0,
-            isFeatured: document.getElementById('isFeatured').checked,
-            hasQuizzes: document.getElementById('hasQuizzes').checked,
-            updatedAt: serverTimestamp()
-        };
+        const title = document.getElementById('courseTitle').value;
+        const description = document.getElementById('courseDescription').value;
+        const category = document.getElementById('courseCategory').value;
+        const duration = document.getElementById('courseDuration').value;
+        const rating = parseFloat(document.getElementById('courseRating').value) || 0;
+        const price = parseFloat(document.getElementById('coursePrice').value) || 0;
+        const currency = document.getElementById('courseCurrency').value;
+        const isFeatured = document.getElementById('isFeatured').checked;
+        const hasQuizzes = document.getElementById('hasQuizzes').checked;
+        const existingThumbnailUrl = document.getElementById('existingThumbnailUrl').value;
 
         try {
+            let thumbnailUrl = existingThumbnailUrl;
+
+            // Upload a new thumbnail file if selected
             if (selectedFile) {
-                const storageRef = ref(storage, `course_thumbnails/${Date.now()}_${selectedFile.name}`);
-                const snapshot = await uploadBytes(storageRef, selectedFile);
-                updates.thumbnailUrl = await getDownloadURL(snapshot.ref);
+                thumbnailUrl = await uploadThumbnailFile();
             }
 
-            await updateDoc(doc(db, "courses", id), updates);
-            alert('Course updated successfully!');
-            window.location.href = 'courses.html';
+            // Post course update details
+            const response = await fetch('../api/admin/courses.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAdminAuthHeader()
+                },
+                body: JSON.stringify({
+                    action: 'update',
+                    id,
+                    title,
+                    description,
+                    category,
+                    duration,
+                    rating,
+                    price,
+                    currency,
+                    isFeatured,
+                    hasQuizzes,
+                    thumbnailUrl
+                })
+            });
+
+            if (response.ok) {
+                alert('Course updated successfully!');
+                window.location.href = 'courses.html';
+            } else {
+                const errData = await response.json();
+                alert("Failed to update: " + (errData.message || "Unknown error"));
+                submitBtn.innerHTML = 'Update Course';
+                submitBtn.disabled = false;
+            }
         } catch (error) {
             console.error("Error updating course:", error);
             alert("Error: " + error.message);
@@ -356,36 +500,3 @@ function setupEditCourseForm() {
         }
     });
 }
-
-export async function syncCourseSchema() {
-    try {
-        const querySnapshot = await getDocs(collection(db, "courses"));
-        let updatedCount = 0;
-        
-        for (const docSnap of querySnapshot.docs) {
-            const data = docSnap.data();
-            const updates = {};
-            
-            if (data.isFeatured === undefined) updates.isFeatured = false;
-            if (data.rating === undefined) updates.rating = 4.8;
-            if (data.duration === undefined) updates.duration = 'Self-paced';
-            if (data.hasQuizzes === undefined) updates.hasQuizzes = true;
-            if (data.category === undefined) updates.category = 'Tech';
-            
-            if (Object.keys(updates).length > 0) {
-                const { updateDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-                await updateDoc(doc(db, "courses", docSnap.id), updates);
-                updatedCount++;
-            }
-        }
-        
-        alert(`Successfully synced ${updatedCount} courses with the new data schema.`);
-        location.reload();
-    } catch (error) {
-        console.error("Error syncing schema: ", error);
-        alert("Error syncing schema: " + error.message);
-    }
-}
-
-// Make it globally available for the button
-window.syncCourseSchema = syncCourseSchema;
