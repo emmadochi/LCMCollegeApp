@@ -16,6 +16,7 @@ let inboxInterval    = null;   // inbox poller  (8 s)
 let threads          = [];     // full thread list from API
 let lastUnreadCount  = null;
 let lastMessageId    = null;
+let isLoadingMessages = false;
 
 function playNotificationSound() {
     try {
@@ -207,7 +208,8 @@ function selectThread(courseId, studentId, studentName, courseTitle) {
 // ── Messages ───────────────────────────────────────────────────────────────
 
 async function loadMessages() {
-    if (!activeCourseId || !activeStudentId) return;
+    if (!activeCourseId || !activeStudentId || isLoadingMessages) return;
+    isLoadingMessages = true;
 
     try {
         const res = await fetch(
@@ -227,6 +229,8 @@ async function loadMessages() {
         renderMessages(msgs);
     } catch (err) {
         console.error('Messages error:', err);
+    } finally {
+        isLoadingMessages = false;
     }
 }
 

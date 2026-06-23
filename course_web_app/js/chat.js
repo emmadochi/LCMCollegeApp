@@ -5,6 +5,7 @@ let currentCourseId = null;
 let lastTimestamp = null;
 let isChatOpen = false;
 let lastMessageId = null;
+let isLoadingMessages = false;
 
 function playNotificationSound() {
     try {
@@ -193,7 +194,8 @@ async function checkUnreadCount() {
 }
 
 async function loadMessages() {
-    if (!currentCourseId) return;
+    if (!currentCourseId || isLoadingMessages) return;
+    isLoadingMessages = true;
 
     try {
         const response = await fetch(`../api/chat/messages.php?course_id=${currentCourseId}`, {
@@ -218,6 +220,8 @@ async function loadMessages() {
         }
     } catch (error) {
         console.error("Error loading messages:", error);
+    } finally {
+        isLoadingMessages = false;
     }
 }
 

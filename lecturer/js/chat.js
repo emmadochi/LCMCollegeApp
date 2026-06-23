@@ -11,6 +11,7 @@ let activeCourseTitle = '';
 let pollInterval      = null;   // message poller (3 s)
 let inboxInterval     = null;   // inbox poller  (8 s)
 let threads           = [];     // cached full thread list
+let isLoadingMessages = false;
 
 // ── Auth ─────────────────────────────────────────────────────────────────────
 
@@ -243,7 +244,8 @@ function selectThread(courseId, studentId, studentName, courseTitle) {
 // ── Messages ──────────────────────────────────────────────────────────────────
 
 async function loadMessages() {
-    if (!activeCourseId || !activeStudentId) return;
+    if (!activeCourseId || !activeStudentId || isLoadingMessages) return;
+    isLoadingMessages = true;
     try {
         const res = await fetch(
             `${API_BASE}/chat/messages.php?course_id=${activeCourseId}&student_id=${activeStudentId}`,
@@ -254,6 +256,8 @@ async function loadMessages() {
         renderMessages(data.messages || []);
     } catch (err) {
         console.error('Messages error:', err);
+    } finally {
+        isLoadingMessages = false;
     }
 }
 

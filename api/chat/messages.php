@@ -48,7 +48,7 @@ try {
             SELECT id, course_id, student_id, sender_id, sender_role, message, is_read, sent_at
             FROM chat_messages
             WHERE course_id = ? AND student_id = ? AND sent_at > ?
-            ORDER BY sent_at ASC
+            ORDER BY sent_at ASC, seq ASC
         ");
         $stmt->execute([$courseId, $studentId, $since]);
     } else {
@@ -56,7 +56,7 @@ try {
             SELECT id, course_id, student_id, sender_id, sender_role, message, is_read, sent_at
             FROM chat_messages
             WHERE course_id = ? AND student_id = ?
-            ORDER BY sent_at ASC
+            ORDER BY sent_at ASC, seq ASC
         ");
         $stmt->execute([$courseId, $studentId]);
     }

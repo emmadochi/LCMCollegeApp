@@ -32,6 +32,7 @@ try {
             message TEXT NOT NULL,
             is_read BOOLEAN DEFAULT FALSE,
             sent_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            seq INT AUTO_INCREMENT UNIQUE KEY,
             FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE,
             FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
             FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -39,6 +40,12 @@ try {
             INDEX idx_chat_student_thread (course_id, student_id)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     ");
+
+    // Check if 'seq' column exists in chat_messages, if not, add it (for existing databases)
+    $checkCol = $conn->query("SHOW COLUMNS FROM chat_messages LIKE 'seq'");
+    if ($checkCol->rowCount() === 0) {
+        $conn->exec("ALTER TABLE chat_messages ADD COLUMN seq INT AUTO_INCREMENT UNIQUE KEY");
+    }
 
     echo json_encode([
         "status" => "success",
