@@ -1,0 +1,28 @@
+---
+deployment:
+  tasks:
+    # Set the root of your cPanel public folder. Change 'yourcpanelusername' to your cPanel account username.
+    - export SUBDOMAIN_PATH=/home/yourcpanelusername/public_html
+    
+    # Deploy Landing Page to public_html root
+    - /bin/rsync -av --exclude=".*" landing_page/ $SUBDOMAIN_PATH/
+    
+    # Deploy Student Web App to public_html/course_web_app
+    - /bin/mkdir -p $SUBDOMAIN_PATH/course_web_app
+    - /bin/rsync -av --exclude=".*" course_web_app/ $SUBDOMAIN_PATH/course_web_app/
+    
+    # Deploy Backend API to public_html/api
+    - /bin/mkdir -p $SUBDOMAIN_PATH/api
+    - /bin/rsync -av --exclude=".*" api/ $SUBDOMAIN_PATH/api/
+    
+    # Deploy Lecturer Portal to public_html/lecturer
+    - /bin/mkdir -p $SUBDOMAIN_PATH/lecturer
+    - /bin/rsync -av --exclude=".*" lecturer/ $SUBDOMAIN_PATH/lecturer/
+    
+    # Deploy Admin Panel to public_html/@admin
+    - /bin/mkdir -p $SUBDOMAIN_PATH/@admin
+    - /bin/rsync -av --exclude=".*" @admin/ $SUBDOMAIN_PATH/@admin/
+    
+    # Create uploads directory and set read-write permissions
+    - /bin/mkdir -p $SUBDOMAIN_PATH/uploads
+    - /bin/chmod 755 $SUBDOMAIN_PATH/uploads
