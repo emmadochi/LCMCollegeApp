@@ -1,8 +1,8 @@
 ---
 deployment:
   tasks:
-    # Set the root of your cPanel public folder. Change 'lcmcolle' to your actual cPanel username if it differs.
-    - export SUBDOMAIN_PATH=/home/lcmcolle/public_html
+    # Set the root of your cPanel public folder.
+    - export SUBDOMAIN_PATH=/home/lifeubkq/lcmcollege.org
     
     # Deploy Landing Page to public_html root
     - /bin/rsync -av --exclude=".*" landing_page/ $SUBDOMAIN_PATH/
