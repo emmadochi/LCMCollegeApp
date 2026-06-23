@@ -6,13 +6,25 @@ if (basename($_SERVER['PHP_SELF']) == basename(__FILE__)) {
 }
 
 // Environment settings ('development' or 'production')
-define('APP_ENV', 'development');
+// Automatically detect environment based on host
+if (isset($_SERVER['HTTP_HOST']) && ($_SERVER['HTTP_HOST'] === 'lcmcollege.org' || $_SERVER['HTTP_HOST'] === 'www.lcmcollege.org')) {
+    define('APP_ENV', 'production');
+} else {
+    define('APP_ENV', 'development');
+}
 
 // Database Configuration
-define('DB_HOST', '127.0.0.1'); // Using IP is faster than 'localhost' in some environments
-define('DB_NAME', 'lcm_college');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+if (APP_ENV === 'production') {
+    define('DB_HOST', '127.0.0.1');
+    define('DB_NAME', 'lifeubkq_college');
+    define('DB_USER', 'lifeubkq_college');
+    define('DB_PASS', 'lifeubkq_college');
+} else {
+    define('DB_HOST', '127.0.0.1'); // Using IP is faster than 'localhost' in some environments
+    define('DB_NAME', 'lcm_college');
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
+}
 
 // Security Keys
 // In production, keep this key in a non-web-accessible environment variable or separate secure file
