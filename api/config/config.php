@@ -25,7 +25,11 @@ define('ALLOWED_ORIGINS', [
     'http://127.0.0.1',
     'http://localhost:8080',
     'http://localhost:3000',
-    'http://localhost:3004'
+    'http://localhost:3004',
+    'http://lcmcollege.org',
+    'https://lcmcollege.org',
+    'http://www.lcmcollege.org',
+    'https://www.lcmcollege.org'
 ]);
 
 // Paystack API Keys
