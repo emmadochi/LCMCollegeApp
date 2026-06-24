@@ -1,5 +1,5 @@
 /**
- * LCM Ministerial College — Student Dashboard Controller
+ * Lifechangers Ministerial College — Student Dashboard Controller
  * Handles: tabs, course fetching (enrolled/catalog/completed), search, enrollment, toast, hero stats
  */
 import { getAuthHeader, currentUser } from './guard.js';

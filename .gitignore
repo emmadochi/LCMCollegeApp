@@ -47,3 +47,7 @@ app.*.map.json
 # Dependencies
 **/node_modules/
 node_modules/
+
+# Local Google OAuth config
+clientId.json
+

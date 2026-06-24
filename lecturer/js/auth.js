@@ -1,5 +1,5 @@
 /**
- * LCM Ministerial College — Lecturer Portal Auth Controller
+ * Lifechangers Ministerial College — Lecturer Portal Auth Controller
  */
 
 // Decode JWT helper

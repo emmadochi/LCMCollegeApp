@@ -1,9 +1,9 @@
-# LCM Ministerial College App Project Summary
+# Lifechangers Ministerial College App Project Summary
 
-A consolidated overview of the status, architecture, and features of the LCM Ministerial College App.
+A consolidated overview of the status, architecture, and features of the Lifechangers Ministerial College App.
 
 ## 📋 General Information
-- **Project Name:** LCM Ministerial College App (lcm_college)
+- **Project Name:** Lifechangers Ministerial College App (lcm_college)
 - **Type:** Multi-Platform E-Learning System (Flutter Mobile App + Student Web Portal + Admin Panel)
 - **Objective:** Provide direct access to courses, interactive quizzes, schedules, and digital certifications for Ministerial college students, with complete coordinator course management tools.
 - **Start Date:** April 2026

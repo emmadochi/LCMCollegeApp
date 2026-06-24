@@ -79,7 +79,7 @@ class CertificateScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('LCM College', style: GoogleFonts.manrope(fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.primary, fontSize: 20)),
+                      Text('Lifechangers College', style: GoogleFonts.manrope(fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.primary, fontSize: 20)),
                       IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Symbols.close, color: Theme.of(context).colorScheme.onSurface)),
                     ],
                   ),

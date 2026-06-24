@@ -129,7 +129,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Symbols.close)),
-        title: Text('LCM College', style: GoogleFonts.manrope(fontWeight: FontWeight.bold)),
+        title: Text('Lifechangers College', style: GoogleFonts.manrope(fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: Padding(

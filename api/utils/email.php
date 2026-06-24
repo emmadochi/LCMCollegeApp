@@ -23,7 +23,7 @@ function send_transactional_email($to, $subject, $body) {
     // 2. Send email via PHP mail()
     $headers = "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-    $headers .= "From: LCM Ministerial College <info@lcmcollege.org>\r\n";
+    $headers .= "From: Lifechangers Ministerial College <info@lcmcollege.org>\r\n";
     
     return @mail($to, $subject, $body, $headers);
 }
@@ -52,7 +52,7 @@ function get_email_template($title, $content) {
     <body>
         <div class="wrapper">
             <div class="header">
-                <h1 class="logo">LCM Ministerial College</h1>
+                <h1 class="logo">Lifechangers Ministerial College</h1>
             </div>
             <div class="body">
                 <h2 class="greeting">' . $title . '</h2>
@@ -61,7 +61,7 @@ function get_email_template($title, $content) {
                 </div>
             </div>
             <div class="footer">
-                <p>&copy; ' . date("Y") . ' LCM Ministerial College. All rights reserved.</p>
+                <p>&copy; ' . date("Y") . ' Lifechangers Ministerial College. All rights reserved.</p>
                 <p>If you did not request this email, please ignore it or contact <a href="mailto:support@lcmcollege.org">support@lcmcollege.org</a>.</p>
             </div>
         </div>

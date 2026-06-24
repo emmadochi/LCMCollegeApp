@@ -42,7 +42,7 @@ class LCMCollege extends ConsumerWidget {
     final authState = ref.watch(authStateProvider);
 
     return MaterialApp(
-      title: 'LCM College',
+      title: 'Lifechangers College',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,

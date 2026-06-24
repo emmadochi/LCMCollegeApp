@@ -1,4 +1,4 @@
--- Database Initialization for LCM Ministerial College App
+-- Database Initialization for Lifechangers Ministerial College App
 CREATE DATABASE IF NOT EXISTS lcm_college CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE lcm_college;
 

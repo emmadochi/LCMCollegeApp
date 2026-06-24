@@ -46,9 +46,9 @@ export const onUserCreated = functions.firestore
 
     await sendEmail(
       email,
-      "Welcome to LCM College!",
+      "Welcome to Lifechangers College!",
       `Hi ${fullName},\n\nWelcome to your learning journey! Explore our courses and start mastering new skills today.`,
-      `<h1>Welcome to LCM College, ${fullName}!</h1><p>Welcome to your learning journey! Explore our courses and start mastering new skills today.</p>`
+      `<h1>Welcome to Lifechangers College, ${fullName}!</h1><p>Welcome to your learning journey! Explore our courses and start mastering new skills today.</p>`
     );
 
     await sendPushNotification(

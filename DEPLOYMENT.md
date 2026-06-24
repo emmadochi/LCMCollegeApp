@@ -1,6 +1,6 @@
-# LCM College — Deployment Guide (Google Play Store)
+# Lifechangers College — Deployment Guide (Google Play Store)
 
-A complete, step-by-step guide to deploy the LCM College Flutter application to the Google Play Store.
+A complete, step-by-step guide to deploy the Lifechangers College Flutter application to the Google Play Store.
 
 ---
 
@@ -109,7 +109,7 @@ version: 1.0.0+1
 
 | Configuration | Location | Example |
 |---|---|---|
-| **App Name** | `android/app/src/main/AndroidManifest.xml` | `android:label="LCM College"` |
+| **App Name** | `android/app/src/main/AndroidManifest.xml` | `android:label="Lifechangers College"` |
 | **Package ID** | `android/app/build.gradle` | `applicationId "com.lcmcollege.app"` |
 | **Min SDK** | `android/app/build.gradle` | `minSdkVersion 21` |
 
@@ -146,7 +146,7 @@ Output: `build/app/outputs/flutter-apk/app-release.apk`
 1. Go to [Google Play Console](https://play.google.com/console)
 2. Click **"Create app"**
 3. Fill in:
-   - **App name**: LCM College
+   - **App name**: Lifechangers College
    - **Default language**: English (United States)
    - **App or Game**: App
    - **Free or Paid**: Free
@@ -172,7 +172,7 @@ Navigate to **"Store Presence" → "Main store listing"** and provide:
 
 Navigate to **"Policy" → "App content"** and complete the content rating questionnaire.
 
-For LCM College (an educational app), the expected rating is **"Everyone"**.
+For Lifechangers College (an educational app), the expected rating is **"Everyone"**.
 
 ---
 
@@ -191,7 +191,7 @@ Navigate to **"Monetize" → "Pricing & distribution"**:
 1. Navigate to **"Testing" → "Internal testing"** (recommended for first release) OR **"Release" → "Production"**
 2. Click **"Create new release"**
 3. Upload your `app-release.aab` file
-4. Fill in the **Release notes** (e.g., *"Initial release of LCM College"*)
+4. Fill in the **Release notes** (e.g., *"Initial release of Lifechangers College"*)
 5. Click **"Save"** then **"Review release"**
 
 ---
@@ -303,7 +303,7 @@ flutter run --release
 2. Navigate to **"Certificates, Identifiers & Profiles" → "Identifiers"**
 3. Click **"+"** to register a new App ID
 4. Select **"App"** and click **Continue**
-5. Enter a **Description** (e.g., LCM College)
+5. Enter a **Description** (e.g., Lifechangers College)
 6. Set **Bundle ID** to **Explicit** and enter your ID (e.g., `com.lcmcollege.app`)
 
    > **⚠️ IMPORTANT:** This Bundle ID must match the `PRODUCT_BUNDLE_IDENTIFIER` in your Xcode project and **cannot be changed** after App Store submission.
@@ -329,7 +329,7 @@ flutter run --release
 2. Select **"App Store Connect"** under Distribution
 3. Select your **App ID** (from Step 1)
 4. Select the **Distribution Certificate** (from Step 2)
-5. Name the profile (e.g., `LCM College App Store`) and click **Generate**
+5. Name the profile (e.g., `Lifechangers College App Store`) and click **Generate**
 6. Download and double-click the `.mobileprovision` file to install it
 
 ---
@@ -390,7 +390,7 @@ Run the following on your Mac terminal from the project root:
 flutter build ipa --release
 ```
 
-Output: `build/ios/ipa/LCM College.ipa`
+Output: `build/ios/ipa/Lifechangers College.ipa`
 
 OR build from Xcode directly:
 
@@ -408,7 +408,7 @@ OR build from Xcode directly:
 2. Click **"My Apps"** → **"+"** → **"New App"**
 3. Fill in:
    - **Platforms**: iOS
-   - **Name**: LCM College
+   - **Name**: Lifechangers College
    - **Primary Language**: English (U.S.)
    - **Bundle ID**: Select your registered Bundle ID
    - **SKU**: A unique internal identifier (e.g., `lcmcollege001`)
@@ -439,7 +439,7 @@ Navigate to **"App Information"**:
 
 1. Set the **Category** (e.g., Education)
 2. Set the **Content Rights** declaration
-3. Set **Age Rating** (complete the questionnaire — LCM College will likely be **4+**)
+3. Set **Age Rating** (complete the questionnaire — Lifechangers College will likely be **4+**)
 
 ---
 
@@ -465,7 +465,7 @@ Navigate to **"Pricing & Availability"**:
 **Option B: Via Flutter CLI (uses `xcrun altool` or Transporter)**
 
 ```bash
-xcrun altool --upload-app -f "build/ios/ipa/LCM College.ipa" \
+xcrun altool --upload-app -f "build/ios/ipa/Lifechangers College.ipa" \
   --type ios \
   --username "your@apple.id" \
   --password "your-app-specific-password"
@@ -582,4 +582,4 @@ flutter run --release -d <device-id> # Run release on iOS device
 
 ---
 
-*Last updated: April 2026 | LCM College v1.0.0*
+*Last updated: April 2026 | Lifechangers College v1.0.0*

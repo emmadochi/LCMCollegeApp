@@ -28,7 +28,7 @@ class CourseDiscoveryPage extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          'LCM College',
+          'Lifechangers College',
           style: GoogleFonts.manrope(
             fontWeight: FontWeight.w800,
             color: Theme.of(context).colorScheme.primary,
@@ -552,7 +552,7 @@ class _AboutCollegeSection extends StatelessWidget {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      'About LCM College',
+                      'About Lifechangers College',
                       style: GoogleFonts.manrope(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
@@ -563,7 +563,7 @@ class _AboutCollegeSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'LCM College is a premier institution dedicated to academic excellence and scholarly innovation. Our mission is to empower the next generation of leaders through a rigorous curriculum, cutting-edge research, and a supportive scholarly community.',
+                  'Lifechangers College is a premier institution dedicated to academic excellence and scholarly innovation. Our mission is to empower the next generation of leaders through a rigorous curriculum, cutting-edge research, and a supportive scholarly community.',
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     height: 1.6,

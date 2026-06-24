@@ -64,7 +64,7 @@ exports.onUserCreated = functions.firestore
     .onCreate(async (snap, context) => {
     const userData = snap.data();
     const { email, fullName } = userData;
-    await sendEmail(email, "Welcome to LCM College!", `Hi ${fullName},\n\nWelcome to your learning journey! Explore our courses and start mastering new skills today.`, `<h1>Welcome to LCM College, ${fullName}!</h1><p>Welcome to your learning journey! Explore our courses and start mastering new skills today.</p>`);
+    await sendEmail(email, "Welcome to Lifechangers College!", `Hi ${fullName},\n\nWelcome to your learning journey! Explore our courses and start mastering new skills today.`, `<h1>Welcome to Lifechangers College, ${fullName}!</h1><p>Welcome to your learning journey! Explore our courses and start mastering new skills today.</p>`);
     await sendPushNotification(context.params.userId, "Welcome aboard!", "Start exploring our top courses today.");
 });
 /**

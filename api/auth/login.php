@@ -125,7 +125,7 @@ try {
         $completedCourses = $stmtComplete->fetchAll(PDO::FETCH_COLUMN) ?: [];
 
         // Send Login Alert Email
-        $subject = "New Login to Your Account - LCM Ministerial College";
+        $subject = "New Login to Your Account - Lifechangers Ministerial College";
         $loginTime = date("Y-m-d H:i:s");
         $loginContent = '
             <p>Dear ' . escape_output($user['name']) . ',</p>

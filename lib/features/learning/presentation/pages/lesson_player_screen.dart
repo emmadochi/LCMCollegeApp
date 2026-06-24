@@ -36,7 +36,7 @@ class LessonPlayerScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('LCM College', style: GoogleFonts.manrope(fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.primary)),
+        title: Text('Lifechangers College', style: GoogleFonts.manrope(fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.primary)),
       ),
       body: SingleChildScrollView(
         child: Column(

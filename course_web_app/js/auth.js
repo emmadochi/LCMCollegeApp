@@ -1,5 +1,5 @@
 /**
- * LCM Ministerial College — Student Portal Auth Handler
+ * Lifechangers Ministerial College — Student Portal Auth Handler
  * Uses local PHP REST API with JWT. No Firebase.
  */
 

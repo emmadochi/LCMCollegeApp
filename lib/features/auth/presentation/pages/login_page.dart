@@ -79,7 +79,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    'LCM College',
+                    'Lifechangers College',
                     style: GoogleFonts.manrope(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,

@@ -87,10 +87,10 @@ try {
     }
     
     $portalUrl = "$protocol://$host" . $basePath . "course_web_app/";
-    $subject = "Welcome to LCM Ministerial College!";
+    $subject = "Welcome to Lifechangers Ministerial College!";
     $welcomeContent = '
         <p>Dear ' . escape_output($name) . ',</p>
-        <p>Welcome! We are excited to have you join us at LCM Ministerial College.</p>
+        <p>Welcome! We are excited to have you join us at Lifechangers Ministerial College.</p>
         <p>Your student account has been registered successfully. You can now log in, enroll in theology courses, and start your ministry training journey.</p>
         <div class="button-container">
             <a href="' . $portalUrl . '" class="button">Log In to Portal</a>

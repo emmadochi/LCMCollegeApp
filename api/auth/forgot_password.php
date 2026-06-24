@@ -80,10 +80,10 @@ try {
     $resetLink = "$protocol://$host" . $basePath . "course_web_app/reset_password.html?token=" . $token;
     
     // 6. Send recovery email
-    $subject = "Reset Your Password - LCM Ministerial College";
+    $subject = "Reset Your Password - Lifechangers Ministerial College";
     $content = '
         <p>Dear ' . escape_output($user['name']) . ',</p>
-        <p>We received a request to reset your password for your LCM Ministerial College account.</p>
+        <p>We received a request to reset your password for your Lifechangers Ministerial College account.</p>
         <p>Click the button below to choose a new password. This link will expire in 1 hour.</p>
         <div class="button-container">
             <a href="' . $resetLink . '" class="button" target="_blank">Reset Password</a>

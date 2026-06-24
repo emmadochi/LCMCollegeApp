@@ -46,7 +46,7 @@ try {
         "http" => [
             "method" => "GET",
             "timeout" => 10,
-            "header" => "User-Agent: LCM-College-Auth/1.0\r\n"
+            "header" => "User-Agent: Lifechangers-College-Auth/1.0\r\n"
         ]
     ];
     $context = stream_context_create($opts);
@@ -168,10 +168,10 @@ try {
 
     if ($isNewUser) {
         // Send Welcome Email
-        $subject = "Welcome to LCM Ministerial College!";
+        $subject = "Welcome to Lifechangers Ministerial College!";
         $welcomeContent = '
             <p>Dear ' . escape_output($name) . ',</p>
-            <p>Welcome! We are excited to have you join us at LCM Ministerial College.</p>
+            <p>Welcome! We are excited to have you join us at Lifechangers Ministerial College.</p>
             <p>Your student account has been registered successfully using Google Sign-In. You can now access your dashboard and start learning.</p>
             <div class="button-container">
                 <a href="' . $portalUrl . '" class="button">Access Portal</a>
@@ -182,7 +182,7 @@ try {
         send_transactional_email($email, $subject, $emailBody);
     } else {
         // Send Login Alert Email
-        $subject = "New Login to Your Account - LCM Ministerial College";
+        $subject = "New Login to Your Account - Lifechangers Ministerial College";
         $loginTime = date("Y-m-d H:i:s");
         $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
         $loginContent = '

@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('contactPhone').value    = data.contactPhone   || '';
             document.getElementById('collegeAddress').value  = data.collegeAddress || '';
         } else {
-            document.getElementById('collegeName').value = 'LCM Ministerial College';
+            document.getElementById('collegeName').value = 'Lifechangers Ministerial College';
         }
     } catch (error) {
         console.error("Error loading settings:", error);
