@@ -2,11 +2,20 @@ import { getAdminAuthHeader } from './auth.js';
 
 let allTransactions = [];
 
+const currencySymbols = {
+    USD: '$',
+    EUR: '€',
+    GBP: '£',
+    NGN: '₦',
+    CAD: 'C$'
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     await loadTransactions();
 
     const searchInput = document.getElementById('paymentsSearch');
     const gatewayFilter = document.getElementById('gatewayFilter');
+    const currencyFilter = document.getElementById('currencyFilter');
 
     if (searchInput) {
         searchInput.addEventListener('input', () => filterAndRenderTransactions());
@@ -14,6 +23,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (gatewayFilter) {
         gatewayFilter.addEventListener('change', () => filterAndRenderTransactions());
+    }
+
+    if (currencyFilter) {
+        currencyFilter.addEventListener('change', () => filterAndRenderTransactions());
     }
 });
 
@@ -47,22 +60,43 @@ async function loadTransactions() {
 }
 
 function calculateStats(txs) {
-    const totalRevenue = txs.reduce((sum, tx) => sum + parseFloat(tx.amount || 0.00), 0.00);
     const count = txs.length;
-    const avg = count > 0 ? (totalRevenue / count) : 0.00;
+    const countEl = document.getElementById('statCount');
+    if (countEl) countEl.textContent = count;
 
     const revEl = document.getElementById('statRevenue');
-    const countEl = document.getElementById('statCount');
     const avgEl = document.getElementById('statAverage');
 
-    if (revEl) revEl.textContent = `$${totalRevenue.toFixed(2)}`;
-    if (countEl) countEl.textContent = count;
-    if (avgEl) avgEl.textContent = `$${avg.toFixed(2)}`;
+    if (revEl) revEl.innerHTML = formatCurrencyStats(txs, 'revenue');
+    if (avgEl) avgEl.innerHTML = formatCurrencyStats(txs, 'average');
+}
+
+function formatCurrencyStats(txs, calculateField) {
+    const totals = {};
+    txs.forEach(tx => {
+        const cur = (tx.currency || 'USD').toUpperCase();
+        const amt = parseFloat(tx.amount || 0);
+        if (!totals[cur]) totals[cur] = { sum: 0, count: 0 };
+        totals[cur].sum += amt;
+        totals[cur].count++;
+    });
+
+    const keys = Object.keys(totals);
+    if (keys.length === 0) return '<span class="text-gray-900 font-bold">$0.00</span>';
+    
+    return keys.map(cur => {
+        const val = calculateField === 'revenue' 
+            ? totals[cur].sum 
+            : (totals[cur].sum / totals[cur].count);
+        const symbol = currencySymbols[cur] || cur;
+        return `<span class="whitespace-nowrap font-black text-gray-900">${symbol}${val.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}<span class="text-xs text-gray-500 font-normal ml-0.5">${cur}</span></span>`;
+    }).join('<span class="text-gray-300 mx-2 font-normal text-base">|</span>');
 }
 
 function filterAndRenderTransactions() {
     const searchVal = document.getElementById('paymentsSearch')?.value.trim().toLowerCase() || '';
     const gatewayVal = document.getElementById('gatewayFilter')?.value || '';
+    const currencyVal = document.getElementById('currencyFilter')?.value || '';
 
     let filtered = allTransactions;
 
@@ -79,6 +113,11 @@ function filterAndRenderTransactions() {
         filtered = filtered.filter(tx => tx.payment_method?.toLowerCase() === gatewayVal.toLowerCase());
     }
 
+    if (currencyVal) {
+        filtered = filtered.filter(tx => (tx.currency || 'USD').toUpperCase() === currencyVal.toUpperCase());
+    }
+
+    calculateStats(filtered);
     renderTransactions(filtered);
 }
 
@@ -117,7 +156,10 @@ function renderTransactions(txs) {
                 <div class="text-sm text-gray-900 font-medium">${tx.course_title || 'Unknown Course'}</div>
             </td>
             <td class="px-6 py-4 border-b border-gray-100">
-                <div class="text-sm text-gray-900 font-bold">$${parseFloat(tx.amount).toFixed(2)}</div>
+                <div class="text-sm text-gray-900 font-bold">
+                    ${currencySymbols[tx.currency?.toUpperCase()] || tx.currency || '$'}${parseFloat(tx.amount).toFixed(2)}
+                    <span class="text-xs text-gray-400 font-normal ml-0.5">${tx.currency?.toUpperCase() || 'USD'}</span>
+                </div>
             </td>
             <td class="px-6 py-4 border-b border-gray-100">
                 <span class="text-xs font-semibold px-2.5 py-1 rounded bg-gray-100 text-gray-800">${gatewayName}</span>
