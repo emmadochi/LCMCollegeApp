@@ -1,0 +1,7 @@
+# Disable directory index listings
+Options -Indexes
+
+# Prevent access to hidden files and directories
+RedirectMatch 404 /\.git
+RedirectMatch 404 /\.env
+RedirectMatch 404 /\.idea
