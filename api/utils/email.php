@@ -23,7 +23,7 @@ function send_transactional_email($to, $subject, $body) {
     // 2. Send email via PHP mail()
     $headers = "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-    $headers .= "From: LCM Ministerial College <no-reply@lcmcollege.org>\r\n";
+    $headers .= "From: LCM Ministerial College <info@lcmcollege.org>\r\n";
     
     return @mail($to, $subject, $body, $headers);
 }
