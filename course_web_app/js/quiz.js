@@ -268,17 +268,53 @@ function renderResultsView(score, passMark, isPassed, correctCount, totalQuestio
         ? `Incredible job! You've passed the lesson quiz and demonstrated a solid understanding of this topic. The next course lesson is now unlocked.`
         : `You scored ${score}%, which is below the minimum required pass mark of ${passMark}%. Please review the lesson content and try the quiz again.`;
 
-                // Calculate next lesson redirect URL
-                const currentIdx = courseLessons.findIndex(l => l.id === lessonId);
-                let nextLessonUrl = `course.html?id=${courseId}`;
-                if (currentIdx !== -1 && currentIdx < courseLessons.length - 1) {
-                    nextLessonUrl = `course.html?id=${courseId}&lessonId=${courseLessons[currentIdx + 1].id}`;
-                } else {
-                    nextLessonUrl = `course.html?id=${courseId}&celebrate=true`;
-                }
+    // Calculate next lesson redirect URL
+    const currentIdx = courseLessons.findIndex(l => l.id === lessonId);
+    let nextLessonUrl = `course.html?id=${courseId}`;
+    if (currentIdx !== -1 && currentIdx < courseLessons.length - 1) {
+        nextLessonUrl = `course.html?id=${courseId}&lessonId=${courseLessons[currentIdx + 1].id}`;
+    } else {
+        nextLessonUrl = `course.html?id=${courseId}&celebrate=true`;
+    }
 
-                mainEl.innerHTML = `
-        <div class="bg-white rounded-[24px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] border border-[#0000000a] max-w-xl w-full mx-auto overflow-hidden">
+    let failedQuestionsHtml = '';
+    if (!isPassed) {
+        let itemsHtml = '';
+        quizData.questions.forEach((q, idx) => {
+            if (userAnswers[idx] !== q.correctAnswerIndex) {
+                const selectedText = userAnswers[idx] !== null && userAnswers[idx] !== undefined ? q.options[userAnswers[idx]] : 'None';
+                const correctText = q.options[q.correctAnswerIndex];
+                itemsHtml += `
+                    <div class="p-4 border border-gray-100 rounded-xl bg-white space-y-2">
+                        <p class="font-semibold text-gray-900 text-sm">${idx + 1}. ${q.question}</p>
+                        <div class="text-xs space-y-1.5 pl-2 border-l-2 border-gray-200">
+                            <div class="text-red-600 font-medium">
+                                <i class="fa-solid fa-circle-xmark mr-1"></i> Your Answer: <span class="text-gray-700">${selectedText}</span>
+                            </div>
+                            <div class="text-green-600 font-medium">
+                                <i class="fa-solid fa-circle-check mr-1"></i> Correct Answer: <span class="text-gray-700">${correctText}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+
+        failedQuestionsHtml = `
+            <div class="mt-6 border border-gray-100 rounded-2xl overflow-hidden bg-gray-50/50 text-left">
+                <button onclick="const el = document.getElementById('failedQuestionsReview'); const icon = document.getElementById('reviewToggleIcon'); el.classList.toggle('hidden'); icon.classList.toggle('rotate-180')" class="w-full px-5 py-4 font-bold text-gray-700 flex justify-between items-center hover:bg-gray-100/70 transition-all outline-none">
+                    <span class="text-sm flex items-center gap-2"><i class="fa-solid fa-clipboard-list text-gray-400"></i> Review Failed Questions</span>
+                    <i id="reviewToggleIcon" class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-300"></i>
+                </button>
+                <div id="failedQuestionsReview" class="hidden p-5 border-t border-gray-100 space-y-4 max-h-[300px] overflow-y-auto">
+                    ${itemsHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    mainEl.innerHTML = `
+        <div class="bg-white rounded-[24px] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.15)] border border-[#0000000a] max-w-xl w-full mx-auto overflow-hidden animate-fade-in">
             <div class="brand-gradient-bg p-10 text-center relative overflow-hidden flex flex-col items-center">
                 <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-4xl mb-4 shadow-inner text-white">
                     ${visualIcon}
@@ -307,11 +343,13 @@ function renderResultsView(score, passMark, isPassed, correctCount, totalQuestio
                     </div>
                 </div>
 
-                <p class="text-sm text-gray-500 mb-8 leading-relaxed px-2">
+                <p class="text-sm text-gray-500 mb-6 leading-relaxed px-2">
                     ${feedback}
                 </p>
 
-                <div class="flex flex-col gap-3">
+                ${failedQuestionsHtml}
+
+                <div class="flex flex-col gap-3 mt-6">
                     ${isPassed 
                         ? `<a href="${nextLessonUrl}" class="w-full py-3 brand-gradient-bg text-gray-900 rounded-[100px] text-sm font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-all block text-center">
                              Continue Course <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>

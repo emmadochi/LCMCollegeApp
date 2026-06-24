@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Support | LCM Ministerial College</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --green-500: #7DC026;
+            --green-600: #6aaa1f;
+            --green-700: #5a9219;
+            --green-dark: #2E7D32;
+            --text-primary: #1a2d0e;
+            --text-secondary: #3d5c1e;
+            --bg: #f6faf0;
+            --border: #d4e9b8;
+            --radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-secondary);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /* NAVBAR */
+        nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 40px;
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 18px;
+        }
+        .nav-logo img {
+            width: 36px;
+            height: 36px;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--green-500), var(--green-dark));
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+            transition: var(--transition);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(46, 125, 50, 0.3);
+        }
+
+        /* LAYOUT & CARDS */
+        .container {
+            max-width: 1100px;
+            margin: 60px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+        }
+
+        .support-card {
+            background: #fff;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+        }
+
+        .support-info {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .info-block {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+        .info-icon {
+            padding: 12px;
+            background: rgba(125, 192, 38, 0.1);
+            border-radius: 12px;
+            color: var(--green-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .info-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+        .info-desc {
+            font-size: 14px;
+            color: rgba(61, 92, 30, 0.8);
+            margin: 0;
+        }
+
+        /* FORM INPUTS */
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        label {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+        input, textarea, select {
+            font-family: 'Inter', sans-serif;
+            padding: 14px;
+            font-size: 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+            color: var(--text-primary);
+            outline: none;
+            transition: var(--transition);
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--green-500);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(125, 192, 38, 0.15);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--green-500), var(--green-dark));
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.3);
+        }
+
+        /* SUCCESS STATE */
+        .success-overlay {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .success-icon {
+            font-size: 64px;
+            color: var(--green-dark);
+            margin-bottom: 16px;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--text-primary);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 100px;
+        }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+        .footer-links a:hover {
+            color: var(--green-500);
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+                margin: 30px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LCM Logo">
+                <span>LCM Ministerial College</span>
+            </a>
+            <a href="../course_web_app/" class="btn-primary">
+                <span class="material-icons" style="font-size:16px;">school</span>
+                Student Portal
+            </a>
+        </div>
+    </nav>
+
+    <!-- CONTAINER -->
+    <main class="container">
+        <!-- Contact Form Card -->
+        <div class="support-card">
+            <div id="formSection">
+                <h2 style="margin-top: 0; font-size: 26px; margin-bottom: 10px;">Contact Support</h2>
+                <p style="margin-bottom: 30px; font-size: 14px;">Have questions about courses, registration, or online portal login issues? Send us a ticket and our administration team will reach back shortly.</p>
+                
+                <form id="supportForm" onsubmit="handleFormSubmit(event)">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" required placeholder="Emmanuel Adeyemi">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required placeholder="scholar@university.edu">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Support Category</label>
+                        <select id="category" required>
+                            <option value="">Select Category...</option>
+                            <option value="login">Portal / Login Issue</option>
+                            <option value="billing">Course Payments & Tuition</option>
+                            <option value="academic">Lessons & Quizzes</option>
+                            <option value="general">General Inquiries</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" rows="5" required placeholder="Describe your inquiry in detail..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <span class="material-icons">send</span> Send Support Ticket
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success Overlay -->
+            <div id="successOverlay" class="success-overlay">
+                <span class="material-icons success-icon">check_circle</span>
+                <h2 style="margin-top: 0;">Ticket Submitted Successfully!</h2>
+                <p>Thank you for reaching out. A confirmation has been logged, and our administrative desk will respond to your registered email address within 24 hours.</p>
+                <button onclick="resetForm()" class="btn-primary" style="margin-top: 20px; border:none; cursor:pointer;">
+                    Submit Another Inquiry
+                </button>
+            </div>
+        </div>
+
+        <!-- Support Info Blocks -->
+        <div class="support-info">
+            <div class="info-block">
+                <div class="info-icon">
+                    <span class="material-icons">location_on</span>
+                </div>
+                <div>
+                    <div class="info-title">College Campus</div>
+                    <p class="info-desc">LCM Ministerial College Main Hall,<br>University Way, Suite 400,<br>Academic Plaza.</p>
+                </div>
+            </div>
+            
+            <div class="info-block">
+                <div class="info-icon">
+                    <span class="material-icons">mail</span>
+                </div>
+                <div>
+                    <div class="info-title">Support Email</div>
+                    <p class="info-desc">support@lcmcollege.org<br>admin@lcmcollege.org</p>
+                </div>
+            </div>
+
+            <div class="info-block">
+                <div class="info-icon">
+                    <span class="material-icons">phone</span>
+                </div>
+                <div>
+                    <div class="info-title">Support Hours</div>
+                    <p class="info-desc">Monday – Friday: 9:00 AM – 5:00 PM<br>Saturday: 10:00 AM – 2:00 PM</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <span>© 2026 LCM Ministerial College. All rights reserved.</span>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+                <a href="cookies.html">Cookies</a>
+                <a href="support.html">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            document.getElementById('formSection').style.display = 'none';
+            document.getElementById('successOverlay').style.display = 'block';
+        }
+
+        function resetForm() {
+            document.getElementById('supportForm').reset();
+            document.getElementById('successOverlay').style.display = 'none';
+            document.getElementById('formSection').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>

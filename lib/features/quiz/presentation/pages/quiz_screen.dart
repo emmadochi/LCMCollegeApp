@@ -34,6 +34,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
   LessonModel? _lesson;
   List<QuizQuestion> _questions = [];
+  List<int?> _userAnswers = [];
   bool _isLoading = true;
 
   @override
@@ -55,6 +56,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
     if (mounted) {
       setState(() {
         _questions = quiz?.questions ?? [];
+        _userAnswers = List<int?>.filled(_questions.length, null);
         _isLoading = false;
       });
     }
@@ -62,6 +64,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
   void _handleSubmit() {
     if (_selectedOptionIndex == null) return;
+
+    _userAnswers[_currentQuestionIndex] = _selectedOptionIndex;
 
     if (_selectedOptionIndex == _questions[_currentQuestionIndex].correctAnswerIndex) {
       _score++;
@@ -108,6 +112,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
         total: _questions.length,
         courseId: widget.courseId,
         currentLessonId: widget.lessonId,
+        questions: _questions,
+        userAnswers: _userAnswers,
       );
     }
     if (_questions.isEmpty) {
@@ -228,12 +234,16 @@ class _ResultView extends ConsumerWidget {
   final int total;
   final String courseId;
   final String currentLessonId;
+  final List<QuizQuestion> questions;
+  final List<int?> userAnswers;
 
   const _ResultView({
     required this.score,
     required this.total,
     required this.courseId,
     required this.currentLessonId,
+    required this.questions,
+    required this.userAnswers,
   });
 
   @override
@@ -253,93 +263,193 @@ class _ResultView extends ConsumerWidget {
               : null;
 
           return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      color: passed ? Theme.of(context).colorScheme.secondary.withOpacity(0.1) : Theme.of(context).colorScheme.error.withOpacity(0.1),
-                      shape: BoxShape.circle,
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 48.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: passed ? Theme.of(context).colorScheme.secondary.withOpacity(0.1) : Theme.of(context).colorScheme.error.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        passed ? Symbols.workspace_premium : Symbols.error,
+                        size: 64,
+                        color: passed ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.error,
+                        fill: 1,
+                      ),
                     ),
-                    child: Icon(
-                      passed ? Symbols.workspace_premium : Symbols.error,
-                      size: 64,
-                      color: passed ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.error,
-                      fill: 1,
+                    const SizedBox(height: 32),
+                    Text(
+                      passed ? 'Congratulations!' : 'Great Effort!',
+                      style: GoogleFonts.manrope(fontSize: 32, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  const SizedBox(height: 32),
-                  Text(
-                    passed ? 'Congratulations!' : 'Great Effort!',
-                    style: GoogleFonts.manrope(fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    passed ? 'You passed the module test.' : 'You didn\'t reach the 70% threshold.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6), fontSize: 16),
-                  ),
-                  const SizedBox(height: 48),
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.white : Theme.of(context).colorScheme.surfaceContainerHigh,
-                      borderRadius: BorderRadius.circular(24),
+                    const SizedBox(height: 8),
+                    Text(
+                      passed ? 'You passed the module test.' : 'You didn\'t reach the 70% threshold.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6), fontSize: 16),
                     ),
-                    child: Column(
-                      children: [
-                        Text('YOUR SCORE', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4), letterSpacing: 1.2)),
-                        const SizedBox(height: 8),
-                        Text('${percentage.toInt()}%', style: GoogleFonts.manrope(fontSize: 48, fontWeight: FontWeight.w800, color: passed ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.error)),
-                        Text('$score out of $total correct', style: const TextStyle(fontWeight: FontWeight.bold)),
-                      ],
+                    const SizedBox(height: 48),
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.white : Theme.of(context).colorScheme.surfaceContainerHigh,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Column(
+                        children: [
+                          Text('YOUR SCORE', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4), letterSpacing: 1.2)),
+                          const SizedBox(height: 8),
+                          Text('${percentage.toInt()}%', style: GoogleFonts.manrope(fontSize: 48, fontWeight: FontWeight.w800, color: passed ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.error)),
+                          Text('$score out of $total correct', style: const TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 48),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (passed) {
-                          if (nextLesson != null) {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (_) => LessonPlayerScreen(lesson: nextLesson)),
-                            );
-                          } else {
-                            // Course completed via quiz!
-                            final user = ref.read(currentUserProvider).value;
-                            if (user != null) {
-                              ref.read(authRepositoryProvider).completeCourse(user.id, courseId);
+                    if (!passed) ...[
+                      const SizedBox(height: 24),
+                      Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+                        ),
+                        clipBehavior: Clip.antiAlias,
+                        child: ExpansionTile(
+                          title: Text(
+                            'Review Failed Questions',
+                            style: GoogleFonts.manrope(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                          leading: Icon(
+                            Symbols.assignment,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          shape: const Border(),
+                          collapsedShape: const Border(),
+                          children: [
+                            for (int idx = 0; idx < questions.length; idx++) ...[
+                              if (userAnswers[idx] != questions[idx].correctAnswerIndex) ...[
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${idx + 1}. ${questions[idx].question}',
+                                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Container(
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.surfaceContainerLowest,
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(Symbols.close, color: Theme.of(context).colorScheme.error, size: 16),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Text(
+                                                    'Your Answer: ${(userAnswers[idx] != null && userAnswers[idx]! >= 0 && userAnswers[idx]! < questions[idx].options.length) ? questions[idx].options[userAnswers[idx]!] : 'None'}',
+                                                    style: TextStyle(
+                                                      color: Theme.of(context).colorScheme.error,
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 6),
+                                            Row(
+                                              children: [
+                                                const Icon(Symbols.check, color: Colors.green, size: 16),
+                                                const SizedBox(width: 8),
+                                                Expanded(
+                                                  child: Text(
+                                                    'Correct Answer: ${questions[idx].correctAnswerIndex >= 0 && questions[idx].correctAnswerIndex < questions[idx].options.length ? questions[idx].options[questions[idx].correctAnswerIndex] : ''}',
+                                                    style: const TextStyle(
+                                                      color: Colors.green,
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ]
+                            ]
+                          ],
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 48),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (passed) {
+                            if (nextLesson != null) {
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (_) => CourseCompletionPage(courseId: courseId)),
+                                MaterialPageRoute(builder: (_) => LessonPlayerScreen(lesson: nextLesson)),
                               );
+                            } else {
+                              // Course completed via quiz!
+                              final user = ref.read(currentUserProvider).value;
+                              if (user != null) {
+                                ref.read(authRepositoryProvider).completeCourse(user.id, courseId);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => CourseCompletionPage(courseId: courseId)),
+                                );
+                              }
                             }
+                          } else {
+                            Navigator.pop(context);
                           }
-                        } else {
-                          Navigator.pop(context);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: passed ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
-                        foregroundColor: passed ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSecondary,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-                      ),
-                      child: Text(
-                        passed 
-                          ? (nextLesson != null ? 'Next Lesson' : 'Back to Course')
-                          : 'Retake Quiz', 
-                        style: const TextStyle(fontWeight: FontWeight.bold)
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: passed ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
+                          foregroundColor: passed ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSecondary,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+                        ),
+                        child: Text(
+                          passed 
+                            ? (nextLesson != null ? 'Next Lesson' : 'Back to Course')
+                            : 'Retake Quiz', 
+                          style: const TextStyle(fontWeight: FontWeight.bold)
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

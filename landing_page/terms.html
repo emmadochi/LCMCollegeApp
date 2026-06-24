@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Use | LCM Ministerial College</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --green-500: #7DC026;
+            --green-600: #6aaa1f;
+            --green-700: #5a9219;
+            --green-dark: #2E7D32;
+            --text-primary: #1a2d0e;
+            --text-secondary: #3d5c1e;
+            --bg: #f6faf0;
+            --border: #d4e9b8;
+            --radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-secondary);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /* NAVBAR */
+        nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 40px;
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 18px;
+        }
+        .nav-logo img {
+            width: 36px;
+            height: 36px;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--green-500), var(--green-dark));
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
+            transition: var(--transition);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(46, 125, 50, 0.3);
+        }
+
+        /* CONTENT */
+        .content-container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 40px;
+            background: #fff;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+        }
+        h1 {
+            font-size: clamp(32px, 4vw, 42px);
+            margin-top: 0;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+        .last-updated {
+            font-size: 13px;
+            color: var(--green-700);
+            font-weight: 600;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        h2 {
+            font-size: 22px;
+            margin-top: 40px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 8px;
+        }
+        p, li {
+            font-size: 15px;
+            color: rgba(61, 92, 30, 0.85);
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--text-primary);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+        .footer-links a:hover {
+            color: var(--green-500);
+        }
+
+        @media (max-width: 768px) {
+            .content-container {
+                margin: 20px;
+                padding: 24px;
+            }
+            .footer-inner {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <img src="logo.png" alt="LCM Logo">
+                <span>LCM Ministerial College</span>
+            </a>
+            <a href="../course_web_app/" class="btn-primary">
+                <span class="material-icons" style="font-size:16px;">school</span>
+                Student Portal
+            </a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="content-container">
+        <h1>Terms of Use</h1>
+        <div class="last-updated">
+            <span class="material-icons" style="font-size: 16px;">schedule</span>
+            Last Updated: June 24, 2026
+        </div>
+
+        <p>Welcome to the digital learning portal of LCM Ministerial College. By accessing our website, student dashboard, or administrative services, you agree to comply with and be bound by the following terms and conditions.</p>
+
+        <h2>1. Student Code & Portal Access</h2>
+        <p>Access to our coursework, lectures, and exams is strictly reserved for verified students and authorized academic staff. By using your account:</p>
+        <ul>
+            <li>You agree to keep your credentials confidential. You are solely responsible for any activity performed on your account.</li>
+            <li>You must register using a valid email. False identities or duplicate accounts created to bypass registration metrics are prohibited.</li>
+            <li>Admins reserves the right to suspend or terminate accounts that breach academic rules or exhibit fraudulent behavior.</li>
+        </ul>
+
+        <h2>2. Academic Integrity & Honor Code</h2>
+        <p>LCM Ministerial College holds high standards for biblical and scholastic integrity. In taking courses:</p>
+        <ul>
+            <li>You represent that all submitted quiz responses and written assignments are your own scholarly work.</li>
+            <li>Sharing answer keys or copying curriculum contents outside the portal without appropriate citations is considered academic misconduct.</li>
+        </ul>
+
+        <h2>3. Content & Intellectual Property</h2>
+        <p>All curriculum material, video lectures, theology tracks, illustrations, and digital assets on the LCM platform are owned by LCM Ministerial College. These materials are provided solely for personal educational use and cannot be republished or resold.</p>
+
+        <h2>4. Disclaimers & Limitation of Liability</h2>
+        <p>Our educational resources are provided "as is" without warranty. While we maintain a high-quality platform, we do not guarantee uninterrupted server performance or immediate grading turnarounds by lecturers. College administration is not liable for data connectivity disruptions that occur outside our servers.</p>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <span>© 2026 LCM Ministerial College. All rights reserved.</span>
+            <div class="footer-links">
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+                <a href="cookies.html">Cookies</a>
+                <a href="support.html">Support</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
