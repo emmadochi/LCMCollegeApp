@@ -18,18 +18,18 @@ class DashboardPage extends ConsumerStatefulWidget {
 class _DashboardPageState extends ConsumerState<DashboardPage> {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
+  List<Widget> get _pages => [
     const StudentDashboardPage(),
     const MyCoursesPage(),
     const CourseDiscoveryPage(),
     const ProfilePage(),
-    const Center(child: Column(
+    Center(child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(Symbols.admin_panel_settings, size: 64, color: Theme.of(context).colorScheme.secondary),
-        SizedBox(height: 16),
-        Text('Admin Dashboard', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-        Padding(
+        const SizedBox(height: 16),
+        const Text('Admin Dashboard', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        const Padding(
           padding: EdgeInsets.all(24.0),
           child: Text('Use the "Edit Course" buttons on course detail pages to manage curriculum.', textAlign: TextAlign.center),
         ),

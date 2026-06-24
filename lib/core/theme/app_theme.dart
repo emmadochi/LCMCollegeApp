@@ -27,7 +27,7 @@ class AppTheme {
       scaffoldBackgroundColor: surfaceColor,
       textTheme: GoogleFonts.manropeTextTheme().copyWith(
         displayLarge: GoogleFonts.manrope(
-          fontWeight: FontWeight.w850,
+          fontWeight: FontWeight.w800,
           color: onSurfaceColor,
           letterSpacing: -1.0,
         ),
@@ -45,7 +45,7 @@ class AppTheme {
           height: 1.5,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: Colors.white,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -90,7 +90,7 @@ class AppTheme {
       scaffoldBackgroundColor: const Color(0xFF11140E),
       textTheme: GoogleFonts.manropeTextTheme().copyWith(
         displayLarge: GoogleFonts.manrope(
-          fontWeight: FontWeight.w850,
+          fontWeight: FontWeight.w800,
           color: const Color(0xFFE2E4DC),
           letterSpacing: -1.0,
         ),
@@ -108,7 +108,7 @@ class AppTheme {
           height: 1.5,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: const Color(0xFF1C2216),
         elevation: 0,
         shape: RoundedRectangleBorder(
