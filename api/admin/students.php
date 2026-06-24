@@ -74,15 +74,49 @@ function listStudents($conn) {
             ");
             $stmt->execute([$userId]);
         }
-        $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $students = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
-        echo json_encode(array_map(function($s) {
+        $studentEnrollments = [];
+        if (count($students) > 0) {
+            $studentIds = array_column($students, 'id');
+            $inClause = implode(',', array_fill(0, count($studentIds), '?'));
+            
+            $stmtProg = $conn->prepare("
+                SELECT e.user_id, e.course_id, c.title AS course_title, c.totalLessons AS total_lessons,
+                       (SELECT COUNT(*) FROM user_progress up WHERE up.user_id = e.user_id AND up.course_id = e.course_id AND up.is_completed = 1) AS completed_lessons
+                FROM enrollments e
+                JOIN courses c ON c.id = e.course_id
+                WHERE e.user_id IN ($inClause)
+            ");
+            $stmtProg->execute($studentIds);
+            $enrollments = $stmtProg->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+            foreach ($enrollments as $enc) {
+                $uid = $enc['user_id'];
+                if (!isset($studentEnrollments[$uid])) {
+                    $studentEnrollments[$uid] = [];
+                }
+                $total = intval($enc['total_lessons']);
+                $completed = intval($enc['completed_lessons']);
+                $pct = $total > 0 ? round(($completed / $total) * 100) : 0;
+                $studentEnrollments[$uid][] = [
+                    'course_id' => $enc['course_id'],
+                    'course_title' => escape_output($enc['course_title']),
+                    'progress_percent' => $pct,
+                    'completed_lessons' => $completed,
+                    'total_lessons' => $total
+                ];
+            }
+        }
+
+        echo json_encode(array_map(function($s) use ($studentEnrollments) {
             return [
                 'id'         => $s['id'],
                 'name'       => escape_output($s['name']),
                 'email'      => escape_output($s['email']),
                 'role'       => $s['role'],
                 'created_at' => $s['created_at'],
+                'courses'    => $studentEnrollments[$s['id']] ?? []
             ];
         }, $students));
     } catch (Exception $e) {

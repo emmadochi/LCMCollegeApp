@@ -196,29 +196,46 @@ function renderStudentsTable() {
         return;
     }
 
-    tbody.innerHTML = allStudents.map(s => `
-        <tr class="hover:bg-gray-50/70 transition-colors">
-            <td class="py-3.5 px-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-full brand-gradient-bg flex items-center justify-center font-bold text-gray-900 text-sm uppercase flex-shrink-0">${(s.name||'?')[0]}</div>
-                    <span class="font-semibold text-gray-900 text-sm">${s.name}</span>
+    tbody.innerHTML = allStudents.map(s => {
+        let coursesHtml = '—';
+        let progressHtml = '—';
+        
+        if (s.courses && s.courses.length > 0) {
+            coursesHtml = s.courses.map(c => `
+                <div class="font-medium text-gray-800 text-xs truncate max-w-[180px] mb-1.5 last:mb-0" title="${c.course_title}">
+                    ${c.course_title}
                 </div>
-            </td>
-            <td class="py-3.5 px-4 text-xs text-gray-500">${s.email}</td>
-            <td class="py-3.5 px-4 text-xs text-gray-500">—</td>
-            <td class="py-3.5 px-4">
-                <div class="flex items-center gap-2">
-                    <div class="flex-1 bg-gray-100 rounded-full h-1.5 max-w-[100px]"><div class="brand-gradient-bg h-1.5 rounded-full" style="width:0%"></div></div>
-                    <span class="text-xs text-gray-500">—</span>
+            `).join('');
+            
+            progressHtml = s.courses.map(c => `
+                <div class="flex items-center gap-2 mb-1.5 last:mb-0" title="${c.completed_lessons} of ${c.total_lessons} lessons completed">
+                    <div class="flex-1 bg-gray-100 rounded-full h-1.5 min-w-[70px] max-w-[100px]">
+                        <div class="brand-gradient-bg h-1.5 rounded-full" style="width:${c.progress_percent}%"></div>
+                    </div>
+                    <span class="text-xs text-gray-500 font-bold">${c.progress_percent}%</span>
                 </div>
-            </td>
-            <td class="py-3.5 px-4 text-right">
-                <button onclick="openStudentModal('${s.id}')" class="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primaryDark text-xs font-semibold rounded-lg transition-colors">
-                    View Profile
-                </button>
-            </td>
-        </tr>
-    `).join('');
+            `).join('');
+        }
+
+        return `
+            <tr class="hover:bg-gray-50/70 transition-colors">
+                <td class="py-3.5 px-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full brand-gradient-bg flex items-center justify-center font-bold text-gray-900 text-sm uppercase flex-shrink-0">${(s.name||'?')[0]}</div>
+                        <span class="font-semibold text-gray-900 text-sm">${s.name}</span>
+                    </div>
+                </td>
+                <td class="py-3.5 px-4 text-xs text-gray-500">${s.email}</td>
+                <td class="py-3.5 px-4 text-xs text-gray-500">${coursesHtml}</td>
+                <td class="py-3.5 px-4">${progressHtml}</td>
+                <td class="py-3.5 px-4 text-right">
+                    <button onclick="openStudentModal('${s.id}')" class="px-3 py-1.5 bg-primary/10 hover:bg-primary/20 text-primaryDark text-xs font-semibold rounded-lg transition-colors">
+                        View Profile
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
 }
 
 // ──────────────────────────────────────────────────────────────────────────────

@@ -40,8 +40,8 @@ function handleGetProgress($conn, $requestUserId, $role) {
         exit();
     }
 
-    // Security: standard students can only view their own progress records
-    if ($userId !== $requestUserId && !in_array($role, ['admin', 'coordinator'])) {
+    // Security: standard students can only view their own progress records, but admins, coordinators and lecturers can view them
+    if ($userId !== $requestUserId && !in_array($role, ['admin', 'coordinator', 'lecturer'])) {
         header("HTTP/1.1 403 Forbidden");
         echo json_encode(["message" => "Access denied. Cannot view another user's progress."]);
         exit();
