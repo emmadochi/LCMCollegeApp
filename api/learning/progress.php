@@ -188,8 +188,15 @@ function handleSaveProgress($conn, $requestUserId, $role) {
                 array_pop($pathParts); // remove learning
                 array_pop($pathParts); // remove api
                 $basePath = implode('/', $pathParts);
-                if ($basePath && substr($basePath, -1) !== '/') {
-                    $basePath .= '/';
+                if (empty($basePath) || $basePath === '/') {
+                    $basePath = '/';
+                } else {
+                    if (substr($basePath, 0, 1) !== '/') {
+                        $basePath = '/' . $basePath;
+                    }
+                    if (substr($basePath, -1) !== '/') {
+                        $basePath .= '/';
+                    }
                 }
                 $dashboardUrl = "$protocol://$host" . $basePath . "course_web_app/dashboard.html";
 
