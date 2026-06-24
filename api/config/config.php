@@ -49,6 +49,6 @@ define('PAYSTACK_SECRET_KEY', 'sk_test_73da203d9534142cebc03f04b5a0d6d6cbbffa86'
 define('PAYSTACK_PUBLIC_KEY', 'pk_test_e02301d81ac02e107bb1b462bb221b95fb58a6d7');
 
 // Google OAuth Configuration
-define('GOOGLE_CLIENT_ID', '1095290947547-qj23cr8o0f0s05flv48c4083a2clfe4p.apps.googleusercontent.com');
+define('GOOGLE_CLIENT_ID', '370483546378-aoeuesf6h9p1smb9c40mkiepippkqud3.apps.googleusercontent.com');
 
 
