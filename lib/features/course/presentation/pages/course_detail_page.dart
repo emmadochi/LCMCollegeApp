@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../data/models/review_model.dart';
 import '../providers/review_providers.dart';
+import '../providers/course_providers.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'admin_course_edit_page.dart';
 
