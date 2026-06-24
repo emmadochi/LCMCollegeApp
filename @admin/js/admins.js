@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 const isCreator = (myCreatorId && admin.id === myCreatorId);
                 const isMyself = (myId && admin.id === myId);
+                const isCreatedByMe = admin.created_by === myId;
 
                 // Disable actions if they are the creator of the logged in user
                 // Disable deactivating/deleting self too
@@ -124,6 +125,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         ${actionDisabled 
                             ? `<span class="text-xs text-gray-400 italic mr-2" title="${tooltipText}">${tooltipText || 'Protected'}</span>` 
                             : `
+                                ${isCreatedByMe ? `<button type="button" class="change-pw-btn text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-lg transition-colors mr-2" onclick="showChangePasswordModal('${admin.id}', '${name}')">Password</button>` : ''}
                                 <button type="button" class="status-btn ${statusBtnColor} px-3 py-1.5 rounded-lg transition-colors mr-2" data-id="${admin.id}" data-active="${isActive ? 0 : 1}" data-name="${name}">${statusBtnText}</button>
                                 <button type="button" class="delete-btn text-red-600 hover:text-red-900 bg-red-50 px-3 py-1.5 rounded-lg transition-colors" data-id="${admin.id}" data-name="${name}">Delete</button>
                             `
@@ -147,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error("Error loading administrators:", error);
             adminsListEl.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">Failed to load administrators: ${error.message}</td></tr>`;
         }
-    }
+     }
 
     // Handle actions click
     adminsListEl.addEventListener('click', async (e) => {
@@ -236,6 +238,50 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error("Register admin error:", error);
             registerError.textContent = "Network error. Could not connect to the API.";
             registerError.classList.remove('hidden');
+        }
+    });
+
+    // Handle Change Password Submit
+    const changePasswordForm = document.getElementById('changePasswordForm');
+    const changePasswordError = document.getElementById('changePasswordError');
+
+    changePasswordForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        changePasswordError.classList.add('hidden');
+
+        const id = document.getElementById('changePasswordAdminId').value;
+        const password = document.getElementById('newAdminPassword').value;
+
+        // Perform password validation (minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 numeric digit)
+        if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
+            changePasswordError.textContent = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.";
+            changePasswordError.classList.remove('hidden');
+            return;
+        }
+
+        try {
+            const response = await fetch('../api/admin/admins.php', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAdminAuthHeader()
+                },
+                body: JSON.stringify({ action: 'change_password', id, password })
+            });
+
+            if (response.ok) {
+                window.hideChangePasswordModal();
+                alert("Password changed successfully.");
+                loadAdmins();
+            } else {
+                const err = await response.json();
+                changePasswordError.textContent = err.message || "Failed to update administrator password.";
+                changePasswordError.classList.remove('hidden');
+            }
+        } catch (error) {
+            console.error("Change password error:", error);
+            changePasswordError.textContent = "Network error. Could not connect to the API.";
+            changePasswordError.classList.remove('hidden');
         }
     });
 

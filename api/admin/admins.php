@@ -23,7 +23,12 @@ switch ($method) {
         break;
 
     case 'PUT':
-        updateAdminStatus($conn, $currentUserId);
+        $input = json_decode(file_get_contents("php://input"), true);
+        if (isset($input['action']) && $input['action'] === 'change_password') {
+            changeAdminPassword($conn, $currentUserId);
+        } else {
+            updateAdminStatus($conn, $currentUserId);
+        }
         break;
 
     case 'DELETE':
@@ -211,5 +216,54 @@ function deleteAdmin($conn, $currentUserId) {
         echo json_encode(["message" => "Administrator deleted successfully."]);
     } catch (Exception $e) {
         secure_error_handler($e, "Failed to delete administrator.");
+    }
+}
+
+/**
+ * Change administrator password by superadmin
+ */
+function changeAdminPassword($conn, $currentUserId) {
+    $inputData = json_decode(file_get_contents("php://input"), true);
+    $targetAdminId = sanitize_input($inputData['id'] ?? '');
+    $newPassword = $inputData['password'] ?? '';
+
+    if (empty($targetAdminId) || empty($newPassword)) {
+        header("HTTP/1.1 400 Bad Request");
+        echo json_encode(["message" => "Admin ID and new password are required fields."]);
+        return;
+    }
+
+    if (strlen($newPassword) < 8 || !preg_match('/[A-Z]/', $newPassword) || !preg_match('/[a-z]/', $newPassword) || !preg_match('/[0-9]/', $newPassword)) {
+        header("HTTP/1.1 400 Bad Request");
+        echo json_encode(["message" => "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number."]);
+        return;
+    }
+
+    try {
+        // Enforce the rule: the current user MUST be the creator of the target admin.
+        $stmtCheck = $conn->prepare("SELECT created_by FROM users WHERE id = ? AND role = 'admin'");
+        $stmtCheck->execute([$targetAdminId]);
+        $creatorId = $stmtCheck->fetchColumn();
+
+        if (!$creatorId) {
+            header("HTTP/1.1 404 Not Found");
+            echo json_encode(["message" => "Administrator not found."]);
+            return;
+        }
+
+        if ($creatorId !== $currentUserId) {
+            header("HTTP/1.1 403 Forbidden");
+            echo json_encode(["message" => "Security Violation: You can only change the password of administrators you registered yourself."]);
+            return;
+        }
+
+        // Update password
+        $passwordHash = password_hash($newPassword, PASSWORD_BCRYPT);
+        $stmtUpdate = $conn->prepare("UPDATE users SET password_hash = ? WHERE id = ?");
+        $stmtUpdate->execute([$passwordHash, $targetAdminId]);
+
+        echo json_encode(["message" => "Administrator password updated successfully."]);
+    } catch (Exception $e) {
+        secure_error_handler($e, "Failed to update administrator password.");
     }
 }
