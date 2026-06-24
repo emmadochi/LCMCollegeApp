@@ -23,6 +23,14 @@ switch ($method) {
         }
         break;
 
+    case 'PUT':
+        toggleStudentStatus($conn);
+        break;
+
+    case 'DELETE':
+        deleteStudent($conn);
+        break;
+
     default:
         http_response_code(405);
         echo json_encode(["message" => "Method not allowed."]);
@@ -39,7 +47,7 @@ function listStudents($conn) {
         if (in_array($role, ['admin', 'coordinator'])) {
             if ($courseId) {
                 $stmt = $conn->prepare("
-                    SELECT u.id, u.name, u.email, u.role, u.created_at
+                    SELECT u.id, u.name, u.email, u.role, u.is_active, u.created_at
                     FROM users u
                     JOIN enrollments e ON e.user_id = u.id
                     WHERE u.role = 'student' AND e.course_id = ?
@@ -48,7 +56,7 @@ function listStudents($conn) {
                 $stmt->execute([$courseId]);
             } else {
                 $stmt = $conn->prepare("
-                    SELECT id, name, email, role, created_at
+                    SELECT id, name, email, role, is_active, created_at
                     FROM users
                     WHERE role = 'student'
                     ORDER BY created_at DESC
@@ -58,7 +66,7 @@ function listStudents($conn) {
         } else {
             // Lecturer: only see students assigned to them via lecturer_assignments
             $stmt = $conn->prepare("
-                SELECT DISTINCT u.id, u.name, u.email, u.role, u.created_at
+                SELECT DISTINCT u.id, u.name, u.email, u.role, u.is_active, u.created_at
                 FROM users u
                 LEFT JOIN enrollments e ON e.user_id = u.id
                 JOIN lecturer_assignments la ON (
@@ -115,6 +123,7 @@ function listStudents($conn) {
                 'name'       => escape_output($s['name']),
                 'email'      => escape_output($s['email']),
                 'role'       => $s['role'],
+                'is_active'  => (bool)$s['is_active'],
                 'created_at' => $s['created_at'],
                 'courses'    => $studentEnrollments[$s['id']] ?? []
             ];
@@ -131,7 +140,7 @@ function getStudentProfile($conn, $studentId) {
     global $role, $userId;
     try {
         // 1. Basic student info
-        $stmt = $conn->prepare("SELECT id, name, email, role, created_at FROM users WHERE id = ? AND role = 'student'");
+        $stmt = $conn->prepare("SELECT id, name, email, role, is_active, created_at FROM users WHERE id = ? AND role = 'student'");
         $stmt->execute([$studentId]);
         $student = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -233,6 +242,7 @@ function getStudentProfile($conn, $studentId) {
                 'id'         => $student['id'],
                 'name'       => escape_output($student['name']),
                 'email'      => escape_output($student['email']),
+                'is_active'  => (bool)$student['is_active'],
                 'created_at' => $student['created_at'],
             ],
             'enrolled_count' => count($enrolledCourseIds),
@@ -256,6 +266,66 @@ function getStudentProfile($conn, $studentId) {
                 ];
             }, $reviews),
         ]);
+    } catch (Exception $e) {
+        secure_error_handler($e);
+    }
+}
+
+/**
+ * Toggle student active status (deactivate / activate)
+ */
+function toggleStudentStatus($conn) {
+    global $role;
+    if (!in_array($role, ['admin', 'coordinator'])) {
+        http_response_code(403);
+        echo json_encode(["message" => "Access denied. Administrative privileges required."]);
+        return;
+    }
+
+    $input = json_decode(file_get_contents("php://input"), true);
+    $studentId = $input['id'] ?? null;
+    $isActive = isset($input['is_active']) ? (int)$input['is_active'] : null;
+
+    if (!$studentId || $isActive === null) {
+        http_response_code(400);
+        echo json_encode(["message" => "Student ID and active status are required."]);
+        return;
+    }
+
+    try {
+        $stmt = $conn->prepare("UPDATE users SET is_active = ? WHERE id = ? AND role = 'student'");
+        $stmt->execute([$isActive, $studentId]);
+
+        echo json_encode(["message" => "Student status updated successfully."]);
+    } catch (Exception $e) {
+        secure_error_handler($e);
+    }
+}
+
+/**
+ * Delete a student account
+ */
+function deleteStudent($conn) {
+    global $role;
+    if (!in_array($role, ['admin', 'coordinator'])) {
+        http_response_code(403);
+        echo json_encode(["message" => "Access denied. Administrative privileges required."]);
+        return;
+    }
+
+    $studentId = $_GET['id'] ?? null;
+
+    if (!$studentId) {
+        http_response_code(400);
+        echo json_encode(["message" => "Student ID is required."]);
+        return;
+    }
+
+    try {
+        $stmt = $conn->prepare("DELETE FROM users WHERE id = ? AND role = 'student'");
+        $stmt->execute([$studentId]);
+
+        echo json_encode(["message" => "Student deleted successfully."]);
     } catch (Exception $e) {
         secure_error_handler($e);
     }

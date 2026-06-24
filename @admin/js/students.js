@@ -72,6 +72,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ? new Date(student.created_at).toLocaleDateString()
                 : 'N/A';
 
+            const statusClass = student.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+            const statusLabel = student.is_active ? 'Active' : 'Suspended';
+
             const tr = document.createElement('tr');
             tr.className = 'hover:bg-gray-50 transition-colors';
             tr.innerHTML = `
@@ -88,7 +91,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${email}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${createdAt}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">${statusLabel}</span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <a href="student_detail.html?studentId=${student.id}" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1.5 rounded-lg transition-colors">View Profile</a>
