@@ -525,6 +525,8 @@
             .form-card { max-width: 100%; }
         }
     </style>
+    <!-- Google Identity Services SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 
@@ -683,6 +685,14 @@
                     </button>
                 </form>
 
+                <!-- Google OAuth Login -->
+                <div style="display:flex;align-items:center;margin:20px 0;color:var(--gray-400);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">
+                    <div style="flex:1;height:1px;background:var(--gray-200);"></div>
+                    <span style="padding:0 12px;">or continue with</span>
+                    <div style="flex:1;height:1px;background:var(--gray-200);"></div>
+                </div>
+                <div id="googleSignInButtonLogin" style="width:100%;margin-bottom:10px;display:flex;justify-content:center;"></div>
+
                 <div class="switch-row">
                     Don't have an account?
                     <button class="switch-btn" onclick="switchTab('register')">Enrol for free</button>
@@ -775,6 +785,14 @@
                             <i class="fa-solid fa-rocket" style="margin-right:8px;font-size:13px;"></i>Create My Account
                         </span>
                     </button>
+
+                    <!-- Google OAuth Signup -->
+                    <div style="display:flex;align-items:center;margin:20px 0;color:var(--gray-400);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">
+                        <div style="flex:1;height:1px;background:var(--gray-200);"></div>
+                        <span style="padding:0 12px;">or register with</span>
+                        <div style="flex:1;height:1px;background:var(--gray-200);"></div>
+                    </div>
+                    <div id="googleSignInButtonRegister" style="width:100%;margin-bottom:15px;display:flex;justify-content:center;"></div>
 
                     <p class="terms-note">
                         By creating an account you agree to our

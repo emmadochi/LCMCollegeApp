@@ -206,4 +206,91 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.classList.remove('loading');
         }
     }
+
+    // =============================================
+    // GOOGLE SIGN IN & SIGN UP HANDLER
+    // =============================================
+    async function initGoogleSignIn() {
+        try {
+            const res = await fetch('../api/auth/google.php?action=client_id');
+            const config = await res.json();
+            if (!config.client_id) return;
+
+            window.google.accounts.id.initialize({
+                client_id: config.client_id,
+                callback: handleGoogleCredentialResponse
+            });
+
+            const loginBtn = document.getElementById("googleSignInButtonLogin");
+            const regBtn = document.getElementById("googleSignInButtonRegister");
+
+            if (loginBtn) {
+                window.google.accounts.id.renderButton(loginBtn, {
+                    theme: "outline",
+                    size: "large",
+                    text: "signin_with",
+                    shape: "rectangular",
+                    width: loginBtn.offsetWidth || 350
+                });
+            }
+
+            if (regBtn) {
+                window.google.accounts.id.renderButton(regBtn, {
+                    theme: "outline",
+                    size: "large",
+                    text: "signup_with",
+                    shape: "rectangular",
+                    width: regBtn.offsetWidth || 350
+                });
+            }
+
+            // Optional: One-Tap Prompt
+            window.google.accounts.id.prompt();
+
+        } catch (e) {
+            console.error("Failed to load Google Sign-In:", e);
+        }
+    }
+
+    async function handleGoogleCredentialResponse(response) {
+        const id_token = response.credential;
+        window.hideAlert && window.hideAlert();
+
+        try {
+            const res = await fetch('../api/auth/google.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_token: id_token })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                window.showAlert && window.showAlert('Google Authentication successful! Redirecting to your dashboard…', 'success');
+                setTimeout(function () {
+                    window.location.replace('dashboard.html');
+                }, 1000);
+            } else {
+                window.showAlert && window.showAlert(data.message || 'Google Authentication failed. Please try again.');
+            }
+        } catch (err) {
+            console.error('Google Auth submit error:', err);
+            window.showAlert && window.showAlert('Connection error during Google authentication. Please try again.');
+        }
+    }
+
+    // Initialize Google API after script loaded
+    if (window.google && window.google.accounts) {
+        initGoogleSignIn();
+    } else {
+        const checkInterval = setInterval(() => {
+            if (window.google && window.google.accounts) {
+                clearInterval(checkInterval);
+                initGoogleSignIn();
+            }
+        }, 100);
+        setTimeout(() => clearInterval(checkInterval), 5000);
+    }
 });
