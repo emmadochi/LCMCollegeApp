@@ -95,6 +95,44 @@ function handlePostEnrollment($conn, $userId) {
         $stmtInsert = $conn->prepare("INSERT INTO enrollments (user_id, course_id) VALUES (?, ?)");
         $stmtInsert->execute([$userId, $courseId]);
 
+        // Send Enrollment Email Notification
+        $stmtDetails = $conn->prepare("
+            SELECT u.name AS user_name, u.email AS user_email, c.title AS course_title 
+            FROM users u, courses c 
+            WHERE u.id = ? AND c.id = ?
+        ");
+        $stmtDetails->execute([$userId, $courseId]);
+        $details = $stmtDetails->fetch(PDO::FETCH_ASSOC);
+
+        if ($details) {
+            require_once __DIR__ . '/../utils/email.php';
+            
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+            $host = $_SERVER['HTTP_HOST'] ?? 'lcmcollege.org';
+            $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+            $pathParts = explode('/', $scriptName);
+            array_pop($pathParts); // remove enroll.php
+            array_pop($pathParts); // remove learning
+            array_pop($pathParts); // remove api
+            $basePath = implode('/', $pathParts);
+            if ($basePath && substr($basePath, -1) !== '/') {
+                $basePath .= '/';
+            }
+            $courseUrl = "$protocol://$host" . $basePath . "course_web_app/course.html?id=" . $courseId;
+
+            $subject = "Course Enrollment Confirmation - " . $details['course_title'];
+            $enrollContent = '
+                <p>Dear ' . escape_output($details['user_name']) . ',</p>
+                <p>You have successfully enrolled in the course: <strong>' . escape_output($details['course_title']) . '</strong>.</p>
+                <p>You can access your course materials, video lectures, and quizzes anytime from your student portal.</p>
+                <div class="button-container">
+                    <a href="' . $courseUrl . '" class="button">Start Learning</a>
+                </div>
+            ';
+            $emailBody = get_email_template("Enrolled in " . escape_output($details['course_title']), $enrollContent);
+            send_transactional_email($details['user_email'], $subject, $emailBody);
+        }
+
         // Fetch updated enrolled course IDs
         $stmtEnroll = $conn->prepare("SELECT course_id FROM enrollments WHERE user_id = ?");
         $stmtEnroll->execute([$userId]);

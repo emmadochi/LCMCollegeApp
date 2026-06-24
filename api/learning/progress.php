@@ -157,6 +157,56 @@ function handleSaveProgress($conn, $requestUserId, $role) {
         ");
         $stmt->execute([$docId, $userId, $courseId, $lessonId, $isCompletedVal, $lastQuizScore, $attempts]);
 
+        // Check if course is completed (all lessons marked as completed)
+        $stmtTotal = $conn->prepare("SELECT COUNT(*) FROM lessons WHERE course_id = ?");
+        $stmtTotal->execute([$courseId]);
+        $totalLessons = (int)$stmtTotal->fetchColumn();
+
+        $stmtCompleted = $conn->prepare("SELECT COUNT(*) FROM user_progress WHERE user_id = ? AND course_id = ? AND is_completed = 1");
+        $stmtCompleted->execute([$userId, $courseId]);
+        $completedLessons = (int)$stmtCompleted->fetchColumn();
+
+        if ($totalLessons > 0 && $completedLessons === $totalLessons && $isCompleted) {
+            // Fetch student and course info
+            $stmtInfo = $conn->prepare("
+                SELECT u.name AS user_name, u.email AS user_email, c.title AS course_title 
+                FROM users u, courses c 
+                WHERE u.id = ? AND c.id = ?
+            ");
+            $stmtInfo->execute([$userId, $courseId]);
+            $info = $stmtInfo->fetch(PDO::FETCH_ASSOC);
+
+            if ($info) {
+                // Send milestone completed email
+                require_once __DIR__ . '/../utils/email.php';
+                
+                $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+                $host = $_SERVER['HTTP_HOST'] ?? 'lcmcollege.org';
+                $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+                $pathParts = explode('/', $scriptName);
+                array_pop($pathParts); // remove progress.php
+                array_pop($pathParts); // remove learning
+                array_pop($pathParts); // remove api
+                $basePath = implode('/', $pathParts);
+                if ($basePath && substr($basePath, -1) !== '/') {
+                    $basePath .= '/';
+                }
+                $dashboardUrl = "$protocol://$host" . $basePath . "course_web_app/dashboard.html";
+
+                $subject = "Course Completed! Congratulations - " . $info['course_title'];
+                $completeContent = '
+                    <p>Dear ' . escape_output($info['user_name']) . ',</p>
+                    <p>Congratulations! You have completed all lessons and assignments for the course: <strong>' . escape_output($info['course_title']) . '</strong>.</p>
+                    <p>We are very proud of your progress and commitment to your studies. You can now claim and print your official certificate directly from the student dashboard.</p>
+                    <div class="button-container">
+                        <a href="' . $dashboardUrl . '" class="button">View Certificate</a>
+                    </div>
+                ';
+                $emailBody = get_email_template("Course Completed!", $completeContent);
+                send_transactional_email($info['user_email'], $subject, $emailBody);
+            }
+        }
+
         echo json_encode(["message" => "Progress saved successfully."]);
     } catch (Exception $e) {
         secure_error_handler($e, "Failed to save user progress due to an internal server error.");

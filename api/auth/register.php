@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../utils/security.php';
+require_once __DIR__ . '/../utils/email.php';
 
 // Handle CORS
 handle_cors();
@@ -64,6 +65,33 @@ try {
     // Insert user into database
     $stmtInsert = $conn->prepare("INSERT INTO users (id, name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)");
     $stmtInsert->execute([$userId, $name, $email, $passwordHash, $role]);
+
+    // Send Welcome Email
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+    $host = $_SERVER['HTTP_HOST'] ?? 'lcmcollege.org';
+    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+    $pathParts = explode('/', $scriptName);
+    array_pop($pathParts); // remove register.php
+    array_pop($pathParts); // remove auth
+    array_pop($pathParts); // remove api
+    $basePath = implode('/', $pathParts);
+    if ($basePath && substr($basePath, -1) !== '/') {
+        $basePath .= '/';
+    }
+    
+    $portalUrl = "$protocol://$host" . $basePath . "course_web_app/";
+    $subject = "Welcome to LCM Ministerial College!";
+    $welcomeContent = '
+        <p>Dear ' . escape_output($name) . ',</p>
+        <p>Welcome! We are excited to have you join us at LCM Ministerial College.</p>
+        <p>Your student account has been registered successfully. You can now log in, enroll in theology courses, and start your ministry training journey.</p>
+        <div class="button-container">
+            <a href="' . $portalUrl . '" class="button">Log In to Portal</a>
+        </div>
+        <p>May your faith and learning journey be blessed!</p>
+    ';
+    $emailBody = get_email_template("Welcome, " . escape_output($name) . "!", $welcomeContent);
+    send_transactional_email($email, $subject, $emailBody);
 
     header("HTTP/1.1 201 Created");
     echo json_encode([

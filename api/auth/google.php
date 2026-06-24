@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../utils/security.php';
+require_once __DIR__ . '/../utils/email.php';
 
 // Handle CORS
 handle_cors();
@@ -82,6 +83,8 @@ try {
     $email = sanitize_input($payload['email']);
     $name = sanitize_input($payload['name'] ?? 'Google Student');
     
+    $isNewUser = false;
+    
     // Check if user exists
     $stmt = $conn->prepare("SELECT id, name, role, is_active, created_by FROM users WHERE email = ?");
     $stmt->execute([$email]);
@@ -99,6 +102,7 @@ try {
         $role = $user['role'];
     } else {
         // User does not exist: perform registration
+        $isNewUser = true;
         // Generate secure UUID v4 for user ID
         $uuidBytes = random_bytes(16);
         $uuidBytes[6] = chr(ord($uuidBytes[6]) & 0x0f | 0x40);
@@ -110,7 +114,7 @@ try {
         $role = 'student';
         
         $stmtInsert = $conn->prepare("INSERT INTO users (id, name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)");
-        $stmtInsert->execute([userId, $name, $email, $passwordHash, $role]);
+        $stmtInsert->execute([$userId, $name, $email, $passwordHash, $role]);
     }
     
     // Generate JWT token
@@ -141,6 +145,49 @@ try {
     $stmtComplete->execute([$userId]);
     $completedCourses = $stmtComplete->fetchAll(PDO::FETCH_COLUMN) ?: [];
     
+    // Resolve dynamic paths for email
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+    $host = $_SERVER['HTTP_HOST'] ?? 'lcmcollege.org';
+    $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
+    $pathParts = explode('/', $scriptName);
+    array_pop($pathParts); // remove google.php
+    array_pop($pathParts); // remove auth
+    array_pop($pathParts); // remove api
+    $basePath = implode('/', $pathParts);
+    if ($basePath && substr($basePath, -1) !== '/') {
+        $basePath .= '/';
+    }
+    $portalUrl = "$protocol://$host" . $basePath . "course_web_app/";
+
+    if ($isNewUser) {
+        // Send Welcome Email
+        $subject = "Welcome to LCM Ministerial College!";
+        $welcomeContent = '
+            <p>Dear ' . escape_output($name) . ',</p>
+            <p>Welcome! We are excited to have you join us at LCM Ministerial College.</p>
+            <p>Your student account has been registered successfully using Google Sign-In. You can now access your dashboard and start learning.</p>
+            <div class="button-container">
+                <a href="' . $portalUrl . '" class="button">Access Portal</a>
+            </div>
+            <p>May your faith and learning journey be blessed!</p>
+        ';
+        $emailBody = get_email_template("Welcome, " . escape_output($name) . "!", $welcomeContent);
+        send_transactional_email($email, $subject, $emailBody);
+    } else {
+        // Send Login Alert Email
+        $subject = "New Login to Your Account - LCM Ministerial College";
+        $loginTime = date("Y-m-d H:i:s");
+        $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $loginContent = '
+            <p>Dear ' . escape_output($name) . ',</p>
+            <p>We detected a new sign-in to your student account via Google Sign-In on ' . $loginTime . '.</p>
+            <p><strong>IP Address:</strong> ' . $ipAddress . '</p>
+            <p>If this was you, you do not need to take any action. If you do not recognize this login, please contact support.</p>
+        ';
+        $emailBody = get_email_template("Security Notification", $loginContent);
+        send_transactional_email($email, $subject, $emailBody);
+    }
+
     echo json_encode([
         "message" => "Google login successful.",
         "token" => $token,

@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../utils/security.php';
+require_once __DIR__ . '/../utils/email.php';
 
 // Handle CORS
 handle_cors();
@@ -79,6 +80,18 @@ try {
         ");
         $stmtComplete->execute([$user['id']]);
         $completedCourses = $stmtComplete->fetchAll(PDO::FETCH_COLUMN) ?: [];
+
+        // Send Login Alert Email
+        $subject = "New Login to Your Account - LCM Ministerial College";
+        $loginTime = date("Y-m-d H:i:s");
+        $loginContent = '
+            <p>Dear ' . escape_output($user['name']) . ',</p>
+            <p>We detected a new sign-in to your student account on ' . $loginTime . '.</p>
+            <p><strong>IP Address:</strong> ' . $ipAddress . '</p>
+            <p>If this was you, you do not need to take any action. If you do not recognize this login, please change your password immediately.</p>
+        ';
+        $emailBody = get_email_template("Security Notification", $loginContent);
+        send_transactional_email($email, $subject, $emailBody);
 
         echo json_encode([
             "message" => "Login successful.",

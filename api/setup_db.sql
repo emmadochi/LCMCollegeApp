@@ -224,3 +224,12 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     INDEX idx_chat_course (course_id, sent_at),
     INDEX idx_chat_student_thread (course_id, student_id)
 );
+
+-- Password Resets Table
+CREATE TABLE IF NOT EXISTS password_resets (
+    email VARCHAR(255) NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    PRIMARY KEY (token),
+    INDEX idx_reset_email (email)
+);

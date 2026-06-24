@@ -59,6 +59,17 @@ try {
         $conn->exec("ALTER TABLE users ADD COLUMN is_active BOOLEAN DEFAULT TRUE");
     }
 
+    // 3. Create password_resets table if not exists
+    $conn->exec("
+        CREATE TABLE IF NOT EXISTS password_resets (
+            email VARCHAR(255) NOT NULL,
+            token VARCHAR(255) NOT NULL,
+            expires_at DATETIME NOT NULL,
+            PRIMARY KEY (token),
+            INDEX idx_reset_email (email)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    ");
+
     echo json_encode([
         "status" => "success",
         "message" => "Database tables migration checked and executed successfully."
