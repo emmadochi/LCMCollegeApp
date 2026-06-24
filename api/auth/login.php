@@ -38,10 +38,53 @@ if (!check_login_rate_limit($ipAddress, $conn)) {
 }
 
 try {
-    // Select user by email
+    // Select all users by email (since same email can have different roles)
     $stmt = $conn->prepare("SELECT id, name, password_hash, role, is_active, created_by FROM users WHERE email = ?");
     $stmt->execute([$email]);
-    $user = $stmt->fetch();
+    $matchingUsers = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+    // Resolve requested role from payload or referer header
+    $requestedRole = sanitize_input($inputData['role'] ?? '');
+    if (empty($requestedRole)) {
+        $referer = $_SERVER['HTTP_REFERER'] ?? '';
+        if (strpos($referer, '/@admin/') !== false) {
+            $requestedRole = 'admin';
+        } else if (strpos($referer, '/lecturer/') !== false) {
+            $requestedRole = 'lecturer';
+        } else if (strpos($referer, '/course_web_app/') !== false) {
+            $requestedRole = 'student';
+        }
+    }
+
+    $user = null;
+    foreach ($matchingUsers as $u) {
+        if (password_verify($password, $u['password_hash'])) {
+            if (!empty($requestedRole)) {
+                // If admin, we also allow coordinator (refer to admin auth.js checks)
+                if ($requestedRole === 'admin' && in_array($u['role'], ['admin', 'coordinator'])) {
+                    $user = $u;
+                    break;
+                } else if ($u['role'] === $requestedRole) {
+                    $user = $u;
+                    break;
+                }
+            } else {
+                // No role specified, just take the first matching one
+                $user = $u;
+                break;
+            }
+        }
+    }
+
+    // Fallback if password was correct but requested role was not found: take the first user with correct password
+    if (!$user && !empty($matchingUsers)) {
+        foreach ($matchingUsers as $u) {
+            if (password_verify($password, $u['password_hash'])) {
+                $user = $u;
+                break;
+            }
+        }
+    }
 
     if ($user && (int)$user['is_active'] === 0) {
         header("HTTP/1.1 403 Forbidden");
@@ -49,7 +92,7 @@ try {
         exit();
     }
 
-    if ($user && password_verify($password, $user['password_hash'])) {
+    if ($user) {
         // Successful login: reset rate limit attempts
         record_login_attempt($ipAddress, true, $conn);
 

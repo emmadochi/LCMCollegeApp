@@ -56,7 +56,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final response = await _apiClient.post(
         ApiConstants.login,
-        body: {'email': email, 'password': password},
+        body: {'email': email, 'password': password, 'role': 'student'},
       );
 
       if (response.statusCode == 200) {

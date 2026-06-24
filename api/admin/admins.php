@@ -101,12 +101,12 @@ function createAdmin($conn, $creatorId) {
     }
 
     try {
-        // Check if email already exists
-        $stmtCheck = $conn->prepare("SELECT id FROM users WHERE email = ?");
+        // Check if email already exists with role 'admin'
+        $stmtCheck = $conn->prepare("SELECT id FROM users WHERE email = ? AND role = 'admin'");
         $stmtCheck->execute([$email]);
         if ($stmtCheck->fetch()) {
             header("HTTP/1.1 409 Conflict");
-            echo json_encode(["message" => "A user with this email address already exists."]);
+            echo json_encode(["message" => "An administrator with this email address already exists."]);
             return;
         }
 

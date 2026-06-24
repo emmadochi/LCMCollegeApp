@@ -6,6 +6,7 @@ import '../../../profile/presentation/pages/profile_page.dart';
 import '../../../learning/presentation/pages/my_courses_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import 'student_dashboard_page.dart';
 
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({super.key});
@@ -18,9 +19,9 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    const CourseDiscoveryPage(),
+    const StudentDashboardPage(),
     const MyCoursesPage(),
-    const Center(child: Text('Search')),
+    const CourseDiscoveryPage(),
     const ProfilePage(),
     const Center(child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -35,6 +36,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
       ],
     )),
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             ),
             _NavItem(
               icon: Symbols.search,
-              label: 'Search',
+              label: 'Explore',
               isActive: _selectedIndex == 2,
               onTap: () => setState(() => _selectedIndex = 2),
             ),

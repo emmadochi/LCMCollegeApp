@@ -114,12 +114,12 @@ function createLecturer($conn) {
     }
 
     try {
-        // Check if user already exists
-        $stmtCheck = $conn->prepare("SELECT 1 FROM users WHERE email = ?");
+        // Check if user already exists with role 'lecturer'
+        $stmtCheck = $conn->prepare("SELECT 1 FROM users WHERE email = ? AND role = 'lecturer'");
         $stmtCheck->execute([$email]);
         if ($stmtCheck->fetch()) {
             http_response_code(409);
-            echo json_encode(["message" => "A user with this email address already exists."]);
+            echo json_encode(["message" => "A lecturer with this email address already exists."]);
             return;
         }
 

@@ -43,12 +43,12 @@ if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/
 }
 
 try {
-    // Check if email already exists
-    $stmtCheck = $conn->prepare("SELECT id FROM users WHERE email = ?");
-    $stmtCheck->execute([$email]);
+    // Check if email already exists with the same role
+    $stmtCheck = $conn->prepare("SELECT id FROM users WHERE email = ? AND role = ?");
+    $stmtCheck->execute([$email, $role]);
     if ($stmtCheck->fetch()) {
         header("HTTP/1.1 409 Conflict");
-        echo json_encode(["message" => "A user with this email address already exists."]);
+        echo json_encode(["message" => "A user with this email address and role already exists."]);
         exit();
     }
 

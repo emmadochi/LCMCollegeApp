@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var response = await fetch('../api/auth/login.php', {
                     method : 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body   : JSON.stringify({ email: email, password: password })
+                    body   : JSON.stringify({ email: email, password: password, role: 'student' })
                 });
 
                 var data = await response.json();
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     var loginResponse = await fetch('../api/auth/login.php', {
                         method : 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body   : JSON.stringify({ email: email, password: password })
+                        body   : JSON.stringify({ email: email, password: password, role: 'student' })
                     });
 
                     var loginData = await loginResponse.json();

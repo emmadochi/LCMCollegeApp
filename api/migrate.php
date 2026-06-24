@@ -70,6 +70,18 @@ try {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     ");
 
+    // 4. Update unique constraint on users table to be (email, role) instead of just email
+    // Check if unique index 'email' exists
+    $checkIndex = $conn->query("SHOW INDEX FROM users WHERE Key_name = 'email'");
+    if ($checkIndex->rowCount() > 0) {
+        $conn->exec("ALTER TABLE users DROP INDEX email");
+    }
+    // Check if composite unique index 'uq_user_email_role' exists, if not, add it
+    $checkNewIndex = $conn->query("SHOW INDEX FROM users WHERE Key_name = 'uq_user_email_role'");
+    if ($checkNewIndex->rowCount() === 0) {
+        $conn->exec("ALTER TABLE users ADD UNIQUE KEY uq_user_email_role (email, role)");
+    }
+
     echo json_encode([
         "status" => "success",
         "message" => "Database tables migration checked and executed successfully."
