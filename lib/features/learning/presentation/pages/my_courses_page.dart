@@ -228,10 +228,11 @@ class _EnrolledCourseCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final progress = ref.watch(courseProgressProvider(course.id)).value ?? 0.0;
     
     // Choose a color based on category or index
-    final color = course.category.toLowerCase().contains('bus') ? Colors.indigo : Colors.teal;
+    final color = course.category.toLowerCase().contains('bus') ? theme.colorScheme.primary : theme.colorScheme.secondary;
     final icon = course.category.toLowerCase().contains('bus') ? Symbols.payments : Symbols.database;
 
     return GestureDetector(
@@ -244,7 +245,7 @@ class _EnrolledCourseCard extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.brightness == Brightness.light ? Colors.white : Theme.of(context).colorScheme.surfaceContainerHigh,
+          color: theme.brightness == Brightness.light ? Colors.white : theme.colorScheme.surfaceContainerHigh,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
         ),
@@ -266,7 +267,7 @@ class _EnrolledCourseCard extends ConsumerWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.bold, 
                     fontSize: 16,
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: theme.colorScheme.onSurface,
                   ), 
                   maxLines: 1, 
                   overflow: TextOverflow.ellipsis,

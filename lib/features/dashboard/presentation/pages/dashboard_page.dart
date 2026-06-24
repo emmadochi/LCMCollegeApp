@@ -26,7 +26,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     const Center(child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Symbols.admin_panel_settings, size: 64, color: Colors.blue),
+        Icon(Symbols.admin_panel_settings, size: 64, color: Theme.of(context).colorScheme.secondary),
         SizedBox(height: 16),
         Text('Admin Dashboard', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         Padding(

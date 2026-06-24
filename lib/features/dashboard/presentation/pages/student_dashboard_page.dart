@@ -35,14 +35,14 @@ class _StudentDashboardPageState extends ConsumerState<StudentDashboardPage> wit
     final theme = Theme.of(context);
 
     // Custom Color Palette matching mockup
-    const darkForestGreen = Color(0xFF0F291B);
-    const leafGreenStart = Color(0xFF529E35);
-    const leafGreenEnd = Color(0xFF3C7D24);
-    const mintBg = Color(0xFFE8F2E9);
-    const softBorder = Color(0xFFE0ECE2);
+    final darkForestGreen = theme.brightness == Brightness.light ? const Color(0xFF1A2D0E) : const Color(0xFFE2E4DC);
+    const leafGreenStart = Color(0xFF7DC026);
+    const leafGreenEnd = Color(0xFF2E7D32);
+    final mintBg = theme.brightness == Brightness.light ? const Color(0xFFF6FAF0) : const Color(0xFF1C2216);
+    final softBorder = theme.brightness == Brightness.light ? const Color(0xFFD4E9B8) : const Color(0xFF2D3823);
 
     return Scaffold(
-      backgroundColor: theme.brightness == Brightness.light ? const Color(0xFFF7FAF7) : const Color(0xFF121814),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: userAsync.when(
         data: (user) {
           final fullName = user?.fullName.isNotEmpty == true ? user!.fullName : "Emmanuel Adeyemi";
@@ -99,7 +99,7 @@ class _StudentDashboardPageState extends ConsumerState<StudentDashboardPage> wit
                                         ),
                                       ),
                                       const SizedBox(width: 4),
-                                      const Icon(Symbols.nest_eco_leaf, color: mintBg, size: 14),
+                                      const Icon(Symbols.nest_eco_leaf, color: Colors.white, size: 14),
                                     ],
                                   ),
                                   const SizedBox(height: 8),
@@ -165,8 +165,8 @@ class _StudentDashboardPageState extends ConsumerState<StudentDashboardPage> wit
                                 iconBg: const Color(0xFFFFF2EE),
                                 title: "Walk in Authority",
                                 subtitle: "Empowered by Faith",
-                                borderThemeColor: const Color(0xFFF9EAE1),
-                                cardBg: const Color(0xFFFDF8F5),
+                                borderThemeColor: theme.brightness == Brightness.light ? const Color(0xFFF9EAE1) : const Color(0xFF382B24),
+                                cardBg: theme.brightness == Brightness.light ? const Color(0xFFFDF8F5) : const Color(0xFF221A16),
                                 onTap: () {},
                               ),
                               const SizedBox(width: 12),
@@ -177,7 +177,7 @@ class _StudentDashboardPageState extends ConsumerState<StudentDashboardPage> wit
                                 title: "On-Site & Online",
                                 subtitle: "Flexible hybrid learning",
                                 borderThemeColor: softBorder,
-                                cardBg: const Color(0xFFF7FAF7),
+                                cardBg: theme.brightness == Brightness.light ? const Color(0xFFF7FAF7) : const Color(0xFF151B12),
                                 onTap: () {},
                               ),
                               const SizedBox(width: 12),
@@ -187,8 +187,8 @@ class _StudentDashboardPageState extends ConsumerState<StudentDashboardPage> wit
                                 iconBg: const Color(0xFFE3F2FD),
                                 title: "New Assignment",
                                 subtitle: "Due in 3 days",
-                                borderThemeColor: const Color(0xFFE1F5FE),
-                                cardBg: const Color(0xFFF6FBFE),
+                                borderThemeColor: theme.brightness == Brightness.light ? const Color(0xFFE1F5FE) : const Color(0xFF1A2B35),
+                                cardBg: theme.brightness == Brightness.light ? const Color(0xFFF6FBFE) : const Color(0xFF111D24),
                                 onTap: () {},
                               ),
                             ],
@@ -309,6 +309,7 @@ class _FloatingAlertCardState extends State<_FloatingAlertCard> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
       onTapUp: (_) {
@@ -355,7 +356,7 @@ class _FloatingAlertCardState extends State<_FloatingAlertCard> {
                       style: GoogleFonts.outfit(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: theme.colorScheme.onSurface,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -365,7 +366,7 @@ class _FloatingAlertCardState extends State<_FloatingAlertCard> {
                       widget.subtitle,
                       style: GoogleFonts.outfit(
                         fontSize: 10,
-                        color: Colors.black45,
+                        color: theme.colorScheme.onSurface.withOpacity(0.65),
                         fontWeight: FontWeight.w500,
                       ),
                       maxLines: 1,
@@ -403,10 +404,11 @@ class _CourseProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: softBorder, width: 1.5),
         boxShadow: [
@@ -437,7 +439,7 @@ class _CourseProgressCard extends StatelessWidget {
                   style: GoogleFonts.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 8),
