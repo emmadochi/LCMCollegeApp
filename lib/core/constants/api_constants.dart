@@ -1,6 +1,6 @@
 class ApiConstants {
   // Use 10.0.2.2 for Android emulator loopback to host PC running XAMPP
-  static const String baseUrl = 'http://10.0.2.2/CollegeApp/api';
+  static const String baseUrl = 'https://lcmcollege.org/api';
   
   // Endpoint paths
   static const String login = '/auth/login.php';
