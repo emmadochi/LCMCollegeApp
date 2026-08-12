@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import '../../data/models/course_model.dart';
-import '../../data/repositories/course_repository.dart';
 import '../providers/course_providers.dart';
 
 class AdminCourseEditPage extends ConsumerStatefulWidget {

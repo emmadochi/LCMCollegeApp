@@ -1,11 +1,23 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../../../../core/constants/api_constants.dart';
+import '../../../../core/services/cache_service.dart';
 import '../models/category_model.dart';
 
 class CategoryRepository {
-  Stream<List<CategoryModel>> getCategories() {
-    return Stream.fromFuture(_fetchCategories());
+  Stream<List<CategoryModel>> getCategories() async* {
+    final cached = await CacheService().get('categories_list');
+    if (cached != null) {
+      yield (cached as List).map((json) => CategoryModel.fromMap(json, json['id']?.toString() ?? '')).toList();
+    }
+
+    try {
+      final fresh = await _fetchCategories();
+      await CacheService().set('categories_list', fresh.map((e) => e.toMap()).toList());
+      yield fresh;
+    } catch (e) {
+      if (cached == null) rethrow;
+    }
   }
 
   Future<List<CategoryModel>> _fetchCategories() async {

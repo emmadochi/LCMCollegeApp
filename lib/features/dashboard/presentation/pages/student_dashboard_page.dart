@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../course/presentation/providers/course_providers.dart';
+import '../../../course/presentation/pages/course_detail_page.dart';
 
 class StudentDashboardPage extends ConsumerStatefulWidget {
   const StudentDashboardPage({super.key});
@@ -32,6 +34,8 @@ class _StudentDashboardPageState extends ConsumerState<StudentDashboardPage> wit
   @override
   Widget build(BuildContext context) {
     final userAsync = ref.watch(currentUserProvider);
+    final enrolledCoursesAsync = ref.watch(enrolledCoursesProvider);
+    final avgScoreAsync = ref.watch(userAverageScoreProvider);
     final theme = Theme.of(context);
 
     // Custom Color Palette matching mockup
@@ -57,89 +61,91 @@ class _StudentDashboardPageState extends ConsumerState<StudentDashboardPage> wit
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // 1. Profile Header Gradient Card
-                  FadeTransition(
-                    opacity: CurvedAnimation(parent: _entranceController, curve: const Interval(0.0, 0.5, curve: Curves.easeOut)),
-                    child: SlideTransition(
-                      position: Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero).animate(
-                        CurvedAnimation(parent: _entranceController, curve: const Interval(0.0, 0.5, curve: Curves.easeOut)),
-                      ),
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [leafGreenStart, leafGreenEnd],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(28),
-                          boxShadow: [
-                            BoxShadow(
-                              color: leafGreenEnd.withOpacity(0.3),
-                              blurRadius: 20,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
+                  WidgetRefreshedOnDemand(
+                    child: FadeTransition(
+                      opacity: CurvedAnimation(parent: _entranceController, curve: const Interval(0.0, 0.5, curve: Curves.easeOut)),
+                      child: SlideTransition(
+                        position: Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero).animate(
+                          CurvedAnimation(parent: _entranceController, curve: const Interval(0.0, 0.5, curve: Curves.easeOut)),
                         ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "GOOD MORNING",
-                                        style: GoogleFonts.outfit(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white.withOpacity(0.8),
-                                          letterSpacing: 1.2,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 4),
-                                      const Icon(Symbols.nest_eco_leaf, color: Colors.white, size: 14),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    fullName,
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    "Theology Major · Year 3",
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 14,
-                                      color: Colors.white.withOpacity(0.9),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [leafGreenStart, leafGreenEnd],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
-                            const SizedBox(width: 16),
-                            Container(
-                              width: 64,
-                              height: 64,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colors.white.withOpacity(0.5), width: 2),
-                                image: profileUrl != null && profileUrl.isNotEmpty
-                                    ? DecorationImage(image: NetworkImage(profileUrl), fit: BoxFit.cover)
+                            borderRadius: BorderRadius.circular(28),
+                            boxShadow: [
+                              BoxShadow(
+                                color: leafGreenEnd.withOpacity(0.3),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "GOOD MORNING",
+                                          style: GoogleFonts.outfit(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white.withOpacity(0.8),
+                                            letterSpacing: 1.2,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        const Icon(Symbols.nest_eco_leaf, color: Colors.white, size: 14),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      fullName,
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      user?.isAdmin == true ? "College Administrator" : "Ministerial Student",
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 14,
+                                        color: Colors.white.withOpacity(0.9),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Container(
+                                width: 64,
+                                height: 64,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.white.withOpacity(0.5), width: 2),
+                                  image: profileUrl != null && profileUrl.isNotEmpty
+                                      ? DecorationImage(image: NetworkImage(profileUrl), fit: BoxFit.cover)
+                                      : null,
+                                ),
+                                child: (profileUrl == null || profileUrl.isEmpty)
+                                    ? const Icon(Symbols.person, color: Colors.white, size: 32)
                                     : null,
                               ),
-                              child: (profileUrl == null || profileUrl.isEmpty)
-                                  ? const Icon(Symbols.person, color: Colors.white, size: 32)
-                                  : null,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -215,24 +221,78 @@ class _StudentDashboardPageState extends ConsumerState<StudentDashboardPage> wit
                           ),
                         ),
                         const SizedBox(height: 12),
-                        _CourseProgressCard(
-                          title: "Biblical Hermeneutics",
-                          icon: Symbols.book,
-                          progress: 0.72,
-                          progressText: "72% complete",
-                          themeColor: leafGreenEnd,
-                          mintBg: mintBg,
-                          softBorder: softBorder,
-                        ),
-                        const SizedBox(height: 12),
-                        _CourseProgressCard(
-                          title: "Systematic Theology II",
-                          icon: Symbols.church,
-                          progress: 0.45,
-                          progressText: "45% complete",
-                          themeColor: leafGreenEnd,
-                          mintBg: mintBg,
-                          softBorder: softBorder,
+                        enrolledCoursesAsync.when(
+                          data: (courses) {
+                            if (courses.isEmpty) {
+                              return Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+                                decoration: BoxDecoration(
+                                  color: theme.cardTheme.color,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: softBorder, width: 1.5),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Symbols.menu_book, color: leafGreenEnd, size: 40),
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      "No active courses yet",
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: theme.colorScheme.onSurface,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      "Go to the Explore tab to enroll in courses.",
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 12,
+                                        color: theme.colorScheme.onSurface.withOpacity(0.6),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return Column(
+                              children: courses.map((course) {
+                                return Consumer(
+                                  builder: (context, ref, child) {
+                                    final progress = ref.watch(courseProgressProvider(course.id)).value ?? 0.0;
+                                    final progressPercent = (progress * 100).toInt();
+                                    
+                                    return Padding(
+                                      padding: const EdgeInsets.only(bottom: 12),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => CourseDetailPage(courseId: course.id),
+                                            ),
+                                          );
+                                        },
+                                        child: _CourseProgressCard(
+                                          title: course.title,
+                                          icon: course.category.toLowerCase().contains('bus') ? Symbols.payments : Symbols.database,
+                                          progress: progress,
+                                          progressText: "$progressPercent% complete",
+                                          themeColor: leafGreenEnd,
+                                          mintBg: mintBg,
+                                          softBorder: softBorder,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }).toList(),
+                            );
+                          },
+                          loading: () => const Center(child: CircularProgressIndicator(color: leafGreenEnd)),
+                          error: (err, stack) => Center(child: Text("Error: $err")),
                         ),
                       ],
                     ),
@@ -245,22 +305,54 @@ class _StudentDashboardPageState extends ConsumerState<StudentDashboardPage> wit
                     child: Row(
                       children: [
                         Expanded(
-                          child: _MetricCard(
-                            value: "8",
-                            label: "COURSES",
-                            mintBg: mintBg,
-                            softBorder: softBorder,
-                            textColor: darkForestGreen,
+                          child: enrolledCoursesAsync.when(
+                            data: (courses) => _MetricCard(
+                              value: courses.length.toString(),
+                              label: "COURSES",
+                              mintBg: mintBg,
+                              softBorder: softBorder,
+                              textColor: darkForestGreen,
+                            ),
+                            loading: () => _MetricCard(
+                              value: "...",
+                              label: "COURSES",
+                              mintBg: mintBg,
+                              softBorder: softBorder,
+                              textColor: darkForestGreen,
+                            ),
+                            error: (_, __) => _MetricCard(
+                              value: "0",
+                              label: "COURSES",
+                              mintBg: mintBg,
+                              softBorder: softBorder,
+                              textColor: darkForestGreen,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: _MetricCard(
-                            value: "96%",
-                            label: "AVG SCORE",
-                            mintBg: mintBg,
-                            softBorder: softBorder,
-                            textColor: darkForestGreen,
+                          child: avgScoreAsync.when(
+                            data: (score) => _MetricCard(
+                              value: "${score.toInt()}%",
+                              label: "AVG SCORE",
+                              mintBg: mintBg,
+                              softBorder: softBorder,
+                              textColor: darkForestGreen,
+                            ),
+                            loading: () => _MetricCard(
+                              value: "...",
+                              label: "AVG SCORE",
+                              mintBg: mintBg,
+                              softBorder: softBorder,
+                              textColor: darkForestGreen,
+                            ),
+                            error: (_, __) => _MetricCard(
+                              value: "0%",
+                              label: "AVG SCORE",
+                              mintBg: mintBg,
+                              softBorder: softBorder,
+                              textColor: darkForestGreen,
+                            ),
                           ),
                         ),
                       ],
@@ -276,6 +368,16 @@ class _StudentDashboardPageState extends ConsumerState<StudentDashboardPage> wit
         error: (err, stack) => Center(child: Text("Error: $err")),
       ),
     );
+  }
+}
+
+class WidgetRefreshedOnDemand extends StatelessWidget {
+  final Widget child;
+  const WidgetRefreshedOnDemand({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return child;
   }
 }
 

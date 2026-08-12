@@ -28,19 +28,19 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
 
   final List<OnboardingContent> _contents = [
     OnboardingContent(
-      title: 'Welcome to College App',
-      description: 'Your one-stop destination for all learning and college activities.',
+      title: 'Welcome to Lifechangers College',
+      description: 'Equipping leaders for ministry and life through flexible hybrid learning.',
       icon: Symbols.school,
     ),
     OnboardingContent(
-      title: 'Learn Anywhere',
-      description: 'Access courses, tutorials, and quizzes on the go.',
+      title: 'Learn Anywhere, Anytime',
+      description: 'Access theology courses, video lectures, and quizzes on the go, offline or online.',
       icon: Symbols.menu_book,
     ),
     OnboardingContent(
-      title: 'Track Your Progress',
-      description: 'Stay updated with your achievements and milestones.',
-      icon: Symbols.analytics,
+      title: 'Empowered for Ministry',
+      description: 'Track your academic journey, submit assignments, and prepare for your calling.',
+      icon: Symbols.local_fire_department,
     ),
   ];
 

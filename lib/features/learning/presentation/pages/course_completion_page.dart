@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
-import '../../../course/data/models/course_model.dart';
 import '../../../course/presentation/providers/course_providers.dart';
-import '../providers/learning_providers.dart';
 
 class CourseCompletionPage extends ConsumerStatefulWidget {
   final String courseId;

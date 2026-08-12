@@ -4,13 +4,26 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/api_constants.dart';
+import '../../../../core/services/cache_service.dart';
 import '../models/assignment_model.dart';
 
 class AssignmentRepository {
   AssignmentRepository();
 
-  Stream<AssignmentModel?> getAssignmentForLesson(String lessonId) {
-    return Stream.fromFuture(_fetchAssignment(lessonId));
+  Stream<AssignmentModel?> getAssignmentForLesson(String lessonId) async* {
+    final cached = await CacheService().get('assignment_$lessonId');
+    if (cached != null) {
+      yield AssignmentModel.fromMap(cached, cached['id'] ?? '');
+    }
+    try {
+      final fresh = await _fetchAssignment(lessonId);
+      if (fresh != null) {
+        await CacheService().set('assignment_$lessonId', fresh.toMap());
+      }
+      yield fresh;
+    } catch (e) {
+      if (cached == null) rethrow;
+    }
   }
 
   Future<AssignmentModel?> _fetchAssignment(String lessonId) async {
@@ -29,8 +42,20 @@ class AssignmentRepository {
     }
   }
 
-  Stream<SubmissionModel?> getUserSubmission(String assignmentId, String userId) {
-    return Stream.fromFuture(_fetchUserSubmission(assignmentId, userId));
+  Stream<SubmissionModel?> getUserSubmission(String assignmentId, String userId) async* {
+    final cached = await CacheService().get('submission_${assignmentId}_$userId');
+    if (cached != null) {
+      yield SubmissionModel.fromMap(cached, cached['id'] ?? '');
+    }
+    try {
+      final fresh = await _fetchUserSubmission(assignmentId, userId);
+      if (fresh != null) {
+        await CacheService().set('submission_${assignmentId}_$userId', fresh.toMap());
+      }
+      yield fresh;
+    } catch (e) {
+      if (cached == null) rethrow;
+    }
   }
 
   Future<SubmissionModel?> _fetchUserSubmission(String assignmentId, String userId) async {
@@ -91,7 +116,9 @@ class AssignmentRepository {
         final streamedResponse = await request.send();
         final response = await http.Response.fromStream(streamedResponse);
 
-        if (response.statusCode != 200 && response.statusCode != 201) {
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          await CacheService().remove('submission_${submission.assignmentId}_${submission.userId}');
+        } else {
           final data = jsonDecode(response.body);
           throw Exception(data['message'] ?? 'Failed to submit assignment with file');
         }
@@ -110,7 +137,9 @@ class AssignmentRepository {
           body: jsonEncode(submission.toMap()),
         );
 
-        if (response.statusCode != 200 && response.statusCode != 201) {
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          await CacheService().remove('submission_${submission.assignmentId}_${submission.userId}');
+        } else {
           final data = jsonDecode(response.body);
           throw Exception(data['message'] ?? 'Failed to submit assignment');
         }

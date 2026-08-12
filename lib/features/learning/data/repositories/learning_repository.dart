@@ -3,14 +3,25 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/api_constants.dart';
+import '../../../../core/services/cache_service.dart';
 import '../models/lesson_model.dart';
 import '../models/progress_model.dart';
 
 class LearningRepository {
   LearningRepository();
 
-  Stream<List<LessonModel>> getLessons(String courseId) {
-    return Stream.fromFuture(_fetchLessons(courseId));
+  Stream<List<LessonModel>> getLessons(String courseId) async* {
+    final cached = await CacheService().get('lessons_list_$courseId');
+    if (cached != null) {
+      yield (cached as List).map((json) => LessonModel.fromMap(json, json['id'] ?? '')).toList();
+    }
+    try {
+      final fresh = await _fetchLessons(courseId);
+      await CacheService().set('lessons_list_$courseId', fresh.map((e) => e.toMap()).toList());
+      yield fresh;
+    } catch (e) {
+      if (cached == null) rethrow;
+    }
   }
 
   Future<List<LessonModel>> _fetchLessons(String courseId) async {
@@ -59,7 +70,11 @@ class LearningRepository {
         body: jsonEncode(progress.toMap()),
       );
 
-      if (response.statusCode != 200 && response.statusCode != 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Invalidate user progress caches
+        await CacheService().remove('user_progress_${progress.userId}_${progress.courseId}');
+        await CacheService().remove('user_progress_${progress.userId}_');
+      } else {
         final data = jsonDecode(response.body);
         throw Exception(data['message'] ?? 'Failed to update progress');
       }
@@ -68,8 +83,18 @@ class LearningRepository {
     }
   }
 
-  Stream<List<ProgressModel>> getUserProgress(String userId, String courseId) {
-    return Stream.fromFuture(_fetchUserProgress(userId, courseId));
+  Stream<List<ProgressModel>> getUserProgress(String userId, String courseId) async* {
+    final cached = await CacheService().get('user_progress_${userId}_$courseId');
+    if (cached != null) {
+      yield (cached as List).map((json) => ProgressModel.fromMap(json)).toList();
+    }
+    try {
+      final fresh = await _fetchUserProgress(userId, courseId);
+      await CacheService().set('user_progress_${userId}_$courseId', fresh.map((e) => e.toMap()).toList());
+      yield fresh;
+    } catch (e) {
+      if (cached == null) rethrow;
+    }
   }
 
   Future<List<ProgressModel>> _fetchUserProgress(String userId, String courseId) async {
@@ -102,6 +127,18 @@ class LearningRepository {
   }
 
   Future<LessonModel?> getLessonById(String lessonId) async {
+    final cached = await CacheService().get('lesson_detail_$lessonId');
+    if (cached != null) {
+      return LessonModel.fromMap(cached, cached['id'] ?? lessonId);
+    }
+    final fresh = await _fetchLessonByIdFromApi(lessonId);
+    if (fresh != null) {
+      await CacheService().set('lesson_detail_$lessonId', fresh.toMap());
+    }
+    return fresh;
+  }
+
+  Future<LessonModel?> _fetchLessonByIdFromApi(String lessonId) async {
     try {
       final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.lessons}').replace(queryParameters: {'id': lessonId});
       final prefs = await SharedPreferences.getInstance();

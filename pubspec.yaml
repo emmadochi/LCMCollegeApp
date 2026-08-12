@@ -31,28 +31,20 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.8
   firebase_core: ^3.10.1
   firebase_auth: ^5.4.1
-  cloud_firestore: ^5.6.1
   flutter_riverpod: ^2.6.1
   http: ^1.2.1
   google_fonts: ^6.2.1
-  cached_network_image: ^3.4.1
   flutter_rating_bar: ^4.0.1
-  video_player: ^2.9.2
   pdf: ^3.11.1
   printing: ^5.13.1
-  path_provider: ^2.1.5
-  share_plus: ^10.1.4
-  intl: ^0.19.0
   material_symbols_icons: ^4.2711.0
   shared_preferences: ^2.5.3
   file_picker: ^8.1.7
-  google_sign_in: ^6.2.1
-  firebase_storage: ^12.4.10
   firebase_messaging: ^15.2.10
   flutter_local_notifications: ^18.0.1
+  flutter_widget_from_html: ^0.17.2
 
 dev_dependencies:
   flutter_test:

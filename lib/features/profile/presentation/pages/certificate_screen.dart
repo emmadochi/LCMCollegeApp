@@ -5,7 +5,6 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import '../../../../core/theme/app_theme.dart';
 
 class CertificateScreen extends StatelessWidget {
   final String userName;

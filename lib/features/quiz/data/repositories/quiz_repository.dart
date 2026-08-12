@@ -3,12 +3,27 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/api_constants.dart';
+import '../../../../core/services/cache_service.dart';
 import '../models/quiz_model.dart';
 
 class QuizRepository {
   QuizRepository();
 
   Future<QuizModel?> getQuizByLessonId(String lessonId) async {
+    final cacheKey = 'quiz_$lessonId';
+    final cached = await CacheService().get(cacheKey);
+    if (cached != null) {
+      return QuizModel.fromMap(cached, cached['id'] ?? '');
+    }
+
+    final fresh = await _fetchQuizFromApi(lessonId);
+    if (fresh != null) {
+      await CacheService().set(cacheKey, fresh.toMap());
+    }
+    return fresh;
+  }
+
+  Future<QuizModel?> _fetchQuizFromApi(String lessonId) async {
     try {
       final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.quizzes}').replace(queryParameters: {'lesson_id': lessonId});
       final response = await http.get(uri);
@@ -57,7 +72,11 @@ class QuizRepository {
         body: jsonEncode(body),
       );
 
-      if (response.statusCode != 200 && response.statusCode != 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Invalidate user progress caches
+        await CacheService().remove('user_progress_${userId}_$courseId');
+        await CacheService().remove('user_progress_${userId}_');
+      } else {
         final responseData = jsonDecode(response.body);
         throw Exception(responseData['message'] ?? 'Failed to submit quiz result');
       }

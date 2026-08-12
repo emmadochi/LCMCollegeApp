@@ -1,14 +1,10 @@
-// Unused firestore import removed
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../learning/data/models/lesson_model.dart';
 import '../../../learning/data/models/progress_model.dart';
 import '../../../learning/data/repositories/learning_repository.dart';
 import '../../../learning/presentation/pages/lesson_player_screen.dart';
-import '../../data/models/course_model.dart';
-import '../../data/repositories/course_repository.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';

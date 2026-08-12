@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:file_picker/file_picker.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -96,7 +95,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           fileName,
         );
         
-        // 2. Update Firestore
+        // 2. Update profile details via repository
         await ref.read(authRepositoryProvider).updateProfile(
           profileImageUrl: imageUrl,
         );

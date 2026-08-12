@@ -875,6 +875,20 @@ async function payWithPaystack() {
     btn.disabled = true;
 
     try {
+        // Fetch dynamic paystack configuration
+        let publicKey = 'pk_live_91fa71a264e0c3919f7d2f7b87c24cfa0df6b796';
+        let subaccountCode = 'ACCT_29ixq9k2y7wucus';
+        try {
+            const configRes = await fetch('../api/config/public_config.php');
+            if (configRes.ok) {
+                const configData = await configRes.json();
+                if (configData.paystackPublicKey) publicKey = configData.paystackPublicKey;
+                if (configData.paystackSubaccount) subaccountCode = configData.paystackSubaccount;
+            }
+        } catch (e) {
+            console.warn('Could not fetch public config, using default keys', e);
+        }
+
         // Load Paystack v2 inline SDK (avoids the CORP-restricted CSS issue in v1)
         await loadScript(
             'https://js.paystack.co/v2/inline.js',
@@ -883,10 +897,11 @@ async function payWithPaystack() {
 
         const popup = new PaystackPop();
         popup.newTransaction({
-            key: 'pk_test_e02301d81ac02e107bb1b462bb221b95fb58a6d7',
+            key: publicKey,
             email: email,
             amount: amountInKobo,
             currency: selectedCurrency,
+            subaccount: subaccountCode,
             ref: 'LCM-PS-' + Date.now() + '-' + Math.floor(Math.random() * 1e6),
             onSuccess: function(transaction) {
                 submitPaymentToServer(transaction.reference);

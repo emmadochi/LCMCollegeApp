@@ -81,3 +81,19 @@ final completedCoursesProvider = FutureProvider<List<CourseModel>>((ref) async {
 final courseByIdProvider = FutureProvider.family<CourseModel, String>((ref, courseId) async {
   return ref.watch(courseRepositoryProvider).getCourseById(courseId);
 });
+
+final userAverageScoreProvider = StreamProvider<double>((ref) {
+  final user = ref.watch(currentUserProvider).value;
+  if (user == null) return Stream.value(0.0);
+  
+  final learningRepo = ref.watch(learningRepositoryProvider);
+  return learningRepo.getUserProgress(user.id, '').map((progressList) {
+    if (progressList.isEmpty) return 0.0;
+    
+    final quizScores = progressList.where((p) => p.attempts > 0 || p.lastQuizScore > 0).map((p) => p.lastQuizScore).toList();
+    if (quizScores.isEmpty) return 0.0;
+    
+    final total = quizScores.reduce((a, b) => a + b);
+    return total / quizScores.length;
+  });
+});

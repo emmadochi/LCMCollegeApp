@@ -39,11 +39,19 @@ class CourseModel {
   }
 
   factory CourseModel.fromMap(Map<String, dynamic> map, String id) {
+    String rawThumbnail = map['thumbnailUrl'] ?? '';
+    String parsedThumbnail = rawThumbnail;
+    if (rawThumbnail.startsWith('../')) {
+      parsedThumbnail = 'https://lcmcollege.org/' + rawThumbnail.substring(3);
+    } else if (rawThumbnail.isNotEmpty && !rawThumbnail.startsWith('http')) {
+      parsedThumbnail = 'https://lcmcollege.org/' + rawThumbnail;
+    }
+
     return CourseModel(
       id: id,
       title: map['title'] ?? '',
       description: map['description'] ?? '',
-      thumbnailUrl: map['thumbnailUrl'] ?? '',
+      thumbnailUrl: parsedThumbnail,
       category: map['category'] ?? '',
       totalLessons: map['totalLessons'] is int 
           ? map['totalLessons'] 

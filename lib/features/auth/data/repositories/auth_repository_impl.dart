@@ -27,6 +27,9 @@ class AuthRepositoryImpl implements AuthRepository {
           id: userMap['id'] ?? '',
           email: userMap['email'] ?? '',
           fullName: userMap['name'] ?? userMap['fullName'] ?? '',
+          profileImageUrl: userMap['profileImageUrl'],
+          enrolledCourses: List<String>.from(userMap['enrolledCourses'] ?? []),
+          completedCourses: List<String>.from(userMap['completedCourses'] ?? []),
           isAdmin: userMap['role'] == 'admin' || userMap['isAdmin'] == true,
         );
         _authStreamController.add(_currentUser);
@@ -68,8 +71,11 @@ class AuthRepositoryImpl implements AuthRepository {
         final userModel = UserModel(
           id: userMap['id'] ?? '',
           email: userMap['email'] ?? '',
-          fullName: userMap['name'] ?? '',
-          isAdmin: userMap['role'] == 'admin',
+          fullName: userMap['name'] ?? userMap['fullName'] ?? '',
+          profileImageUrl: userMap['profileImageUrl'],
+          enrolledCourses: List<String>.from(userMap['enrolledCourses'] ?? []),
+          completedCourses: List<String>.from(userMap['completedCourses'] ?? []),
+          isAdmin: userMap['role'] == 'admin' || userMap['isAdmin'] == true,
         );
 
         // Store session tokens

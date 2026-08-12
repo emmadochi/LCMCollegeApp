@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 
 import '../../../quiz/data/models/quiz_model.dart';
@@ -11,10 +10,6 @@ import '../../../learning/presentation/providers/learning_providers.dart';
 import '../../../learning/presentation/pages/lesson_player_screen.dart';
 import '../../../learning/data/models/lesson_model.dart';
 import '../../../learning/data/repositories/learning_repository.dart';
-import '../../../../features/profile/presentation/pages/certificate_screen.dart';
-import '../../../../features/course/presentation/providers/course_providers.dart';
-import '../../../../features/course/data/models/course_model.dart';
-import 'package:intl/intl.dart';
 import '../../../learning/presentation/pages/course_completion_page.dart';
 
 class QuizScreen extends ConsumerStatefulWidget {

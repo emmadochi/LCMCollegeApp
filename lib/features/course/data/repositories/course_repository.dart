@@ -3,21 +3,52 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/api_constants.dart';
+import '../../../../core/services/cache_service.dart';
 import '../models/course_model.dart';
 
 class CourseRepository {
   CourseRepository();
 
-  Stream<List<CourseModel>> getCourses() {
-    return Stream.fromFuture(_fetchCoursesList());
+  Stream<List<CourseModel>> getCourses() async* {
+    final cached = await CacheService().get('courses_list_all');
+    if (cached != null) {
+      yield (cached as List).map((json) => CourseModel.fromMap(json, json['id'] ?? '')).toList();
+    }
+    try {
+      final fresh = await _fetchCoursesList();
+      await CacheService().set('courses_list_all', fresh.map((e) => e.toMap()).toList());
+      yield fresh;
+    } catch (e) {
+      if (cached == null) rethrow;
+    }
   }
 
-  Stream<List<CourseModel>> getFeaturedCourses() {
-    return Stream.fromFuture(_fetchCoursesList(queryParams: {'featured': 'true'}));
+  Stream<List<CourseModel>> getFeaturedCourses() async* {
+    final cached = await CacheService().get('courses_list_featured');
+    if (cached != null) {
+      yield (cached as List).map((json) => CourseModel.fromMap(json, json['id'] ?? '')).toList();
+    }
+    try {
+      final fresh = await _fetchCoursesList(queryParams: {'featured': 'true'});
+      await CacheService().set('courses_list_featured', fresh.map((e) => e.toMap()).toList());
+      yield fresh;
+    } catch (e) {
+      if (cached == null) rethrow;
+    }
   }
 
-  Stream<List<CourseModel>> getCoursesByCategory(String category) {
-    return Stream.fromFuture(_fetchCoursesList(queryParams: {'category': category}));
+  Stream<List<CourseModel>> getCoursesByCategory(String category) async* {
+    final cached = await CacheService().get('courses_list_category_$category');
+    if (cached != null) {
+      yield (cached as List).map((json) => CourseModel.fromMap(json, json['id'] ?? '')).toList();
+    }
+    try {
+      final fresh = await _fetchCoursesList(queryParams: {'category': category});
+      await CacheService().set('courses_list_category_$category', fresh.map((e) => e.toMap()).toList());
+      yield fresh;
+    } catch (e) {
+      if (cached == null) rethrow;
+    }
   }
 
   Future<List<CourseModel>> _fetchCoursesList({Map<String, String>? queryParams}) async {
@@ -36,6 +67,16 @@ class CourseRepository {
   }
 
   Future<CourseModel> getCourseById(String courseId) async {
+    final cached = await CacheService().get('course_detail_$courseId');
+    if (cached != null) {
+      return CourseModel.fromMap(cached, cached['id'] ?? courseId);
+    }
+    final fresh = await _fetchCourseByIdFromApi(courseId);
+    await CacheService().set('course_detail_$courseId', fresh.toMap());
+    return fresh;
+  }
+
+  Future<CourseModel> _fetchCourseByIdFromApi(String courseId) async {
     try {
       final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.courses}').replace(queryParameters: {'id': courseId});
       final response = await http.get(uri);
@@ -82,7 +123,14 @@ class CourseRepository {
         body: jsonEncode(body),
       );
 
-      if (response.statusCode != 200 && response.statusCode != 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Invalidate course-related caches
+        await CacheService().remove('courses_list_all');
+        await CacheService().remove('courses_list_featured');
+        await CacheService().remove('course_detail_${course.id}');
+        await CacheService().remove('courses_list_category_${course.category}');
+        await CacheService().remove('categories_list');
+      } else {
         final responseData = jsonDecode(response.body);
         throw Exception(responseData['message'] ?? 'Failed to update course');
       }

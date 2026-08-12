@@ -17,6 +17,18 @@ class AssignmentModel {
     required this.createdAt,
   });
 
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'lessonId': lessonId,
+      'courseId': courseId,
+      'title': title,
+      'instructions': instructions,
+      'dueDate': dueDate.toIso8601String(),
+      'createdAt': createdAt.toIso8601String(),
+    };
+  }
+
   factory AssignmentModel.fromMap(Map<String, dynamic> map, String id) {
     DateTime parseDate(dynamic val) {
       if (val == null) return DateTime.now();

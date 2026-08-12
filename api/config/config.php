@@ -45,8 +45,9 @@ define('ALLOWED_ORIGINS', [
 ]);
 
 // Paystack API Keys
-define('PAYSTACK_SECRET_KEY', 'sk_test_73da203d9534142cebc03f04b5a0d6d6cbbffa86');
-define('PAYSTACK_PUBLIC_KEY', 'pk_test_e02301d81ac02e107bb1b462bb221b95fb58a6d7');
+define('PAYSTACK_SECRET_KEY', getenv('PAYSTACK_SECRET_KEY') ?: '');
+define('PAYSTACK_PUBLIC_KEY', getenv('PAYSTACK_PUBLIC_KEY') ?: 'pk_live_91fa71a264e0c3919f7d2f7b87c24cfa0df6b796');
+define('PAYSTACK_SUBACCOUNT_CODE', getenv('PAYSTACK_SUBACCOUNT_CODE') ?: 'ACCT_29ixq9k2y7wucus');
 
 // Google OAuth Configuration
 define('GOOGLE_CLIENT_ID', '370483546378-aoeuesf6h9p1smb9c40mkiepippkqud3.apps.googleusercontent.com');

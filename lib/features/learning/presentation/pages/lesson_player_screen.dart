@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import '../../../../core/theme/app_theme.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import '../../../quiz/presentation/pages/quiz_screen.dart';
 
 import '../../data/models/lesson_model.dart';
@@ -496,26 +496,6 @@ class _SubmissionStatusView extends StatelessWidget {
   }
 }
 
-class _BulletPoint extends StatelessWidget {
-  final String text;
-  const _BulletPoint({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(margin: const EdgeInsets.only(top: 6), width: 6, height: 6, decoration: BoxDecoration(color: Theme.of(context).colorScheme.secondary, shape: BoxShape.circle)),
-          const SizedBox(width: 12),
-          Expanded(child: Text(text, style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7), height: 1.5))),
-        ],
-      ),
-    );
-  }
-}
-
 class _NotesTab extends StatelessWidget {
   final String? notes;
   const _NotesTab({this.notes});
@@ -527,13 +507,18 @@ class _NotesTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Lesson Notes', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          SizedBox(height: 16),
-          Text(
+          const SizedBox(height: 16),
+          HtmlWidget(
             notes == null || notes!.isEmpty 
-                ? 'No specific notes for this lesson.' 
+                ? '<p>No specific notes for this lesson.</p>' 
                 : notes!,
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7), height: 1.5),
+            textStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.85),
+              fontSize: 15,
+              height: 1.6,
+            ),
           ),
+          const SizedBox(height: 80), // extra padding for floating action button overlap
         ],
       ),
     );

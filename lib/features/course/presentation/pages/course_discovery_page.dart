@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import '../../../../core/theme/app_theme.dart';
 import '../../data/models/course_model.dart';
 import '../../data/repositories/course_repository.dart';
 import '../providers/course_providers.dart';
-import '../../data/models/category_model.dart';
 import 'course_detail_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
